@@ -1,34 +1,35 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using System;
-using System.IO;
+using Chirp.CLI;
 
-string path = "chirp_cli_db.csv";
+ChirpManager manager = new ChirpManager();
 
-if (args[0] == "cheep")
+if (args.Length > 0)
 {
-    string userName = Environment.UserName;
-    DateTimeOffset time = DateTimeOffset.Now;
-    string message = args[1];
-    
-    using (StreamWriter sw = File.AppendText(path))
+    switch (args[0].ToLower())
     {
-        sw.WriteLine(userName + " @ " + time.ToUniversalTime() + ": " + message);
-    }
-}
+        case "chirp":
+            if (args.Length > 1)
+            {
+                manager.SaveChirp(args[1]);
+            }
+            else
+            {
+                Console.WriteLine("Error: Chirp only accepts one argument");
+            }
 
-else if (args[0] == "read")
-{
-    using (StreamReader sr = File.OpenText(path))
-    {
-        string s = "";
-        while ((s = sr.ReadLine()) != null)
-        {
-            Console.WriteLine(s);
-        }
+            break;
+
+        case "read":
+            manager.ReadChirp();
+            break;
+
+        default:
+            Console.WriteLine("Error: Unknown operation");
+            break;
     }
 }
 
 else
 {
-    Console.WriteLine(args[0] ?? "Unknown command");
+    Console.WriteLine("Error: No arguments provided");
 }
