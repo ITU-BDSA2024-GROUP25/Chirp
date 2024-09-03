@@ -8,7 +8,7 @@ if (args.Length > 0)
     switch (args[0].ToLower())
     {
         case "chirp":
-            if (args.Length > 1)
+            if (args.Length < 3)
             {
                 manager.SaveChirp(args[1]);
             }
