@@ -1,19 +1,19 @@
 ﻿namespace Chirp.CLI;
 
-public class ChirpManager
+public class CheepManager
 {
     private readonly string _path = "chirp_cli_db.csv";
     public string userName { get; set; }
     public DateTime time { get; set; }
     
-    public ChirpManager()
+    public CheepManager()
     { }
 
-    public void SaveChirp(string message)
+    public void SaveCheep(string message)
     {
         if (string.IsNullOrWhiteSpace(message))
         {
-            Console.WriteLine("Error: Empty chirp message");
+            Console.WriteLine("Error: Empty cheep message");
             return;
         }
         
@@ -26,7 +26,7 @@ public class ChirpManager
         }
     }
 
-    public void ReadChirp()
+    public void ReadCheep()
     {
         using (StreamReader sr = File.OpenText(_path))
         {

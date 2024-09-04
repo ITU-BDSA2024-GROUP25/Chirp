@@ -1,26 +1,26 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Chirp.CLI;
 
-ChirpManager manager = new ChirpManager();
+CheepManager manager = new CheepManager();
 
 if (args.Length > 0)
 {
     switch (args[0].ToLower())
     {
-        case "chirp":
+        case "cheep":
             if (args.Length < 3)
             {
-                manager.SaveChirp(args[1]);
+                manager.SaveCheep(args[1]);
             }
             else
             {
-                Console.WriteLine("Error: Chirp only accepts one argument");
+                Console.WriteLine("Error: Cheep only accepts one argument");
             }
 
             break;
 
         case "read":
-            manager.ReadChirp();
+            manager.ReadCheep();
             break;
 
         default:
