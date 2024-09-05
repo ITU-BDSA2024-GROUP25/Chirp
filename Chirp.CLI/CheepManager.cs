@@ -2,9 +2,9 @@
 
 public class CheepManager
 {
+    public record Cheep(string Author, string Message, long Timestamp);
+    
     private readonly string _path = "chirp_cli_db.csv";
-    public string userName { get; set; }
-    public DateTime time { get; set; }
     
     public CheepManager()
     { }
@@ -16,13 +16,12 @@ public class CheepManager
             Console.WriteLine("Error: Empty cheep message");
             return;
         }
-        
-        userName = Environment.UserName;
-        time = DateTime.Now;
+
+        Cheep cheep = new Cheep(Environment.UserName, message, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         
         using (StreamWriter sw = new StreamWriter(_path, true))
         {
-            sw.WriteLine($"{userName},{time},{message}");
+            sw.WriteLine($"{cheep.Author},{cheep.Timestamp},{cheep.Message}");
         }
     }
 
@@ -38,8 +37,10 @@ public class CheepManager
             while ((line = sr.ReadLine()) != null)
             {
                 var parts = line.Split(',');
-
-                string output = $"{parts[0]} @ {parts[1]}: {parts[2]}";
+                
+                DateTime timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(parts[1])).UtcDateTime;
+                
+                string output = $"{parts[0]} @ {timestamp}: {parts[2]}";
                 
                 Console.WriteLine(output);
             }
