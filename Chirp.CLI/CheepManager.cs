@@ -1,4 +1,7 @@
-﻿namespace Chirp.CLI;
+﻿using System.Globalization;
+using CsvHelper;
+
+namespace Chirp.CLI;
 
 public class CheepManager
 {
@@ -19,29 +22,29 @@ public class CheepManager
 
         Cheep cheep = new Cheep(Environment.UserName, message, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         
-        using (StreamWriter sw = new StreamWriter(_path, true))
+        using (var stream = new FileStream(_path, FileMode.Append))
+        using (var writer = new StreamWriter(stream))
+        using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
         {
-            sw.WriteLine($"{cheep.Author},{cheep.Timestamp},{cheep.Message}");
+            csv.WriteRecord(cheep);
+            csv.NextRecord();
         }
     }
 
     public void ReadCheep()
     {
-        using (StreamReader sr = File.OpenText(_path))
+        using (var reader = new StreamReader(_path))
+        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
         {
-            string line;
-            
-            // Takes header line out of table
-            sr.ReadLine();
-            
-            while ((line = sr.ReadLine()) != null)
+            csv.Read();
+            csv.ReadHeader();
+            while (csv.Read())
             {
-                var parts = line.Split(',');
-                
-                DateTime timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(parts[1])).UtcDateTime;
-                
-                string output = $"{parts[0]} @ {timestamp}: {parts[2]}";
-                
+                var record = csv.GetRecord<Cheep>();
+                DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).DateTime;
+
+                string output = $"{record.Author} @ {dateTime}: {record.Message}";
+                    
                 Console.WriteLine(output);
             }
         }
