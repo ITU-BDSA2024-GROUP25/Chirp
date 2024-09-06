@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lord_\\Documents\\GitHub\\Chirp\\SimpleDB\\SimpleDB.csproj": {}
+    "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lord_\\Documents\\GitHub\\Chirp\\SimpleDB\\SimpleDB.csproj": {
+    "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lord_\\Documents\\GitHub\\Chirp\\SimpleDB\\SimpleDB.csproj",
+        "projectUniqueName": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj",
         "projectName": "SimpleDB",
-        "projectPath": "C:\\Users\\lord_\\Documents\\GitHub\\Chirp\\SimpleDB\\SimpleDB.csproj",
-        "packagesPath": "C:\\Users\\lord_\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lord_\\Documents\\GitHub\\Chirp\\SimpleDB\\obj\\",
+        "projectPath": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj",
+        "packagesPath": "/Users/mariehansen/.nuget/packages/",
+        "outputPath": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\lord_\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/mariehansen/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -53,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.410/RuntimeIdentifierGraph.json"
         }
       }
     }
