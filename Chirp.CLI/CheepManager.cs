@@ -2,6 +2,7 @@
 using CsvHelper;
 using SimpleDB;
 
+
 namespace Chirp.CLI;
 
 public class CheepManager
