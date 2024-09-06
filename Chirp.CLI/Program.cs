@@ -1,7 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Chirp.CLI;
+//using IDatabaseRepository;
+
 
 CheepManager manager = new CheepManager();
+//IdataRepository<Cheep> database = new CSVDatabase<Cheep>();
+
 
 if (args.Length > 0)
 {

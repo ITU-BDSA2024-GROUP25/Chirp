@@ -1,25 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj": {}
+    "C:\\Users\\lukas\\OneDrive\\Skrivebord\\Chirp\\simpleDB\\SimpleDB.csproj": {}
   },
   "projects": {
-    "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj": {
+    "C:\\Users\\lukas\\OneDrive\\Skrivebord\\Chirp\\simpleDB\\SimpleDB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj",
+        "projectUniqueName": "C:\\Users\\lukas\\OneDrive\\Skrivebord\\Chirp\\simpleDB\\SimpleDB.csproj",
         "projectName": "SimpleDB",
-        "projectPath": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj",
-        "packagesPath": "/Users/mariehansen/.nuget/packages/",
-        "outputPath": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/obj/",
+        "projectPath": "C:\\Users\\lukas\\OneDrive\\Skrivebord\\Chirp\\simpleDB\\SimpleDB.csproj",
+        "packagesPath": "C:\\Users\\lukas\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lukas\\OneDrive\\Skrivebord\\Chirp\\simpleDB\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "/Users/mariehansen/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\lukas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -37,6 +42,12 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+          "dependencies": {
+            "CsvHelper": {
+              "target": "Package",
+              "version": "[33.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -53,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.410/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
         }
       }
     }
