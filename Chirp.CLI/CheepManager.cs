@@ -9,6 +9,7 @@ public class CheepManager
 {
     public record Cheep(string Author, string Message, long Timestamp);
     IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
+
     public void SaveCheep(string message)
     {
         if (string.IsNullOrWhiteSpace(message))
