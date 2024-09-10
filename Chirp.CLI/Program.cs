@@ -24,8 +24,15 @@ if (arguments["cheep"].IsTrue){
     manager.saveCheep(arguments["<message>"].ToString());
     }
 if (arguments["read"].IsTrue){
-    manager.readCheep();
+    if (arguments["<limit>"] is not null)
+    {
+        manager.readCheep(Int32.Parse(arguments["<limit>"].ToString()));
     }
+    else
+    {
+        manager.readCheep();
+    }
+}
 
 else
 {

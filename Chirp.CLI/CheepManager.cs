@@ -23,9 +23,9 @@ public class CheepManager
         database.Store(cheep);
         
     }
-    public void readCheep() // this should be able to take ints!
+    public void readCheep(int? limit = null) 
     { 
-         database.Read();
+         database.Read(limit);
     }
         
 }

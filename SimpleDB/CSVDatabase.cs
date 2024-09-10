@@ -27,8 +27,9 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
             csv.Read();
             csv.ReadHeader();
             string output;
-            while (csv.Read())
+            while ((limit > 0 || limit == null) && csv.Read())
             {
+				limit--;
                 var record = csv.GetRecord<Cheep>();
                 DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).DateTime;
 
