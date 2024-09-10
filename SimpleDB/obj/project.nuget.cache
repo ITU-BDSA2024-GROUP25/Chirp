@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "K86UFB2N8sxdChG9ttewmVo38/Xp20jVQMCfpN3hOPSkaHf4dWIkSaaUUXul2j3I+XnmK7e/hGOgYCtYMejooA==",
+  "dgSpecHash": "REqQZT/Z9K2/JyJRnNJmkor0Vmfr+dn1RT+QRIu5AH4tO4GXCVkC7+vRa38LekW37zjcM1tYPu5fsAO+WIK7hw==",
   "success": true,
-  "projectFilePath": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/Users/carlamoos/RiderProjects/Chirp/simpleDB/SimpleDB.csproj",
+  "expectedPackageFiles": [
+    "/Users/carlamoos/.nuget/packages/csvhelper/33.0.1/csvhelper.33.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

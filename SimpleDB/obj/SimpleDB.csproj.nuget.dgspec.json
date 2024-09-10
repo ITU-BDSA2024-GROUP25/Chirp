@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj": {}
+    "/Users/carlamoos/RiderProjects/Chirp/simpleDB/SimpleDB.csproj": {}
   },
   "projects": {
-    "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj": {
+    "/Users/carlamoos/RiderProjects/Chirp/simpleDB/SimpleDB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj",
+        "projectUniqueName": "/Users/carlamoos/RiderProjects/Chirp/simpleDB/SimpleDB.csproj",
         "projectName": "SimpleDB",
-        "projectPath": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj",
-        "packagesPath": "/Users/mariehansen/.nuget/packages/",
-        "outputPath": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/obj/",
+        "projectPath": "/Users/carlamoos/RiderProjects/Chirp/simpleDB/SimpleDB.csproj",
+        "packagesPath": "/Users/carlamoos/.nuget/packages/",
+        "outputPath": "/Users/carlamoos/RiderProjects/Chirp/simpleDB/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/mariehansen/.nuget/NuGet/NuGet.Config"
+          "/Users/carlamoos/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+          "dependencies": {
+            "CsvHelper": {
+              "target": "Package",
+              "version": "[33.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
