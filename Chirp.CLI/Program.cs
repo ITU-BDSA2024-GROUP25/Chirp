@@ -24,19 +24,17 @@ if (arguments["cheep"].IsTrue){
     manager.saveCheep(arguments["<message>"].ToString());
     }
 if (arguments["read"].IsTrue){
-    if (arguments["<limit>"] is not null)
-    {
-        manager.readCheep(Int32.Parse(arguments["<limit>"].ToString()));
-    }
-    else
+
+    if (string.IsNullOrWhiteSpace(arguments["<limit>"].ToString() ))
     {
         manager.readCheep();
     }
+    else
+    {
+        manager.readCheep(Int32.Parse(arguments["<limit>"].ToString()));
+        
+    }
 }
 
-else
-{
-    Console.WriteLine("Error: No arguments provided");
-}
-**/
+
   
