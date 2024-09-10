@@ -10,7 +10,7 @@ public class CheepManager
     public record Cheep(string Author, string Message, long Timestamp);
     IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
 
-    public void SaveCheep(string message)
+    public void saveCheep(string message)
     {
         if (string.IsNullOrWhiteSpace(message))
         {
@@ -23,7 +23,7 @@ public class CheepManager
         database.Store(cheep);
         
     }
-    public void ReadCheep() // this should be able to take ints!
+    public void readCheep() // this should be able to take ints!
     { 
          database.Read();
     }
