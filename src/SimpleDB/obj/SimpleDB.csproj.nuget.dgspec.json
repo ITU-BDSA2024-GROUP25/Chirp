@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj": {}
+    "C:\\Users\\nickl\\Desktop\\ANDSA\\Chirp\\src\\simpleDB\\SimpleDB.csproj": {}
   },
   "projects": {
-    "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj": {
+    "C:\\Users\\nickl\\Desktop\\ANDSA\\Chirp\\src\\simpleDB\\SimpleDB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj",
+        "projectUniqueName": "C:\\Users\\nickl\\Desktop\\ANDSA\\Chirp\\src\\simpleDB\\SimpleDB.csproj",
         "projectName": "SimpleDB",
-        "projectPath": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/SimpleDB.csproj",
-        "packagesPath": "/Users/mariehansen/.nuget/packages/",
-        "outputPath": "/Users/mariehansen/Desktop/ADSA/Project Churp/Chirp/simpleDB/obj/",
+        "projectPath": "C:\\Users\\nickl\\Desktop\\ANDSA\\Chirp\\src\\simpleDB\\SimpleDB.csproj",
+        "packagesPath": "C:\\Users\\nickl\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nickl\\Desktop\\ANDSA\\Chirp\\src\\simpleDB\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/mariehansen/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\nickl\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -59,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.410/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
