@@ -5,9 +5,9 @@ name: .NET
 
 on:
   push:
-    branches: [ "minor-bugfix-attempts-Teis" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "minor-bugfix-attempts-Teis" ]
+    branches: [ "main" ]
 
 jobs:
   build:
