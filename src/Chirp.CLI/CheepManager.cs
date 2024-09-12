@@ -17,8 +17,10 @@ public class CheepManager
             Console.WriteLine("Error: Empty cheep message");
             return;
         }
-    
-        Cheep cheep = new Cheep(Environment.UserName, message, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+
+        long unixTimestamp = get_UNIX_Timestamp(DateTimeOffset.UtcNow);
+        
+        Cheep cheep = new Cheep(Environment.UserName, message, unixTimestamp);
         
         database.Store(cheep);
         
@@ -27,5 +29,9 @@ public class CheepManager
     { 
          database.Read(limit);
     }
-        
+
+    public long get_UNIX_Timestamp(DateTimeOffset time)
+    {
+        return time.ToUnixTimeSeconds();
+    }
 }
