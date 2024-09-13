@@ -47,6 +47,7 @@ jobs:
       run: zip -r linuxrelease.zip . -x "Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/" 
 
     - name: Release
+      uses: softprops/action-gh-release@v2
       with:
         files: |
           winrelease.zip
