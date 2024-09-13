@@ -27,12 +27,14 @@ jobs:
     - name: Publish win64
       run: dotnet publish --framework net7.0 --runtime win-x64
     - name: Creating win64
-      run: zip -r winrelease.zip . -i "Chirp.CLI/bin/Release/net7.0/win-x64/publish"
+      run: |
+        rm -rf winrelease.zip
+        zip -r winrelease.zip . -x "Chirp.CLI/bin/Release/net7.0/win-x64/publish"
       
     - name: Publish osx64
       run: dotnet publish --framework net7.0 --runtime osx-x64 
     - name: Creating osx64
-      run: zip -r osxrelease.zip . -i "Chirp.CLI/bin/Release/net7.0/osx-x64/publish" 
+      run: zip -r osxrelease.zip . -x "Chirp.CLI/bin/Release/net7.0/osx-x64/publish" 
       
     - name: Publish osxarm64
       run: dotnet publish --framework net7.0 --runtime osx-arm64
