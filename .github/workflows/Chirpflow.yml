@@ -27,20 +27,20 @@ jobs:
     - name: Publish win64
       run: dotnet publish --framework net7.0 --runtime win-x64
     - name: Creating win64
-      run: zip -r winrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/win-x64/publish"
+      run: zip -r winrelease.zip . -x  "Chirp.CLI/bin/Release/net7.0/win-x64/publish" ".git/"
       
     - name: Publish osx64
       run: dotnet publish --framework net7.0 --runtime osx-x64 
     - name: Creating osx64
-      run: zip -r osxrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/osx-x64/publish"
+      run: zip -r osxrelease.zip . -x "Chirp.CLI/bin/Release/net7.0/osx-x64/publish" ".git/"
       
     - name: Publish osxarm64
       run: dotnet publish --framework net7.0 --runtime osx-arm64
     - name: Creating armZip
-      run: zip -r armrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/osx-arm64/publish"
+      run: zip -r armrelease.zip . -x  "Chirp.CLI/bin/Release/net7.0/osx-arm64/publish" ".git/"
       
     - name: Publish linux
       run: dotnet publish
     - name: Creating Zip
-      run: zip -r linuxrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/linux-x64/publish"
+      run: zip -r linuxrelease.zip . -x "Chirp.CLI/bin/Release/net7.0/linux-x64/publish" ".git/"
         
