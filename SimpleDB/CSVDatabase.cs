@@ -27,15 +27,20 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
             csv.Read();
             csv.ReadHeader();
 
-            while (csv.Read())
+            IEnumerable<T> records;
+
+            if (limit != null)
             {
-                var record = csv.GetRecord<Cheep>();
-                DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).DateTime;
 
-                var output = $"{record.Author} @ {dateTime}: {record.Message}";
+                records = csv.GetRecords<T>().ToList().Take((int)limit);
 
-                yield return (T)Convert.ChangeType(output, typeof(IEnumerable<T>));
+
             }
+            else
+            {
+                records = csv.GetRecords<T>().ToList();
+            }
+            return records;
 
             /*if !(limit == null || limit < 1)
             {
