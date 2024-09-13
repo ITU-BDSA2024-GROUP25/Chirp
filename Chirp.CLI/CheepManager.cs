@@ -25,7 +25,8 @@ public class CheepManager
     }
     public void readCheep(int? limit = null) 
     { 
-         database.Read(limit);
+        foreach(var cheep in database.Read(limit))
+				Console.WriteLine(cheep);
     }
         
 }
