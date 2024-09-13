@@ -20,7 +20,7 @@ public class CheepManager
     
         Cheep cheep = new Cheep(Environment.UserName, message, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         
-        database.Store(cheep);
+        database.Store(cheep); // should we have some feedback here?  so the user can tell that it worked.
         
     }
     public void readCheep(int? limit = null) 
