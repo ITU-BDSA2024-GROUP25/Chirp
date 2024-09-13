@@ -1,0 +1,46 @@
+name: Chirpflow
+
+on:
+  push:
+    tags: ['v[0-9].[0-9]+.[0-9]+']
+    branches: [ "main" ]
+ 
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+   
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+ 
+      
+    - name: Publish win64
+      run: dotnet publish --arch win-x64 
+    - name: Creating win64
+      run: zip -r winrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/win-x64/publish"
+      
+    - name: Publish osx64
+      run: dotnet publish --arch osx-x64 
+    - name: Creating osx64
+      run: zip -r osxrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/osx-x64/publish"
+      
+    - name: Publish osxarm64
+      run: dotnet publish --arch osx-arm64
+    - name: Creating armZip
+      run: zip -r armrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/osx-arm64/publish"
+      
+    - name: Publish linux
+      run: dotnet publish
+    - name: Creating Zip
+      run: zip -r linuxrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/linux-x64/publish"
+        
