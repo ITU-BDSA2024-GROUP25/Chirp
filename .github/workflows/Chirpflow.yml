@@ -25,7 +25,7 @@ jobs:
  
       
     - name: Publish win64
-      run: dotnet publish --arch win-x64 
+      run: dotnet publish --framework net7.0 --runtime win-x64.
     - name: Creating win64
       run: zip -r winrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/win-x64/publish"
       
