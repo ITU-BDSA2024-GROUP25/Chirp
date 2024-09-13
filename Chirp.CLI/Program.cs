@@ -27,7 +27,9 @@ if (arguments["cheep"].IsTrue){
     }
 
 if (arguments["read"].IsTrue){
-
+	// this sections needs to catch the exception that occurs
+	// if the input "read five" turns up.
+	// currently it does not know if someone feeds it a non null/int
     if (string.IsNullOrWhiteSpace(arguments["<limit>"].ToString() ))
     {
         manager.readCheep();
