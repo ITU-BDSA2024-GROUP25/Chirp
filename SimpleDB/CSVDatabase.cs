@@ -37,7 +37,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
                     
                 Console.WriteLine(output);
             }
-            return null;
+            return null; // this should be an EInumerable<T> containing records
         }
     }
 }
