@@ -30,12 +30,12 @@ jobs:
       run: zip -r winrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/win-x64/publish"
       
     - name: Publish osx64
-      run: dotnet publish --arch osx-x64 
+      run: dotnet publish --framework net7.0 --runtime osx-x64 
     - name: Creating osx64
       run: zip -r osxrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/osx-x64/publish"
       
     - name: Publish osxarm64
-      run: dotnet publish --arch osx-arm64
+      run: dotnet publish --framework net7.0 --runtime osx-arm64
     - name: Creating armZip
       run: zip -r armrelease.zip . -x ".git/" "Chirp.CLI/bin/Release/net7.0/osx-arm64/publish"
       
