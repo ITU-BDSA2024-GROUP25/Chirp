@@ -1,9 +1,10 @@
 name: Chirpflow
-
+permissions:
+  contents: write
+  
 on:
   push:
     tags: ['v[0-9].[0-9]+.[0-9]+']
-    branches: [ "main" ]
  
 jobs:
   build:
@@ -44,7 +45,7 @@ jobs:
     - name: Publish linux
       run: dotnet publish
     - name: Creating Zip
-      run: zip -r linuxrelease.zip . -i "Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/" 
+      run: zip -r linuxrelease.zip . -i "Chirp.CLI/bin/Debug/net7.0/publish/" 
 
     - name: Release
       uses: softprops/action-gh-release@v2
