@@ -34,20 +34,21 @@ jobs:
     - name: Publish osx64
       run: dotnet publish --framework net7.0 --runtime osx-x64 
     - name: Creating osx64
-      run: zip -r osxrelease.zip . -x "Chirp.CLI/bin/Debug/net7.0/osx-x64/publish/" 
+      run: zip -r osxrelease.zip . -i "Chirp.CLI/bin/Debug/net7.0/osx-x64/publish/" 
       
     - name: Publish osxarm64
       run: dotnet publish --framework net7.0 --runtime osx-arm64
     - name: Creating armZip
-      run: zip -r armrelease.zip . -x "Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/" 
+      run: zip -r armrelease.zip . -i "Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/" 
       
     - name: Publish linux
       run: dotnet publish
     - name: Creating Zip
-      run: zip -r linuxrelease.zip . -x "Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/" 
+      run: zip -r linuxrelease.zip . -i "Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/" 
 
     - name: Release
       uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
           winrelease.zip
