@@ -33,7 +33,7 @@ public class CheepManager
             {
                 DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).DateTime;
                 
-                var output = $"{Environment.UserName} @ {dateTime}: {cheep.Message}";
+                var output = $"{cheep.Author} @ {dateTime}: {cheep.Message}";
                 
 
                 Console.WriteLine(output);

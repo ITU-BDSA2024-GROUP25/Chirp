@@ -32,7 +32,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
             if (limit != null)
             {
 
-                records = csv.GetRecords<T>().ToList().Take((int)limit);
+                records = csv.GetRecords<T>().ToList().TakeLast((int)limit);
 
 
             }
@@ -41,15 +41,6 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
                 records = csv.GetRecords<T>().ToList();
             }
             return records;
-
-            /*if !(limit == null || limit < 1)
-            {
-                System.Collections.IEnumerator
-                    System.Collections.IEnumerable.GetEnumerator()
-                {
-                    return GetEnumerator().take(limit);
-                }
-            }*/
            
         }
     }
