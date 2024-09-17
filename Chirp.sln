@@ -1,9 +1,16 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI", "Chirp.CLI\Chirp.CLI.csproj", "{1A7AB262-1AB3-48AC-A73E-F97D02CED40A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI", "src\Chirp.CLI\Chirp.CLI.csproj", "{1A7AB262-1AB3-48AC-A73E-F97D02CED40A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3C2576F1-1E86-4014-978C-318783B54FC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.CLI.Tests", "test\Chirp.CLI.Tests\Chirp.CLI.Tests.csproj", "{E0F8877D-6D88-44A0-B03D-2E5BC7403BA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D67F5470-C7B7-4588-9931-C61B95CE4B63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDB", "src\SimpleDB\SimpleDB.csproj", "{61BF6DC7-2CE6-4BBA-9F98-1500050A4096}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +25,17 @@ Global
 		{1A7AB262-1AB3-48AC-A73E-F97D02CED40A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A7AB262-1AB3-48AC-A73E-F97D02CED40A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A7AB262-1AB3-48AC-A73E-F97D02CED40A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0F8877D-6D88-44A0-B03D-2E5BC7403BA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0F8877D-6D88-44A0-B03D-2E5BC7403BA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0F8877D-6D88-44A0-B03D-2E5BC7403BA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0F8877D-6D88-44A0-B03D-2E5BC7403BA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61BF6DC7-2CE6-4BBA-9F98-1500050A4096}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61BF6DC7-2CE6-4BBA-9F98-1500050A4096}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61BF6DC7-2CE6-4BBA-9F98-1500050A4096}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61BF6DC7-2CE6-4BBA-9F98-1500050A4096}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E0F8877D-6D88-44A0-B03D-2E5BC7403BA6} = {3C2576F1-1E86-4014-978C-318783B54FC2}
+		{61BF6DC7-2CE6-4BBA-9F98-1500050A4096} = {D67F5470-C7B7-4588-9931-C61B95CE4B63}
 	EndGlobalSection
 EndGlobal
