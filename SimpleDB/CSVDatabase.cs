@@ -41,7 +41,6 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
                 records = csv.GetRecords<T>().ToList();
             }
             return records;
-           
         }
     }
 }
