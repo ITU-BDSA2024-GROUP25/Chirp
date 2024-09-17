@@ -4,7 +4,7 @@ using CsvHelper;
 namespace SimpleDB;
 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
-    private readonly string _path = "chirp_cli_db.csv";
+    private readonly string _path = "../../data/chirp_cli_db.csv";
     public record Cheep(string Author, string Message, long Timestamp);
     
     public void Store(T record)
