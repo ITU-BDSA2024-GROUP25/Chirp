@@ -19,7 +19,7 @@ public class CheepManager
             return;
         }
 
-        Cheep cheep = new Cheep(Environment.UserName, message, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+        Cheep cheep = new Cheep(Environment.UserName, message, getTimestampUNIX(DateTimeOffset.UtcNow));
 
         database.Store(cheep);
 
@@ -40,9 +40,10 @@ public class CheepManager
                 Console.WriteLine(output);
                 
             }
-                
-            
-        
+    }
 
+    public long getTimestampUNIX(DateTimeOffset dt)
+    {
+        return dt.ToUnixTimeSeconds();
     }
 }
