@@ -8,6 +8,7 @@ namespace Chirp.CLI;
 public class CheepManager
 {
     public record Cheep(string Author, string Message, long Timestamp);
+
     IDatabaseRepository<Cheep> database = new CSVDatabase<Cheep>();
 
     public void saveCheep(string message)
@@ -18,20 +19,30 @@ public class CheepManager
             return;
         }
 
-        long unixTimestamp = get_UNIX_Timestamp(DateTimeOffset.UtcNow);
-        
-        Cheep cheep = new Cheep(Environment.UserName, message, unixTimestamp);
-        
+        Cheep cheep = new Cheep(Environment.UserName, message, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+
         database.Store(cheep);
-        
-    }
-    public void readCheep(int? limit = null) 
-    { 
-         database.Read(limit);
+
+
     }
 
-    public long get_UNIX_Timestamp(DateTimeOffset time)
+    public void readCheep(int? limit = null)
     {
-        return time.ToUnixTimeSeconds();
+          
+
+            foreach (var cheep in database.Read(limit))
+            {
+                DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).DateTime;
+                
+                var output = $"{cheep.Author} @ {dateTime}: {cheep.Message}";
+                
+
+                Console.WriteLine(output);
+                
+            }
+                
+            
+        
+
     }
 }

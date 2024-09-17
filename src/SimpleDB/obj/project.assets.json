@@ -53,26 +53,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nickl\\.nuget\\packages\\": {}
+    "C:\\Users\\lord_\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\nickl\\Desktop\\ANDSA\\Chirp\\src\\SimpleDB\\SimpleDB.csproj",
+      "projectUniqueName": "C:\\Users\\lord_\\Documents\\GitHub\\Chirp\\SimpleDB\\SimpleDB.csproj",
       "projectName": "SimpleDB",
-      "projectPath": "C:\\Users\\nickl\\Desktop\\ANDSA\\Chirp\\src\\SimpleDB\\SimpleDB.csproj",
-      "packagesPath": "C:\\Users\\nickl\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nickl\\Desktop\\ANDSA\\Chirp\\src\\SimpleDB\\obj\\",
+      "projectPath": "C:\\Users\\lord_\\Documents\\GitHub\\Chirp\\SimpleDB\\SimpleDB.csproj",
+      "packagesPath": "C:\\Users\\lord_\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lord_\\Documents\\GitHub\\Chirp\\SimpleDB\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nickl\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\lord_\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -112,7 +110,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
       }
     }
   }

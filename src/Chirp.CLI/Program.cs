@@ -6,6 +6,7 @@ using DocoptNet;
 CheepManager manager = new CheepManager();
 // code taken from slides : https://github.com/itu-bdsa/lecture_notes/blob/main/sessions/session_02/Slides.md
 // code inpired by documentation link : https://docopt.github.io/docopt.net/dev/#api
+// Using this comment to test if our new workflow runs 
 
 const string usage = @"Chirp CLI version. 
 Usage:
@@ -22,9 +23,13 @@ Options:
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 if (arguments["cheep"].IsTrue){
     manager.saveCheep(arguments["<message>"].ToString());
+    
     }
-if (arguments["read"].IsTrue){
 
+if (arguments["read"].IsTrue){
+	// this sections needs to catch the exception that occurs
+	// if the input "read five" turns up.
+	// currently it does not know if someone feeds it a non null/int
     if (string.IsNullOrWhiteSpace(arguments["<limit>"].ToString() ))
     {
         manager.readCheep();

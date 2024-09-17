@@ -26,18 +26,21 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
         {
             csv.Read();
             csv.ReadHeader();
-            string output;
-            while ((limit > 0 || limit == null) && csv.Read())
-            {
-				limit--;
-                var record = csv.GetRecord<Cheep>();
-                DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(record.Timestamp).DateTime;
 
-                output = $"{record.Author} @ {dateTime}: {record.Message}";
-                    
-                Console.WriteLine(output);
+            IEnumerable<T> records;
+
+            if (limit != null)
+            {
+
+                records = csv.GetRecords<T>().ToList().TakeLast((int)limit);
+
+
             }
-            return null;
+            else
+            {
+                records = csv.GetRecords<T>().ToList();
+            }
+            return records;
         }
     }
 }

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "nYQ2v6arkzzPRx+gvSOA/pUhoe9ZN/nPOd+m4F93a2SwUI54BgSZ7vSA1cFgFTbvz025GhdL61SENr3zRSEK9w==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\lord_\\Documents\\GitHub\\Chirp\\SimpleDB\\SimpleDB.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\lord_\\.nuget\\packages\\csvhelper\\33.0.1\\csvhelper.33.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
