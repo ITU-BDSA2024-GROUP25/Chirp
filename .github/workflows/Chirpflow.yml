@@ -42,9 +42,9 @@ jobs:
       run: zip -j armrelease.zip "src/Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/Chirp.CLI" 
       
     - name: Publish linux
-      run: dotnet publish --no-self-contained
+      run: dotnet publish --framework net7.0 --runtime linux-x64  --no-self-contained
     - name: Creating linux-x64 Zip
-      run: zip -j linuxrelease.zip "src/Chirp.CLI/bin/Debug/net7.0/publish/Chirp.CLI"
+      run: zip -j linuxrelease.zip "src/Chirp.CLI/bin/Debug/net7.0/publish/linux-x64/Chirp.CLI"
 
     - name: Release
       uses: softprops/action-gh-release@v2
