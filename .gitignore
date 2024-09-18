@@ -1,5 +1,12 @@
-
 /.idea
-/SimpleDB/bin
-/SimpleDB/obj
-/SimpleDB/obj
+
+/src/SimpleDB/bin
+/src/SimpleDB/obj
+/src/Chirp.CLI/bin
+/src/Chirp.CLI/obj
+
+/test/Chirp.CLI.Tests/bin
+/test/Chirp.CLI.Tests/obj
+/test/SimpleDB.Tests/bin
+/test/SimpleDB.Tests/obj
+
