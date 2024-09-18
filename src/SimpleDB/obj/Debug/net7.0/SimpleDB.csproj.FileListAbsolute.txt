@@ -1,0 +1,12 @@
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\bin\Debug\net7.0\SimpleDB.deps.json
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\bin\Debug\net7.0\SimpleDB.dll
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\bin\Debug\net7.0\SimpleDB.pdb
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\obj\Debug\net7.0\SimpleDB.csproj.AssemblyReference.cache
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\obj\Debug\net7.0\SimpleDB.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\obj\Debug\net7.0\SimpleDB.AssemblyInfoInputs.cache
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\obj\Debug\net7.0\SimpleDB.AssemblyInfo.cs
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\obj\Debug\net7.0\SimpleDB.csproj.CoreCompileInputs.cache
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\obj\Debug\net7.0\SimpleDB.dll
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\obj\Debug\net7.0\refint\SimpleDB.dll
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\obj\Debug\net7.0\SimpleDB.pdb
+C:\Users\nickl\Desktop\ANDSA\Chirp\src\simpleDB\obj\Debug\net7.0\ref\SimpleDB.dll

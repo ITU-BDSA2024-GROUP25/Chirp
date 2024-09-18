@@ -4,13 +4,14 @@ using CsvHelper;
 namespace SimpleDB;
 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
-    private readonly string _path = "chirp_cli_db.csv";
+    // private readonly here, public only for testing
+    public string path = "../../data/chirp_cli_db.csv";
     public record Cheep(string Author, string Message, long Timestamp);
     
     public void Store(T record)
     {
         
-        using (var stream = new FileStream(_path, FileMode.Append))
+        using (var stream = new FileStream(path, FileMode.Append))
         using (var writer = new StreamWriter(stream))
         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
         {
@@ -21,7 +22,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
 
     public IEnumerable<T> Read(int? limit = null)
     {
-        using (var reader = new StreamReader(_path))
+        using (var reader = new StreamReader(path))
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
         {
             csv.Read();
