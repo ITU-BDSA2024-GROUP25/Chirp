@@ -6,7 +6,6 @@ using DocoptNet;
 CheepManager manager = new CheepManager();
 // code taken from slides : https://github.com/itu-bdsa/lecture_notes/blob/main/sessions/session_02/Slides.md
 // code inpired by documentation link : https://docopt.github.io/docopt.net/dev/#api
-// Using this comment to test if our new workflow runs 
 
 const string usage = @"Chirp CLI version. 
 Usage:
