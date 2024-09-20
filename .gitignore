@@ -15,7 +15,7 @@
 
 # Mono auto generated files
 mono_crash.*
-test/SimpleDB.Tests/obj/project.nuget.cache
+/src/SimpleDB/obj/
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
