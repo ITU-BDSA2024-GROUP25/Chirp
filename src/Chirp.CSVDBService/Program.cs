@@ -6,6 +6,9 @@ var app = builder.Build();
 app.MapGet("/cheeps", () => new[]
     {
             new {name = "pølse"}, 
+                        new {name = "pølse"}, 
+                                    new {name = "pølse"}, 
+                                                new {name = "pølse"}, 
             /*         foreach (var cheep in database.Read()){
                 {new name = $"{cheep.Author}",timestamp =  "{cheep.Timestamp}", content = $"{cheep.Message}"}
             }*/
