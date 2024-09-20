@@ -8,6 +8,21 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
     public string path = "../../data/chirp_cli_db.csv";
     public record Cheep(string Author, string Message, long Timestamp);
     
+    private static CSVDatabase<T>? _instance = null;
+    
+    private CSVDatabase() { }
+
+    public static CSVDatabase<T> Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new CSVDatabase<T>();
+            }
+            return _instance;
+        }
+    }
     public void Store(T record)
     {
         
