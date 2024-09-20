@@ -4,19 +4,23 @@ IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-
 // adapted from copilot code, full code at bottom of program
 // code appeared when googeling "c# forloop in app.mapget"
 app.MapGet("/cheeps", () =>
     {
      var BS = new List<Cheep>();
-     foreach (var cheep in database.Read()){
+     foreach (var cheep in database.Read()){ // <- this needs to accept an argument from cheepmanager
                BS.Add(cheep);
             }
      return BS;       
     });
         
-app.MapGet("/cheep", () => "ein requeste hereth postth thine cheep to yon csv DB");
+app.MapPost("/cheep", (Cheep cheep) => 
+    {
+    database.Store(cheep);
+    return Results.Ok(cheep);
+    });
+
 app.Run();
 
 
