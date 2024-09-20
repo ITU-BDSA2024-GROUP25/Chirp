@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
-using CsvHelper;
-using SimpleDB;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 
 namespace Chirp.CLI;
@@ -9,7 +10,8 @@ public class CheepManager
 {
     public record Cheep(string Author, string Message, long Timestamp);
 
-    IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
+
+
 
     public void saveCheep(string message)
     {
@@ -21,7 +23,7 @@ public class CheepManager
 
         Cheep cheep = new Cheep(Environment.UserName, message, getTimestampUNIX(DateTimeOffset.UtcNow));
 
-        database.Store(cheep);
+        Console.WriteLine("Error: non-empty cheep message");
 
 
     }
@@ -30,7 +32,7 @@ public class CheepManager
     {
           
 
-            foreach (var cheep in database.Read(limit))
+            /*foreach (var cheep in database.Read(limit))
             {
                 DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).DateTime;
                 
@@ -39,7 +41,8 @@ public class CheepManager
 
                 Console.WriteLine(output);
                 
-            }
+            }*/
+            Console.WriteLine("Error: reading!");
     }
 
     public long getTimestampUNIX(DateTimeOffset dt)
