@@ -2,7 +2,6 @@
 using Chirp.CLI;
 using DocoptNet; 
 
-
 CheepManager manager = new CheepManager();
 // code taken from slides : https://github.com/itu-bdsa/lecture_notes/blob/main/sessions/session_02/Slides.md
 // code inpired by documentation link : https://docopt.github.io/docopt.net/dev/#api
@@ -21,7 +20,7 @@ Options:
 // using Docopt to parse arguments and call cheep manager saveCheep() or readCheep() methodes 
 var arguments = new Docopt().Apply(usage, args, version: "1.0", exit: true)!;
 if (arguments["cheep"].IsTrue){
-    manager.saveCheep(arguments["<message>"].ToString());
+    await manager.saveCheep(arguments["<message>"].ToString());
     
     }
 

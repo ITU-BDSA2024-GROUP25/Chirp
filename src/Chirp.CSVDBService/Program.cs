@@ -6,12 +6,12 @@ var app = builder.Build();
 
 // adapted from copilot code, full code at bottom of program
 // code appeared when googeling "c# forloop in app.mapget"
-app.MapGet("/cheeps", () =>
+app.MapGet("/cheeps", async () =>
     {
      var BS = new List<Cheep>();
      foreach (var cheep in database.Read()){ // <- this needs to accept an argument from cheepmanager
                BS.Add(cheep);
-            }
+     }
      return BS;       
     });
         
