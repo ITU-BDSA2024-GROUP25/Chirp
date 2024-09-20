@@ -5,7 +5,7 @@ namespace SimpleDB;
 
 public sealed class CSVDatabase<T> : IDatabaseRepository<T> {
     // private readonly here, public only for testing
-    public string path = "/data/chirp_cli_db.csv";
+    public string path = "data/chirp_cli_db.csv";
     public record Cheep(string Author, string Message, long Timestamp);
     
     private static CSVDatabase<T>? _instance = null;
