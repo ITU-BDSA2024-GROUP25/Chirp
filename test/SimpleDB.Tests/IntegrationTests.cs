@@ -10,7 +10,7 @@ public class IntegrationTests
     public void CSVDatabaseStoreAndReadTest()
     {
         // Arrange
-        CSVDatabase<Cheep> csv = new CSVDatabase<Cheep>();
+        CSVDatabase<Cheep> csv = CSVDatabase<Cheep>.Instance;
         csv.path = "../../../../../data/chirp_cli_db.csv";
         
         Cheep cheep = new Cheep("John Doe", "I am John Doeeee", DateTimeOffset.Now.ToUnixTimeSeconds());
