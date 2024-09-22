@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -27,8 +27,9 @@ public class CheepManager
 
     public async Task readCheep(int? limit = null)
     {
+
         Console.WriteLine("Reading cheep");
-        var cheeps = await sharedClient.GetFromJsonAsync<List<Cheep>>("cheeps");
+        var cheeps = await sharedClient.GetFromJsonAsync<List<Cheep>>($"cheeps/{limit}");
 
         if (cheeps != null)
             foreach (var cheep in cheeps)
