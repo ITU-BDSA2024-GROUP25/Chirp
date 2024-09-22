@@ -25,17 +25,15 @@ public class CheepManager
         await sharedClient.PostAsJsonAsync("cheep", cheep);
     }
 
-    public async void readCheep(int? limit = null)
+    public async Task readCheep(int? limit = null)
     {
         Console.WriteLine("Reading cheep");
-        var cheep = await sharedClient.GetFromJsonAsync<Cheep>("cheeps");
-        Console.WriteLine($"Found {cheep.Author} ({cheep.Timestamp})");
+        var cheeps = await sharedClient.GetFromJsonAsync<List<Cheep>>("cheeps");
+        cheeps.ForEach(Console.WriteLine);
+        Console.WriteLine("test");
         
-        DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).DateTime;
-        var output = $"{cheep.Author} @ {dateTime}: {cheep.Message}";
-        
-        Console.WriteLine(output);
-        Console.WriteLine("output");
+     
+       
 
         /*foreach (var cheep in database.Read(limit))
             {
@@ -49,6 +47,7 @@ public class CheepManager
             }*/
             //Console.WriteLine("Error: reading!");
     }
+    
 
     public long getTimestampUNIX(DateTimeOffset dt)
     {
