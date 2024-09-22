@@ -6,10 +6,18 @@ var app = builder.Build();
 
 // adapted from copilot code, full code at bottom of program
 // code appeared when googeling "c# forloop in app.mapget"
-app.MapGet("/cheeps", async () =>
+app.MapGet("/cheeps/{limit}", async (HttpRequest request) =>
     {
+     var limit = request.RouteValues["limit"].ToString(); // <- https://www.youtube.com/watch?v=AuKKFVSMxJc
+     int? intlimit = null;                                //    very helpfull getting the basics down
+     if (limit == "all")                                  //    used the request example for thisS
+        {
+        intlimit = null;       
+        }else{
+        intlimit = int.Parse(limit);  
+        }
      var BS = new List<Cheep>();
-     foreach (var cheep in database.Read()){ // <- this needs to accept an argument from cheepmanager
+     foreach (var cheep in database.Read(intlimit)){ // <- this needs to accept an argument from cheepmanager
                BS.Add(cheep);
      }
      return BS;       
