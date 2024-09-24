@@ -25,23 +25,24 @@ if (arguments["cheep"].IsTrue){
     }
 
 if (arguments["read"].IsTrue){
- 
-	// this sections needs to catch the exception that occurs
-	// if the input "read five" turns up.
-	// currently it does not know if someone feeds it a non null/int!
-    
     // got the idea for moving the .Wait() method from here:  
     // https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/task-based-asynchronous-programming
-    if (string.IsNullOrWhiteSpace(arguments["<limit>"].ToString() ))
+    try
     {
-        Task read = Task.Run(() => manager.readCheep());
-        read.Wait();
-
+        if (string.IsNullOrWhiteSpace(arguments["<limit>"].ToString()))
+        {
+            Task read = Task.Run(() => manager.readCheep());
+            read.Wait();
+        }
+        else
+        {
+            manager.readCheep(Int32.Parse(arguments["<limit>"].ToString()));
+        }
     }
-    else
+    
+    catch (Exception e)
     {
-        manager.readCheep(Int32.Parse(arguments["<limit>"].ToString()));
-        
+        Console.WriteLine(e.Message);
     }
 }
 
