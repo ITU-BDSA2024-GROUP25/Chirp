@@ -39,7 +39,7 @@ jobs:
     - name: Publish osxarm64
       run: dotnet publish --framework net8.0 --runtime osx-arm64 --no-self-contained
     - name: Creating arm-x64 Zip
-      run: zip -j armrelease.zip "src/Chirp.CLI/bin/Release/net8.0/arm-x64/publish/Chirp.CLI" 
+      run: zip -j armrelease.zip "src/Chirp.CLI/bin/Release/net8.0/osx-arm64/publish/Chirp.CLI" 
       
     - name: Publish linux
       run: dotnet publish --framework net8.0 --runtime linux-x64  --no-self-contained
