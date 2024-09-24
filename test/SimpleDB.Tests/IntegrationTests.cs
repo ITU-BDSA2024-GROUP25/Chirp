@@ -1,26 +1,39 @@
 using Chirp.CLI;
+using System.Net;
+using System.Net.Http.Json;
+using Newtonsoft.Json;
 
 namespace SimpleDB.Tests;
 
 public class IntegrationTests
 {
     public record Cheep(string Author, string Message, long Timestamp);
+    
+        [Fact]
+        public async Task GetCheeps_ReturnOK()
+        {
+            // Arrange
+            using var client = new HttpClient { BaseAddress = new Uri("http://localhost:5137") };
+    
+            // Act
+            var response = await client.GetAsync("/cheeps");
 
-    [Fact]
-    public void CSVDatabaseStoreAndReadTest()
-    {
-        // Arrange
-        CSVDatabase<Cheep> csv = CSVDatabase<Cheep>.Instance;
-        csv.path = "../../../../../data/chirp_cli_db.csv";
-        
-        Cheep cheep = new Cheep("John Doe", "I am John Doeeee", DateTimeOffset.Now.ToUnixTimeSeconds());
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
 
-        var amount = csv.Read().Count();
-
-        // Act
-        csv.Store(cheep);
-
-        // Assert
-        Assert.Equal(amount + 1, csv.Read().Count());
-    }
+        [Fact]
+        public async Task PostCheeps_ReturnOK()
+        {
+            // Arrange
+            using var client = new HttpClient { BaseAddress = new Uri("http://localhost:5137") };
+            Cheep cheep = new Cheep("ImATester", "Hej", 123456);
+            
+            // Act
+            var response = await client.PostAsJsonAsync("cheep", cheep);
+            
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            // Should cleanup afterwards here
+        }
 }
