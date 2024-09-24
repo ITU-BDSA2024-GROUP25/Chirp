@@ -1,7 +1,7 @@
-﻿using System.Globalization;
-using CsvHelper;
-using SimpleDB;
-
+using System.Globalization;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace Chirp.CLI;
 
@@ -9,38 +9,42 @@ public class CheepManager
 {
     public record Cheep(string Author, string Message, long Timestamp);
 
-    IDatabaseRepository<Cheep> database = CSVDatabase<Cheep>.Instance;
-
-    public void saveCheep(string message)
+    private static HttpClient sharedClient = new()
+    {
+        BaseAddress = new Uri("http://localhost:5137/"),
+    };
+    public async Task saveCheep(string message)
     {
         if (string.IsNullOrWhiteSpace(message))
         {
             Console.WriteLine("Error: Empty cheep message");
             return;
         }
-
         Cheep cheep = new Cheep(Environment.UserName, message, getTimestampUNIX(DateTimeOffset.UtcNow));
 
-        database.Store(cheep);
-
-
+        await sharedClient.PostAsJsonAsync("cheep", cheep);
     }
 
-    public void readCheep(int? limit = null)
+    public async Task readCheep(int? limit = null)
     {
-          
 
-            foreach (var cheep in database.Read(limit))
+        Console.WriteLine("Reading cheep");
+        var cheeps = await sharedClient.GetFromJsonAsync<List<Cheep>>($"cheeps/{limit}");
+
+        if (cheeps != null)
+            foreach (var cheep in cheeps)
             {
                 DateTime dateTime = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).DateTime;
-                
+
                 var output = $"{cheep.Author} @ {dateTime}: {cheep.Message}";
-                
+
 
                 Console.WriteLine(output);
-                
             }
+
     }
+
+
 
     public long getTimestampUNIX(DateTimeOffset dt)
     {
