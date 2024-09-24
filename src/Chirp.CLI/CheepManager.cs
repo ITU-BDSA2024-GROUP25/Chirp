@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -11,7 +11,7 @@ public class CheepManager
 
     private static HttpClient sharedClient = new()
     {
-        BaseAddress = new Uri("http://localhost:5137/"),
+        BaseAddress = new Uri("http://bdsagroup25chirpremotedb1.azurewebsites.net"),
     };
     public async Task saveCheep(string message)
     {
