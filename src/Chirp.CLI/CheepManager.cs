@@ -27,7 +27,7 @@ public class CheepManager
 
     public async Task readCheep(int? limit = null)
     {
-        // this does not pass the limit properly
+        // this does not pass the limit properly.
         Console.WriteLine("Reading cheep");
         var cheeps = await sharedClient.GetFromJsonAsync<List<Cheep>>($"cheeps/{limit}");
 
