@@ -13,7 +13,7 @@ public class IntegrationTests
         public async Task GetCheeps_ReturnOK()
         {
             // Arrange
-            using var client = new HttpClient { BaseAddress = new Uri("http://localhost:5137") };
+            using var client = new HttpClient { BaseAddress = new Uri("https://bdsagroup25chirpremotedb1.azurewebsites.net/") };
     
             // Act
             var response = await client.GetAsync("/cheeps");
@@ -26,7 +26,7 @@ public class IntegrationTests
         public async Task PostCheeps_ReturnOK()
         {
             // Arrange
-            using var client = new HttpClient { BaseAddress = new Uri("http://localhost:5137") };
+            using var client = new HttpClient { BaseAddress = new Uri("https://bdsagroup25chirpremotedb1.azurewebsites.net/") };
             Cheep cheep = new Cheep("ImATester", "Hej", 123456);
             
             // Act
