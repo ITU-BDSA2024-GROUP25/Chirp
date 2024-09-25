@@ -2,6 +2,8 @@
 using Chirp.CLI;
 using DocoptNet; 
 
+// this is a comment used to test pull request git 
+
 CheepManager manager = new CheepManager();
 // code taken from slides : https://github.com/itu-bdsa/lecture_notes/blob/main/sessions/session_02/Slides.md
 // code inpired by documentation link : https://docopt.github.io/docopt.net/dev/#api
