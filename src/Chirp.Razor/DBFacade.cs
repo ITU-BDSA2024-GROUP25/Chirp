@@ -1,20 +1,17 @@
 ﻿using System.Data;
 using Microsoft.Data.Sqlite;
 
-namespace chirp.razor;
-public record CheepViewModel(string Author, string Message, string Timestamp);
-
 public interface IDatabaseReader
 {
-    public void reader(String input)
+    public static abstract List<CheepViewModel> reader();
 }
 
 public class SQLReader : IDatabaseReader
 {
-    public void reader(String input)
+    public static List<CheepViewModel> reader()
     {
-        var sqlDBFilePath = "/data/chirp.db";
-        var sqlQuery = @"SELECT * FROM message ORDER by message.pub_date desc";
+        var sqlDBFilePath = "data/chirp.db";
+        var sqlQuery = @"SELECT * FROM user JOIN message on user_id = author_id ORDER by message.pub_date desc";
         var allCheeps = new List<CheepViewModel>();
 
         using (var connection = new SqliteConnection($"Data Source={sqlDBFilePath}"))
@@ -27,19 +24,18 @@ public class SQLReader : IDatabaseReader
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                // https://learn.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqldatareader?view=dotnet-plat-ext-7.0#examples
-                var dataRecord = (IDataRecord)reader;
-                for (var i = 0; i < dataRecord.FieldCount; i++)
-                    Console.WriteLine($"{dataRecord.GetName(i)}: {dataRecord[i]}");
-
+                CheepViewModel tempCheep = new CheepViewModel("null", "null", "null");
                 // See https://learn.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqldatareader.getvalues?view=dotnet-plat-ext-7.0
                 // for documentation on how to retrieve complete columns from query results
                 var values = new object[reader.FieldCount];
                 var fieldCount = reader.GetValues(values);
-                for (var i = 0; i < fieldCount; i++)
-                    Console.WriteLine($"{reader.GetName(i)}: {values[i]}");
+                tempCheep = new CheepViewModel($"{values[1]}", $"{values[5]}", $"{values[6]}");
+                allCheeps.Add(tempCheep);
+                
+                //Console.WriteLine($"{reader.GetName(i)}: {values[i]}");
+                // vi vil have fat i navn, txt og date.
             }
-
+            return allCheeps;
         }
     }
 }
