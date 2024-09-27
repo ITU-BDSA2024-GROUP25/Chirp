@@ -25,15 +25,13 @@ public class SQLReader : IDatabaseReader
             while (reader.Read())
             {
                 CheepViewModel tempCheep = new CheepViewModel("null", "null", "null");
+                // based on material from lecture 5
                 // See https://learn.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqldatareader.getvalues?view=dotnet-plat-ext-7.0
                 // for documentation on how to retrieve complete columns from query results
                 var values = new object[reader.FieldCount];
                 var fieldCount = reader.GetValues(values);
-                tempCheep = new CheepViewModel($"{values[1]}", $"{values[5]}", $"{values[6]}");
+                tempCheep = new CheepViewModel($"{values[1]}", $"{values[5]}", $"{DateTimeOffset.FromUnixTimeSeconds(Convert.ToInt64(values[6])).DateTime}");
                 allCheeps.Add(tempCheep);
-                
-                //Console.WriteLine($"{reader.GetName(i)}: {values[i]}");
-                // vi vil have fat i navn, txt og date.
             }
             return allCheeps;
         }
