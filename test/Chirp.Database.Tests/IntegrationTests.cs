@@ -1,4 +1,0 @@
-namespace Chirp.Database.Tests
-{
-    
-}
