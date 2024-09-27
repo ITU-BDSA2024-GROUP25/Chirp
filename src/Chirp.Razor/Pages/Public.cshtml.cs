@@ -18,7 +18,7 @@ public class PublicModel : PageModel
 
     public int TotalPages { get; set; }
 
-    public ActionResult OnGet(int? page)
+    public ActionResult OnGet([FromQuery] int? page)
     {
         CurrentPage = page ?? 1;        
 
