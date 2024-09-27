@@ -1,3 +1,5 @@
+
+
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
@@ -9,28 +11,8 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-    // These would normally be loaded from a database for example
-    private static readonly List<CheepViewModel> _cheeps = new()
-        {
-            new CheepViewModel("He1lge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adr2ian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-            new CheepViewModel("Helg3e", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adria4n", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-            new CheepViewModel("Helge5", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adria6n", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-            new CheepViewModel("Helge7", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adri8an", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-            new CheepViewModel("Helg9e", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adri10an", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-            new CheepViewModel("Helge11", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adria12n", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-            new CheepViewModel("He13lge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-            new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-            new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Adrian", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-        };
+ 
+    private static readonly List<CheepViewModel> _cheeps = SQLReader.reader();
 
     public int GetTotalCheepsCount()
     {
