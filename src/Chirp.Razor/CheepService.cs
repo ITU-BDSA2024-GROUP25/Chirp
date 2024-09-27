@@ -5,8 +5,9 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 public interface ICheepService
 {
     public List<CheepViewModel> GetCheeps(int page, int pageSize);
-    public List<CheepViewModel> GetCheepsFromAuthor(string author);
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize);
     public int GetTotalCheepsCount();
+    public int GetTotalCheepsCountFromAuthor(string author);
 }
 
 public class CheepService : ICheepService
@@ -19,6 +20,11 @@ public class CheepService : ICheepService
         return _cheeps.Count();
     }
 
+    public int GetTotalCheepsCountFromAuthor(string author)
+    {
+        return _cheeps.Where(x => x.Author == author).ToList().Count();
+    }
+
      public List<CheepViewModel> GetCheeps(int pageNumber, int pageSize)
     {
         return _cheeps
@@ -28,10 +34,14 @@ public class CheepService : ICheepService
             .ToList();
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize)
     {
         // filter by the provided author name
-        return _cheeps.Where(x => x.Author == author).ToList();
+        return _cheeps
+            .Where(x => x.Author == author).ToList()
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
     }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
