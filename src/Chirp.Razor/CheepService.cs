@@ -4,8 +4,9 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps();
+    public List<CheepViewModel> GetCheeps(int page, int pageSize);
     public List<CheepViewModel> GetCheepsFromAuthor(string author);
+    public int GetTotalCheepsCount();
 }
 
 public class CheepService : ICheepService
@@ -13,9 +14,18 @@ public class CheepService : ICheepService
  
     private static readonly List<CheepViewModel> _cheeps = SQLReader.reader();
 
-    public List<CheepViewModel> GetCheeps()
+    public int GetTotalCheepsCount()
     {
-        return _cheeps;
+        return _cheeps.Count();
+    }
+
+     public List<CheepViewModel> GetCheeps(int pageNumber, int pageSize)
+    {
+        return _cheeps
+            // .OrderByDescending(c => c.Timestamp)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author)

@@ -6,6 +6,7 @@ namespace Chirp.Razor.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepService _service;
+    private const int PageSize = 10;
     public List<CheepViewModel> Cheeps { get; set; }
 
     public PublicModel(ICheepService service)
@@ -13,9 +14,20 @@ public class PublicModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet()
+    public int CurrentPage { get; set; }
+
+    public int TotalPages { get; set; }
+
+    public ActionResult OnGet([FromQuery] int? page)
     {
-        Cheeps = _service.GetCheeps();
+        CurrentPage = page ?? 1;        
+
+        int totalCheeps = _service.GetTotalCheepsCount();
+        TotalPages = (int)Math.Ceiling(totalCheeps / (double)PageSize);
+
+        // Fetch the cheeps for the requested page
+        Cheeps = _service.GetCheeps(CurrentPage, PageSize);
+
         return Page();
     }
 }
