@@ -2,6 +2,8 @@
 
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
+
+
 public interface ICheepService
 {
     public List<CheepViewModel> GetCheeps(int page, int pageSize);
@@ -12,11 +14,13 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
- 
+    public string supertest = Environment.GetEnvironmentVariable("TEST");
+
     private static readonly List<CheepViewModel> _cheeps = SQLReader.reader();
 
     public int GetTotalCheepsCount()
     {
+        Console.WriteLine(supertest);
         return _cheeps.Count();
     }
 
