@@ -12,6 +12,7 @@ public class PublicModel : PageModel
     public PublicModel(ICheepService service)
     {
         _service = service;
+        _service.CurrentPage = CurrentPage; 
     }
 
     public int CurrentPage { get; set; }

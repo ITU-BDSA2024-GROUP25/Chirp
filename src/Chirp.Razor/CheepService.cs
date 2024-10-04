@@ -8,12 +8,14 @@ public interface ICheepService
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize);
     public int GetTotalCheepsCount();
     public int GetTotalCheepsCountFromAuthor(string author);
+    public int CurrentPage { get; set;}
 }
 
 public class CheepService : ICheepService
 {
  
     private static readonly List<CheepViewModel> _cheeps = SQLReader.reader();
+    public int CurrentPage {get; set;}
 
     public int GetTotalCheepsCount()
     {
