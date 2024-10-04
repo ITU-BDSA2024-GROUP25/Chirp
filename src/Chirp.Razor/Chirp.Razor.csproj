@@ -11,5 +11,11 @@
     <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8" />
     <EmbeddedResource Include="data/**/*" />
   </ItemGroup>
+  // installing EF Core 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8" />
+  </ItemGroup>
 
 </Project>
