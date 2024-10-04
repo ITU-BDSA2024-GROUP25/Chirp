@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Razor;
 
-class ChirpDbContext : DbContext
+public class ChirpDbContext : DbContext
 
 {
     
