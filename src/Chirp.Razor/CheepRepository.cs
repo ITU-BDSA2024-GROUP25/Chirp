@@ -6,8 +6,8 @@ public interface ICheepRepository
 {
     public Task CreateCheep(Cheep cheep);
     public int CurrentPage { get; set;  }
-    public Task<IEnumerable<Cheep>> GetCheeps();
-    public Task<IEnumerable<Cheep>> GetCheeps(Author author);
+    public Task<List<Cheep>> GetCheeps();
+    public Task<List<Cheep>> GetCheeps(Author author);
 }
 public class CheepRepository : ICheepRepository 
 {
@@ -24,7 +24,7 @@ public class CheepRepository : ICheepRepository
     }
     
     //adapted from slides session 6 page 8
-    public async Task<IEnumerable<Cheep>> GetCheeps() 
+    public async Task<List<Cheep>> GetCheeps() 
     {
         var query = (from cheep in _context.Cheeps
                 orderby cheep.TimeStamp descending
@@ -35,7 +35,7 @@ public class CheepRepository : ICheepRepository
         return result;
     }
 
-    public async Task<IEnumerable<Cheep>> GetCheeps(Author author)
+    public async Task<List<Cheep>> GetCheeps(Author author)
     {
         var query = (from cheep in _context.Cheeps
                 orderby cheep.TimeStamp descending

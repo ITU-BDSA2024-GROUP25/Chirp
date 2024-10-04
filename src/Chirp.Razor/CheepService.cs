@@ -1,10 +1,12 @@
 
 
+using Chirp.Razor;
+
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps(int page, int pageSize);
+    public List<Cheep> GetCheeps();
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize);
     public int GetTotalCheepsCount();
     public int GetTotalCheepsCountFromAuthor(string author);
@@ -13,6 +15,14 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
+    
+    private readonly ChirpDbContext _context;
+    private CheepRepository _cheepRepo;
+    public CheepService(ChirpDbContext context)
+    {
+        _context = context;
+        _cheepRepo = new CheepRepository(context);
+    }
  
     private static readonly List<CheepViewModel> _cheeps = SQLReader.reader();
     public int CurrentPage {get; set;}
@@ -27,14 +37,10 @@ public class CheepService : ICheepService
         return _cheeps.Where(x => x.Author == author).ToList().Count();
     }
 
-     public List<CheepViewModel> GetCheeps(int pageNumber, int pageSize)
-    {
-        return _cheeps
-            // .OrderByDescending(c => c.Timestamp)
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-    }
+     public List<Cheep> GetCheeps()
+     {
+         List<Cheep> cheeps = _cheepRepo.GetCheeps();
+     }
 
     public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize)
     {
