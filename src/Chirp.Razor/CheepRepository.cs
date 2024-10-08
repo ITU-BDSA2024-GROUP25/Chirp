@@ -6,7 +6,7 @@ public interface ICheepRepository
 {
     public Task CreateCheep(Cheep cheep);
     public int CurrentPage { get; set;  }
-    public Task<List<Cheep>> GetCheeps(string? author);
+    public Task<List<CheepDto>> GetCheeps(string? author);
     public int GetTotalCheepsCount(string? author);
 }
 public class CheepRepository : ICheepRepository 
@@ -25,14 +25,15 @@ public class CheepRepository : ICheepRepository
     }
 
     //adapted from slides session 6 page 8
-    public async Task<List<Cheep>> GetCheeps(string? author = null) 
+    public async Task<List<CheepDto>> GetCheeps(string? author = null)
     {
         var query = (from cheep in _context.Cheeps
                 orderby cheep.TimeStamp descending
                 select cheep)
             .Include(c => c.Author)
             .Where(c => author == null || c.Author.Name == author)
-            .Skip(CurrentPage * 32).Take(32);
+            .Skip(CurrentPage * 32).Take(32)
+            .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
         var result = await query.ToListAsync();
         return result; 
     }
