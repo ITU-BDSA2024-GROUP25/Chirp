@@ -6,7 +6,7 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
-    public Task<List<Cheep>> GetCheeps(string? author);
+    public Task<List<CheepDto>> GetCheeps(string? author);
     public int GetTotalCheepsCount(string? author);
     public int CurrentPage { get; set;}
 }
@@ -29,7 +29,7 @@ public class CheepService : ICheepService
         return _cheepRepo.GetTotalCheepsCount(author);
     }
 
-     public Task<List<Cheep>> GetCheeps(string? author = null)
+     public Task<List<CheepDto>> GetCheeps(string? author = null)
      {
         return _cheepRepo.GetCheeps(author);
      }

@@ -8,7 +8,7 @@ public class UserTimelineModel : PageModel
     private readonly ICheepService _service;
     public int CurrentPage { get; set; }
     public int TotalPages { get; set; }
-    public List<Cheep> Cheeps { get; set; }
+    public List<CheepDto> Cheeps { get; set; }
 
     public UserTimelineModel(ICheepService service)
     {
