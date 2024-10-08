@@ -18,7 +18,7 @@ public class PublicModel : PageModel
 
     public int TotalPages { get; set; }
 
-    public async Task<ActionResult> AsyncOnGet([FromQuery] int? page)
+    public async Task<ActionResult> OnGet([FromQuery] int? page)
     {
         CurrentPage = page ?? 1;        
 
