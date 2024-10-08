@@ -7,7 +7,7 @@ public class PublicModel : PageModel
 {
     private readonly ICheepService _service;
     public List<Cheep>  Cheeps { get; set; }
-
+    
     public PublicModel(ICheepService service)
     {
         _service = service;
@@ -22,11 +22,11 @@ public class PublicModel : PageModel
     {
         CurrentPage = page ?? 1;        
 
-        int totalCheeps = _service.GetTotalCheepsCount();
+        int totalCheeps = _service.GetTotalCheepsCount(null);
         TotalPages = (int)Math.Ceiling(totalCheeps / (double)32);
 
         // Fetch the cheeps for the requested page
-        Cheeps = await _service.GetCheeps();
+        Cheeps = await _service.GetCheeps(null);
 
         return Page();
     }

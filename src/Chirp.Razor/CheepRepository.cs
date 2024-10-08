@@ -7,6 +7,7 @@ public interface ICheepRepository
     public Task CreateCheep(Cheep cheep);
     public int CurrentPage { get; set;  }
     public Task<List<Cheep>> GetCheeps(string? author);
+    public int GetTotalCheepsCount(string? author);
 }
 public class CheepRepository : ICheepRepository 
 {
@@ -30,9 +31,21 @@ public class CheepRepository : ICheepRepository
                 orderby cheep.TimeStamp descending
                 select cheep)
             .Include(c => c.Author)
-            //.Include(c => c.Author.Name == author || author == null)
+            .Where(c => author == null || c.Author.Name == author)
             .Skip(CurrentPage * 32).Take(32);
         var result = await query.ToListAsync();
         return result; 
+    }
+
+    public int GetTotalCheepsCount(string? author = null)
+    {
+        var query = _context.Cheeps.AsQueryable();
+
+        if (!string.IsNullOrEmpty(author))
+        {
+            query = query.Where(c => c.Author.Name == author);
+        }
+
+        return query.Count();
     }
 }

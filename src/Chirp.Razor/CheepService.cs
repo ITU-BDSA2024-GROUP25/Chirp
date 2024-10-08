@@ -6,10 +6,8 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
-    public Task<List<Cheep>> GetCheeps();
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize);
-    public int GetTotalCheepsCount();
-    public int GetTotalCheepsCountFromAuthor(string author);
+    public Task<List<Cheep>> GetCheeps(string? author);
+    public int GetTotalCheepsCount(string? author);
     public int CurrentPage { get; set;}
 }
 
@@ -24,33 +22,17 @@ public class CheepService : ICheepService
         _cheepRepo = new CheepRepository(context);
     }
  
-    private static readonly List<CheepViewModel> _cheeps = SQLReader.reader();
     public int CurrentPage {get; set;}
 
-    public int GetTotalCheepsCount()
+    public int GetTotalCheepsCount(string? author = null)
     {
-        return _cheeps.Count();
+        return _cheepRepo.GetTotalCheepsCount(author);
     }
 
-    public int GetTotalCheepsCountFromAuthor(string author)
-    {
-        return _cheeps.Where(x => x.Author == author).ToList().Count();
-    }
-
-     public Task<List<Cheep>> GetCheeps()
+     public Task<List<Cheep>> GetCheeps(string? author = null)
      {
-        return _cheepRepo.GetCheeps();
+        return _cheepRepo.GetCheeps(author);
      }
-
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int pageNumber, int pageSize)
-    {
-        // filter by the provided author name
-        return _cheeps
-            .Where(x => x.Author == author).ToList()
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-    }
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
     {
