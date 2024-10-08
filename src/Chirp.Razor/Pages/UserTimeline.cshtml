@@ -17,10 +17,10 @@
                 <li>
                     <p>
                         <strong>
-                            <a href="/@cheep.Author">@cheep.Author</a>
+                            <a href="/@cheep.Author.Name">@cheep.Author.Name</a>
                         </strong>
-                        @cheep.Message
-                        <small>&mdash; @cheep.Timestamp</small>
+                        @cheep.Text
+                        <small>&mdash; @cheep.TimeStamp</small>
                     </p>
                 </li>
             }
@@ -30,21 +30,21 @@
     {
         <em>There are no cheeps so far.</em>
     }
-
+    
     <div class="pagination">
         @if (Model.CurrentPage > 1)
         {
-            <a href="/@routeName/?page=@(Model.CurrentPage - 1)">Previous</a>
+        <a href="/@routeName/?page=@(Model.CurrentPage - 1)">Previous</a>
         }
 
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
-            <a href="/@routeName/?page=@i" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+        <a href="/@routeName/?page=@i" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
         }
 
         @if (Model.CurrentPage < Model.TotalPages)
         {
-            <a href="/@routeName/?page=@(Model.CurrentPage + 1)">Next</a>
+        <a href="/@routeName/?page=@(Model.CurrentPage + 1)">Next</a>
         }
     </div>
 </div>

@@ -7,24 +7,22 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _service;
     public int CurrentPage { get; set; }
-
     public int TotalPages { get; set; }
-    private const int PageSize = 10;
-    public List<CheepViewModel> Cheeps { get; set; }
+    public List<Cheep> Cheeps { get; set; }
 
     public UserTimelineModel(ICheepService service)
     {
         _service = service;
     }
 
-    public ActionResult OnGet(string author, [FromQuery] int? page)
+    public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
     {
         CurrentPage = page ?? 1;        
 
-        int totalCheeps = _service.GetTotalCheepsCountFromAuthor(author);
-        TotalPages = (int)Math.Ceiling(totalCheeps / (double)PageSize);
+        int totalCheeps = _service.GetTotalCheepsCount(author);
+        TotalPages = (int)Math.Ceiling(totalCheeps / (double)32);
 
-        Cheeps = _service.GetCheepsFromAuthor(author, CurrentPage, PageSize);
+        Cheeps = await _service.GetCheeps(author);
 
         return Page();
     }
