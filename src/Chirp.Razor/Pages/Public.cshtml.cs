@@ -6,27 +6,27 @@ namespace Chirp.Razor.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepService _service;
-    private const int PageSize = 10;
-    public List<CheepViewModel> Cheeps { get; set; }
+    public List<Cheep>  Cheeps { get; set; }
 
     public PublicModel(ICheepService service)
     {
         _service = service;
+        _service.CurrentPage = CurrentPage;
     }
 
     public int CurrentPage { get; set; }
 
     public int TotalPages { get; set; }
 
-    public ActionResult OnGet([FromQuery] int? page)
+    public async Task<ActionResult> OnGet([FromQuery] int? page)
     {
         CurrentPage = page ?? 1;        
 
         int totalCheeps = _service.GetTotalCheepsCount();
-        TotalPages = (int)Math.Ceiling(totalCheeps / (double)PageSize);
+        TotalPages = (int)Math.Ceiling(totalCheeps / (double)32);
 
         // Fetch the cheeps for the requested page
-        Cheeps = _service.GetCheeps(CurrentPage, PageSize);
+        Cheeps = await _service.GetCheeps();
 
         return Page();
     }
