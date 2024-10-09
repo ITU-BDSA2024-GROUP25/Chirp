@@ -23,15 +23,21 @@ namespace Chirp.Razor.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("email")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("AuthorId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Authors");
                 });
@@ -45,11 +51,12 @@ namespace Chirp.Razor.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("text")
+                    b.Property<string>("Text")
                         .IsRequired()
+                        .HasMaxLength(160)
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("timestamp")
+                    b.Property<DateTime>("TimeStamp")
                         .HasColumnType("TEXT");
 
                     b.HasKey("CheepId");
@@ -61,13 +68,13 @@ namespace Chirp.Razor.Migrations
 
             modelBuilder.Entity("Cheep", b =>
                 {
-                    b.HasOne("Author", "author")
+                    b.HasOne("Author", "Author")
                         .WithMany("Cheeps")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("author");
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("Author", b =>

@@ -18,5 +18,17 @@ public class ChirpDbContext : DbContext
     {
         DbPath = "data/chirp.db";
     }
+    // taken from slide 22 session 7 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Author>()
+            .HasIndex(c => c.Name)
+            .IsUnique();
+        modelBuilder.Entity<Author>()
+            .HasIndex(c => c.Email)
+            .IsUnique();
+    }
    
 }
