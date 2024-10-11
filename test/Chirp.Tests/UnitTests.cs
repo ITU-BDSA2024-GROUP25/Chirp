@@ -1,4 +1,6 @@
-namespace Chirp.Razor.Tests;
+using Chirp.Infrastructure;
+
+namespace Chirp.Tests;
 
 public class UnitTests
 {

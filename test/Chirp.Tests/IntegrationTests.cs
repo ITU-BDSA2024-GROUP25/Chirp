@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;  
 using Xunit;
+using Chirp.Core;
+using Chirp.Infrastructure;
+using Chirp.Web;
 
-namespace Chirp.Razor.Tests
+namespace Chirp.Tests
 {
     public class TestAPI : IClassFixture<WebApplicationFactory<Program>>
     {

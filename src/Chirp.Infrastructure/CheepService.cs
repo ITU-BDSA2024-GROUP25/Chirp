@@ -34,7 +34,7 @@ public class CheepService : ICheepService
         return _cheepRepo.GetCheeps(author);
      }
 
-    private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
+    public static string UnixTimeStampToDateTimeString(double unixTimeStamp)
     {
         // Unix timestamp is seconds past epoch.
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
