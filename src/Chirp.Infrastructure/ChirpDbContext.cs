@@ -1,7 +1,7 @@
-
 using Microsoft.EntityFrameworkCore;
+using Chirp.Core;
 
-namespace Chirp.Razor;
+namespace Chirp.Infrastructure;
 
 public class ChirpDbContext : DbContext
 
@@ -10,6 +10,7 @@ public class ChirpDbContext : DbContext
     
     public DbSet<Author> Authors { get; set; }
     public DbSet<Cheep> Cheeps { get; set; }
+    
  
     public ChirpDbContext(DbContextOptions<ChirpDbContext> options) : base(options) {}
     

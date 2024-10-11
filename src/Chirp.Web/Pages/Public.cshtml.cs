@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace Chirp.Razor.Pages;
+using Chirp.Core;
+using Chirp.Infrastructure;
+namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
 {
@@ -12,6 +13,7 @@ public class PublicModel : PageModel
     {
         _service = service;
         _service.CurrentPage = CurrentPage;
+        Cheeps = new List<CheepDto>();
     }
 
     public int CurrentPage { get; set; }

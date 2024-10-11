@@ -1,14 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Chirp.Core;
 
-namespace Chirp.Razor;
+namespace Chirp.Infrastructure;
 
-public interface ICheepRepository
-{
-    public Task CreateCheep(Cheep cheep);
-    public int CurrentPage { get; set;  }
-    public Task<List<CheepDto>> GetCheeps(string? author);
-    public int GetTotalCheepsCount(string? author);
-}
 public class CheepRepository : ICheepRepository 
 {
     private readonly ChirpDbContext _context;
@@ -18,11 +12,6 @@ public class CheepRepository : ICheepRepository
         DbInitializer.SeedDatabase(context);
     }
     public int CurrentPage { get; set;  }
-
-    public async Task CreateCheep(Cheep cheep)
-    {
-        await Task.CompletedTask;
-    }
 
     //adapted from slides session 6 page 8
     public async Task<List<CheepDto>> GetCheeps(string? author = null)
@@ -48,5 +37,36 @@ public class CheepRepository : ICheepRepository
         }
 
         return query.Count();
+    }
+    
+    public async Task<Author?> FindAuthorByName(string name)
+    {
+        return await _context.Authors
+            .Where(a => a.Name == name)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Author?> FindAuthorByEmail(string email)
+    {
+        return await _context.Authors
+            .Where(a => a.Email == email)
+            .FirstOrDefaultAsync();
+    }
+    
+    public async Task CreateCheep(Cheep cheep)
+    {
+        if (await FindAuthorByName(cheep.Author.Name) == null)
+        {
+            await CreateAuthor(cheep.Author);
+        }
+        
+        _context.Cheeps.Add(cheep);
+        await _context.SaveChangesAsync();
+    }
+    
+    public async Task CreateAuthor(Author author)
+    {
+        _context.Authors.Add(author);
+        await _context.SaveChangesAsync();
     }
 }
