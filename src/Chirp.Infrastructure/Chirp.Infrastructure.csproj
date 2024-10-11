@@ -10,7 +10,7 @@
         <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8" />
-        <ProjectReference Include="..\Chirp.core\Chirp.core.csproj" />
+        <ProjectReference Include="..\Chirp.Core\Chirp.Core.csproj" />
     </ItemGroup>
 
 </Project>
