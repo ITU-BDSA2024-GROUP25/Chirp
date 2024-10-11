@@ -13,6 +13,7 @@ public class PublicModel : PageModel
     {
         _service = service;
         _service.CurrentPage = CurrentPage;
+        Cheeps = new List<CheepDto>();
     }
 
     public int CurrentPage { get; set; }

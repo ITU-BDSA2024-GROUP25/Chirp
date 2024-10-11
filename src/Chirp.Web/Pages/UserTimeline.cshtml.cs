@@ -15,6 +15,7 @@ public class UserTimelineModel : PageModel
     public UserTimelineModel(ICheepService service)
     {
         _service = service;
+        Cheeps = new List<CheepDto>();
     }
 
     public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
