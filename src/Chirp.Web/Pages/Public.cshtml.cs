@@ -1,32 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace Chirp.Razor.Pages;
+using Chirp.Core;
+using Chirp.Infrastructure;
+namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
 {
     private readonly ICheepService _service;
-    private const int PageSize = 10;
-    public List<CheepViewModel> Cheeps { get; set; }
-
+    public List<CheepDto>  Cheeps { get; set; }
+    
     public PublicModel(ICheepService service)
     {
         _service = service;
+        _service.CurrentPage = CurrentPage;
+        Cheeps = new List<CheepDto>();
     }
 
     public int CurrentPage { get; set; }
 
     public int TotalPages { get; set; }
 
-    public ActionResult OnGet([FromQuery] int? page)
+    public async Task<ActionResult> OnGet([FromQuery] int? page)
     {
         CurrentPage = page ?? 1;        
 
-        int totalCheeps = _service.GetTotalCheepsCount();
-        TotalPages = (int)Math.Ceiling(totalCheeps / (double)PageSize);
+        int totalCheeps = _service.GetTotalCheepsCount(null);
+        TotalPages = (int)Math.Ceiling(totalCheeps / (double)32);
 
         // Fetch the cheeps for the requested page
-        Cheeps = _service.GetCheeps(CurrentPage, PageSize);
+        Cheeps = await _service.GetCheeps(null);
 
         return Page();
     }

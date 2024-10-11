@@ -5,7 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AB76718C-7E56-4465-BD42-39D4BF65AFF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Razor", "src\Chirp.Razor\Chirp.Razor.csproj", "{8F0091F4-41EC-4DC3-80C9-625754D3D5A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Web", "src\Chirp.Web\Chirp.Web.csproj", "{8F0091F4-41EC-4DC3-80C9-625754D3D5A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Core", "src\Chirp.Core\Chirp.Core.csproj", "{500C1206-EFEF-4079-9FEA-6E261F648AFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chirp.Infrastructure", "src\Chirp.Infrastructure\Chirp.Infrastructure.csproj", "{DB04115B-2E01-4C4B-81DD-E4F834574A56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +24,14 @@ Global
 		{8F0091F4-41EC-4DC3-80C9-625754D3D5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F0091F4-41EC-4DC3-80C9-625754D3D5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F0091F4-41EC-4DC3-80C9-625754D3D5A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{500C1206-EFEF-4079-9FEA-6E261F648AFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{500C1206-EFEF-4079-9FEA-6E261F648AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{500C1206-EFEF-4079-9FEA-6E261F648AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{500C1206-EFEF-4079-9FEA-6E261F648AFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB04115B-2E01-4C4B-81DD-E4F834574A56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB04115B-2E01-4C4B-81DD-E4F834574A56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB04115B-2E01-4C4B-81DD-E4F834574A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB04115B-2E01-4C4B-81DD-E4F834574A56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8F0091F4-41EC-4DC3-80C9-625754D3D5A7} = {AB76718C-7E56-4465-BD42-39D4BF65AFF8}
