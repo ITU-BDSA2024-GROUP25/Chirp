@@ -1,14 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Chirp.Core;
 
-namespace Chirp.Razor;
+namespace Chirp.Infrastructure;
 
-public interface ICheepRepository
-{
-    public Task CreateCheep(Cheep cheep);
-    public int CurrentPage { get; set;  }
-    public Task<List<CheepDto>> GetCheeps(string? author);
-    public int GetTotalCheepsCount(string? author);
-}
 public class CheepRepository : ICheepRepository 
 {
     private readonly ChirpDbContext _context;

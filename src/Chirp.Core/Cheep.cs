@@ -1,3 +1,4 @@
+namespace Chirp.Core;
 
 using System.ComponentModel.DataAnnotations;
 
@@ -10,6 +11,6 @@ public class Cheep
     public DateTime TimeStamp { get; set; }
     public int AuthorId { get; set; }
     [Required]
-    public Author Author { get; set; }
+    public required Author Author { get; set; }
     
 }
