@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
      <!-- have to make publish singlefile false to make azure work(it wants a .dll, not exe), probaly gonna mess up the auto release tho-->
+    <!-- Had to make a comment pleas delete later -->
     <PublishSingleFile>true</PublishSingleFile>
   </PropertyGroup>
 
