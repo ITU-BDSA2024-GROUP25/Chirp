@@ -20,7 +20,19 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-   
+          
+      - name: Build core with dotnet
+        run: dotnet build src/Chirp.Core/  --configuration Release
+
+      - name: dotnet publish core
+        run: dotnet publish src/Chirp.Core/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        
+      - name: Build Infrastructure with dotnet
+        run: dotnet build src/Chirp.Infrastructure/  --configuration Release
+
+      - name: dotnet publish Infrastructure
+        run: dotnet publish src/Chirp.Infrastructure/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        
       - name: Build web with dotnet
         run: dotnet build src/Chirp.Web/  --configuration Release
 
