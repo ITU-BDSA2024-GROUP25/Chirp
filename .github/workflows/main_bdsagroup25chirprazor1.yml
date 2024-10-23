@@ -5,6 +5,10 @@ name: Build and deploy ASP.Net Core app to Azure Web App - bdsagroup25chirprazor
 
 on:
   push:
+    paths:
+     -src/**
+     -test/**
+     -Chirp.sln
     branches:
       - main
   workflow_dispatch:
