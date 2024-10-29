@@ -21,11 +21,12 @@
     <None Update="chirp.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="data\Chirp.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
       <ProjectReference Include="..\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
       <ProjectReference Include="..\Chirp.Core\Chirp.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="data\" />
   </ItemGroup>
 
 </Project>

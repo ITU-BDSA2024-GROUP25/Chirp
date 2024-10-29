@@ -1,8 +1,12 @@
 ﻿@page "/"
 @model Chirp.Web.Pages.PublicModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
+    <partial name="_LoginPartial" />
+
 }
 
 <div>

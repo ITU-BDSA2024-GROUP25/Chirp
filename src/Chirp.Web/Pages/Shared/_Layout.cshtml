@@ -15,15 +15,15 @@
         <div>
             <a href="/@(User.Identity.Name)">my timeline</a> |
             <a href="/">public timeline</a> |
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">logout [@(User.Identity.Name)]</a>
+            <a class="nav-link text-dark" href="/Identity/Account/Logout">logout [@(User.Identity.Name)]</a>
         </div>
         }
         else
         {
         <div>
             <a href="/">public timeline</a> |
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">register</a> |
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">login</a>
+            <a class="nav-link text-dark" href="/Identity/Account/Register">register</a> |
+            <a class="nav-link text-dark" href="/Identity/Account/Login">login</a>
         </div>
         }
     </div>
