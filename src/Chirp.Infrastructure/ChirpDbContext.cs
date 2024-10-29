@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Chirp.Core;
 
 namespace Chirp.Infrastructure;
 
-public class ChirpDbContext : DbContext
+public class ChirpDbContext : IdentityDbContext<AppUser>
 
 {
     

@@ -12,6 +12,15 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
+builder.Services.AddDefaultIdentity<AppUser>(options =>
+{
+    // Making sure our password can be "password" like god intended!
+    // also verifying emails is for cowards.
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = false;
+}).AddEntityFrameworkStores<ChirpDbContext>();
 
 var app = builder.Build();
 
