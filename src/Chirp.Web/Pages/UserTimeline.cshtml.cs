@@ -1,5 +1,6 @@
 ﻿using Chirp.Core;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -28,5 +29,13 @@ public class UserTimelineModel : PageModel
         Cheeps = await _service.GetCheeps(author);
 
         return Page();
+    }
+    // code given from groupe number 3 
+    public IActionResult OnGetLogin()
+    {
+        return Challenge(new AuthenticationProperties
+        {
+            RedirectUri = "/signin-github" 
+        }, "GitHub"); 
     }
 }

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
+
 namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
@@ -31,5 +33,14 @@ public class PublicModel : PageModel
         Cheeps = await _service.GetCheeps(null);
 
         return Page();
+    }
+
+    // code given from groupe number 3 
+    public IActionResult OnGetLogin()
+    {
+        return Challenge(new AuthenticationProperties
+        {
+            RedirectUri = "/signin-github" 
+        }, "GitHub"); 
     }
 }
