@@ -15,7 +15,7 @@ public class _LoginPartial : PageModel
     {
         return Challenge(new AuthenticationProperties
         {
-            RedirectUri = "/signin-github" 
+            RedirectUri = "/" 
         }, "GitHub"); 
     }
 }
