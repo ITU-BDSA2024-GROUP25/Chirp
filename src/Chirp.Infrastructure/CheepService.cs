@@ -9,6 +9,7 @@ public interface ICheepService
     public Task<List<CheepDto>> GetCheeps(string? author);
     public int GetTotalCheepsCount(string? author);
     public int CurrentPage { get; set;}
+    public Task CreateCheep(Cheep cheep);
 }
 
 public class CheepService : ICheepService
@@ -32,5 +33,10 @@ public class CheepService : ICheepService
      public Task<List<CheepDto>> GetCheeps(string? author = null)
      {
         return _cheepRepo.GetCheeps(author);
+     }
+
+     public Task CreateCheep(Cheep cheep)
+     {
+         return _cheepRepo.CreateCheep(cheep);
      }
 }

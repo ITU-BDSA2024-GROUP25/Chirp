@@ -21,6 +21,9 @@ public class PublicModel : PageModel
     public int CurrentPage { get; set; }
 
     public int TotalPages { get; set; }
+    
+    [BindProperty]
+    public string Text { get; set; }
 
     public async Task<ActionResult> OnGet([FromQuery] int? page)
     {
@@ -42,5 +45,25 @@ public class PublicModel : PageModel
         {
             RedirectUri = "/signin-github" 
         }, "GitHub"); 
+    }
+    
+    public ActionResult OnPost(string Message)
+    {
+        Author author = new Author
+        {
+            Name = User.Identity.Name,
+            Email = User.Identity.Name + "@gmail.com",
+            Cheeps = new List<Cheep>()
+        };
+        
+        Cheep cheep = new Cheep
+        {
+            Text = Message,
+            Author = author
+        };
+        
+        _service.CreateCheep(cheep);
+        
+        return RedirectToPage("Public"); // it is good practice to redirect the user after a post request
     }
 }
