@@ -52,6 +52,13 @@ public class CheepRepository : ICheepRepository
             .Where(a => a.Email == email)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<Author?> GetAuthorById(int id)
+    {
+        return await _context.Authors
+            .Where(a => a.AuthorId == id)
+            .FirstOrDefaultAsync();
+    }
     
     public async Task CreateCheep(Cheep cheep)
     {
@@ -59,6 +66,9 @@ public class CheepRepository : ICheepRepository
         {
             await CreateAuthor(cheep.Author);
         }
+
+        if (cheep.TimeStamp == default)
+            cheep.TimeStamp = DateTime.UtcNow;
         
         _context.Cheeps.Add(cheep);
         await _context.SaveChangesAsync();

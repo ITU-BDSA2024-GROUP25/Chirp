@@ -10,6 +10,9 @@ public interface ICheepService
     public int GetTotalCheepsCount(string? author);
     public int CurrentPage { get; set;}
     public Task CreateCheep(Cheep cheep);
+    public Task<Author?> FindAuthorByName(string name);
+    public Task CreateAuthor(Author author);
+
 }
 
 public class CheepService : ICheepService
@@ -39,4 +42,14 @@ public class CheepService : ICheepService
      {
          return _cheepRepo.CreateCheep(cheep);
      }
+
+    public async Task<Author?> FindAuthorByName(string name) 
+    {
+        return await _cheepRepo.FindAuthorByName(name);
+    }
+
+    public Task CreateAuthor(Author author) 
+    {
+        return _cheepRepo.CreateAuthor(author);
+    }
 }
