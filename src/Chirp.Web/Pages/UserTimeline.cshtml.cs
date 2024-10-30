@@ -35,7 +35,7 @@ public class UserTimelineModel : PageModel
     {
         return Challenge(new AuthenticationProperties
         {
-            RedirectUri = "/" 
+            RedirectUri = "/signin-github" 
         }, "GitHub"); 
     }
 }

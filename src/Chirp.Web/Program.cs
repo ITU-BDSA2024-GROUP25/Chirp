@@ -16,9 +16,8 @@ builder.Services.AddScoped<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddAuthentication(options =>
     {
-        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = "GitHub";
+        options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
     .AddCookie()
     .AddGitHub(o =>
@@ -28,7 +27,7 @@ builder.Services.AddAuthentication(options =>
         o.CallbackPath = "/signin-github";
     });
 
-builder.Services.AddDefaultIdentity<AppUser>(options =>
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
         options.Password.RequiredLength = 8;
@@ -37,7 +36,13 @@ builder.Services.AddDefaultIdentity<AppUser>(options =>
         options.Password.RequireUppercase = false;
     })
     .AddEntityFrameworkStores<ChirpDbContext>()
-    .AddDefaultUI(); 
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
+    
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.MinimumSameSitePolicy = SameSiteMode.Lax;
+});
 
 var app = builder.Build();
 
@@ -52,6 +57,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCookiePolicy();
+
 app.UseAuthentication();    
 app.UseAuthorization();     
 
