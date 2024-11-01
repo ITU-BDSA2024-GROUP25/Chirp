@@ -19,6 +19,13 @@
     <!--packages for core identity -->
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
+
+    <!-- Code from group 15 -->
+    <None Update="chirp.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <ProjectReference Include="..\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
+    <ProjectReference Include="..\Chirp.Core\Chirp.Core.csproj" />
     
     <!--packages for project projectReference  -->
     <ProjectReference Include="..\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
