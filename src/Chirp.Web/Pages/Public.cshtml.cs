@@ -40,7 +40,7 @@ public class PublicModel : PageModel
     {
         return Challenge(new AuthenticationProperties
         {
-            RedirectUri = "/signin-github" 
+            RedirectUri = "/" 
         }, "GitHub"); 
     }
 }
