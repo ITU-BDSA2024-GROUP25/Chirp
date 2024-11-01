@@ -21,6 +21,7 @@ namespace Chirp.Tests
         [Fact]
         public async void CanSeePublicTimeline()
         {
+            
             var response = await _client.GetAsync("/");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
