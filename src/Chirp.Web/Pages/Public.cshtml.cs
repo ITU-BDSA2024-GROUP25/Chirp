@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+
 
 namespace Chirp.Web.Pages;
 
@@ -24,6 +26,9 @@ public class PublicModel : PageModel
     public int TotalPages { get; set; }
 
     [BindProperty]
+    [Required]
+    [MinLength(10, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
+    [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
     public string Text { get; set; }
 
     public async Task<ActionResult> OnGet([FromQuery] int? page)
@@ -50,18 +55,28 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnPost(string Message)
     {
+        if (!ModelState.IsValid)
+        {
+            return Page(); // Show page with previously entered data and error markers
+            
+        }
+        Console.WriteLine("do we get this far");
         try
         {
-            _service.FindAuthorByName(User.Identity.Name);
+            Console.WriteLine("how about this");
+            await _service.FindAuthorByName(User.Identity.Name);
+            Console.WriteLine("hey1");
         }
         catch
         {
+            Console.WriteLine("hey2");
             await _service.CreateAuthor(new Author
             {
                 Name = User.Identity.Name,
                 Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
                 Cheeps = new List<Cheep>()
             });
+            Console.WriteLine("hey3");
         }
 
         try {
