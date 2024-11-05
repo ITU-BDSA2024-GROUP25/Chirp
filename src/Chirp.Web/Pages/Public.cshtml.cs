@@ -55,41 +55,46 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnPost(string Message)
     {
-        if (!ModelState.IsValid)
+        /*if (!ModelState.IsValid)
         {
+            Console.WriteLine("do we get this far1");
             return Page(); // Show page with previously entered data and error markers
             
         }
-        Console.WriteLine("do we get this far");
-        try
-        {
-            Console.WriteLine("how about this");
-            await _service.FindAuthorByName(User.Identity.Name);
-            Console.WriteLine("hey1");
-        }
-        catch
-        {
-            Console.WriteLine("hey2");
-            await _service.CreateAuthor(new Author
+        */
+            Console.WriteLine("do we get this far");
+            try
             {
-                Name = User.Identity.Name,
-                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
-                Cheeps = new List<Cheep>()
-            });
-            Console.WriteLine("hey3");
-        }
+                Console.WriteLine("how about this");
+                await _service.FindAuthorByName(User.Identity.Name);
+                Console.WriteLine("hey1");
+            }
+            catch
+            {
+                Console.WriteLine("hey2");
+                await _service.CreateAuthor(new Author
+                {
+                    Name = User.Identity.Name,
+                    Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
+                    Cheeps = new List<Cheep>()
+                });
+                Console.WriteLine("hey3");
+            }
 
-        try {
-            Cheep cheep = new Cheep
+            try
             {
-                Text = Message,
-                Author =  await _service.FindAuthorByName(User.Identity.Name)
-            };
-            await _service.CreateCheep(cheep);
-            return Redirect(User.Identity.Name);
-        }
-        catch {
-            return Redirect("/");
-        }
+                Cheep cheep = new Cheep
+                {
+                    Text = Message,
+                    Author = await _service.FindAuthorByName(User.Identity.Name)
+                };
+                await _service.CreateCheep(cheep);
+                return Redirect(User.Identity.Name);
+            }
+            catch
+            {
+                return Redirect("/");
+            }
+        
     }
 }

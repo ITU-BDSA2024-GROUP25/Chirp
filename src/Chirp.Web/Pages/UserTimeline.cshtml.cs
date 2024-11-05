@@ -1,4 +1,5 @@
-﻿using Chirp.Core;
+﻿using System.ComponentModel.DataAnnotations;
+using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,12 @@ public class UserTimelineModel : PageModel
     public int CurrentPage { get; set; }
     public int TotalPages { get; set; }
     public List<CheepDto> Cheeps { get; set; }
-
+    
+    [BindProperty]
+    [Required]
+    [MinLength(10, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
+    [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
+    public string Text { get; set; }
     public UserTimelineModel(ICheepService service)
     {
         _service = service;
@@ -30,12 +36,48 @@ public class UserTimelineModel : PageModel
 
         return Page();
     }
-    // code given from groupe number 3 
-    public IActionResult OnGetLogin()
+    public async Task<IActionResult> OnPost(string Message)
     {
-        return Challenge(new AuthenticationProperties
+        if (!ModelState.IsValid)
         {
-            RedirectUri = "/signin-github" 
-        }, "GitHub"); 
+            Console.WriteLine("do we get this far1");
+            return Page(); // Show page with previously entered data and error markers
+
+        }
+        
+        Console.WriteLine("do we get this far");
+        try
+        {
+            Console.WriteLine("how about this");
+            await _service.FindAuthorByName(User.Identity.Name);
+            Console.WriteLine("hey1");
+        }
+        catch
+        {
+            Console.WriteLine("hey2");
+            await _service.CreateAuthor(new Author
+            {
+                Name = User.Identity.Name,
+                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
+                Cheeps = new List<Cheep>()
+            });
+            Console.WriteLine("hey3");
+        }
+
+        try
+        {
+            Cheep cheep = new Cheep
+            {
+                Text = Message,
+                Author = await _service.FindAuthorByName(User.Identity.Name)
+            };
+            await _service.CreateCheep(cheep);
+            return Redirect(User.Identity.Name);
+        }
+        catch
+        {
+            return Redirect("/");
+        }
+        
     }
 }
