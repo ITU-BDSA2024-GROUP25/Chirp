@@ -36,14 +36,8 @@ public class UserTimelineModel : PageModel
 
         return Page();
     }
-    public async Task<IActionResult> OnPost(string Message)
+    public async Task<IActionResult> OnPost()
     {
-        if (!ModelState.IsValid)
-        {
-            Console.WriteLine("do we get this far1");
-            return Page(); // Show page with previously entered data and error markers
-
-        }
         
         Console.WriteLine("do we get this far");
         try
@@ -58,24 +52,27 @@ public class UserTimelineModel : PageModel
             await _service.CreateAuthor(new Author
             {
                 Name = User.Identity.Name,
-                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
+                Email = User.Claims.FirstOrDefault(c => c.Type == "email")?.Value,
                 Cheeps = new List<Cheep>()
             });
             Console.WriteLine("hey3");
         }
-
+        Console.WriteLine("hey4");
         try
         {
             Cheep cheep = new Cheep
             {
-                Text = Message,
-                Author = await _service.FindAuthorByName(User.Identity.Name)
+                Author = await _service.FindAuthorByName(User.Identity.Name),
+                Text = this.Text,
+                CheepId = 999
+                
             };
             await _service.CreateCheep(cheep);
             return Redirect(User.Identity.Name);
         }
         catch
         {
+            Console.WriteLine("hey4");
             return Redirect("/");
         }
         
