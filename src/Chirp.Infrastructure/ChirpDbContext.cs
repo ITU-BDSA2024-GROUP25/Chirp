@@ -22,10 +22,13 @@ public class ChirpDbContext : IdentityDbContext<AppUser>
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Author>()
-            .HasIndex(c => c.Name)
+            .HasIndex(c => c.AuthorId)
             .IsUnique();
         modelBuilder.Entity<Author>()
             .HasIndex(c => c.Email)
+            .IsUnique();
+        modelBuilder.Entity<Cheep>()
+            .HasIndex(c => c.CheepId)
             .IsUnique();
     }
    

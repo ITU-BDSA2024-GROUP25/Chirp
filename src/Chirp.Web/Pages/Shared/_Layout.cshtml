@@ -14,11 +14,15 @@
     <div class=navigation>
         @if (User.Identity.IsAuthenticated)
         {
-        <div>
-            <a href="/@(User.Identity.Name)">my timeline</a> |
-            <a href="/">public timeline</a> |
-            <a class="nav-link text-dark" href="/Identity/Account/Logout">logout [@(User.Identity.Name)]</a>
-        </div>
+            <div>
+                <a href="/@(User.Identity.Name)">my timeline</a> |
+                <a href="/">public timeline</a> |
+                <a class="nav-link text-dark" href="/Identity/Account/Logout">logout [@(User.Identity.Name)]</a>
+            </div>
+            <div asp-validation-summary="ModelOnly">
+            </div>
+
+
         }
         else
         {

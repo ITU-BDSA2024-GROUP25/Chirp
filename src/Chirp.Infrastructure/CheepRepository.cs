@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Chirp.Core;
 
@@ -52,6 +53,13 @@ public class CheepRepository : ICheepRepository
             .Where(a => a.Email == email)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<Author?> GetAuthorById(int id)
+    {
+        return await _context.Authors
+            .Where(a => a.AuthorId == id)
+            .FirstOrDefaultAsync();
+    }
     
     public async Task CreateCheep(Cheep cheep)
     {
@@ -59,14 +67,56 @@ public class CheepRepository : ICheepRepository
         {
             await CreateAuthor(cheep.Author);
         }
+
+        if (cheep.TimeStamp == default)
+            cheep.TimeStamp = DateTime.UtcNow;
         
         _context.Cheeps.Add(cheep);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task CreateCheep(CheepDto cheep)
+    {
+        if (await FindAuthorByName(cheep.authorName) == null)
+        {
+            Author newAuthor = await CreateNewAuthor(cheep.authorName);
+            await CreateAuthor(newAuthor);
+        }
+        
+        Cheep newCheep = new Cheep
+        {
+            CheepId = await GetCheepId(),
+            Text = cheep.text,
+            TimeStamp = DateTime.Parse(cheep.postedTime),
+            AuthorId = FindAuthorByName(cheep.authorName).Id,
+            Author = await FindAuthorByName(cheep.authorName)
+        };
+        
+        _context.Cheeps.Add(newCheep);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<int> GetCheepId()
+    {
+        return _context.Cheeps.Count() + 1;
+        
     }
     
     public async Task CreateAuthor(Author author)
     {
         _context.Authors.Add(author);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<Author> CreateNewAuthor(String authorName)
+    {
+        Author author = new Author
+        {
+            AuthorId = _context.Authors.Count() + 1,
+            Name = authorName,
+            Email = authorName,
+            Cheeps = new List<Cheep>()
+        };
+        return author;
     }
 }

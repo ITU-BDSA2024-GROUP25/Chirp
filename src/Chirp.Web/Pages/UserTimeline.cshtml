@@ -11,6 +11,13 @@
 <div>
     <h2> @routeName's Timeline </h2>
 
+    <form asp-page="/" method="post">
+        <input type="text" asp-for="Message">
+        <input type="submit" value="Share">
+        <span asp-validation-for="Message"></span>
+
+    </form>
+    
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
