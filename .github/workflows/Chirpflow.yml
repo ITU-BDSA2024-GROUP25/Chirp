@@ -30,22 +30,22 @@ jobs:
     - name: Publish win64
       run: dotnet publish --framework net8.0 --runtime win-x64 --no-self-contained
     - name: Creating win64 zip
-      run: zip -r winrelease.zip "src/Chirp.Razor/bin/Release/net8.0/win-x64/publish/"
+      run: zip -r winrelease.zip . -i src/Chirp.Razor/bin/Release/net8.0/win-x64/publish/
       
     - name: Publish osx64
       run: dotnet publish --framework net8.0 --runtime osx-x64 --no-self-contained
     - name: Creating osx-64 zip
-      run: zip -r osxrelease.zip "src/Chirp.Razor/bin/Release/net8.0/osx-x64/publish/" 
+      run: zip -r osxrelease.zip . -i src/Chirp.Razor/bin/Release/net8.0/osx-x64/publish/ 
       
     - name: Publish osxarm64
       run: dotnet publish --framework net8.0 --runtime osx-arm64 --no-self-contained
     - name: Creating arm-x64 Zip
-      run: zip -r armrelease.zip "src/Chirp.Razor/bin/Release/net8.0/osx-arm64/publish/" 
+      run: zip -r armrelease.zip . -i src/Chirp.Razor/bin/Release/net8.0/osx-arm64/publish/ 
       
     - name: Publish linux
       run: dotnet publish --framework net8.0 --runtime linux-x64 --no-self-contained
     - name: Creating linux-x64 Zip
-      run: zip -r linuxrelease.zip "src/Chirp.Razor/bin/Release/net8.0/linux-x64/publish/"
+      run: zip -r linuxrelease.zip . -i src/Chirp.Razor/bin/Release/net8.0/linux-x64/publish/
 
     - name: Release
       uses: softprops/action-gh-release@v2
