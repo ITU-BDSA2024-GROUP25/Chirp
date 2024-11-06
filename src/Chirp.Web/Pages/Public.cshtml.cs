@@ -59,49 +59,32 @@ public class PublicModel : PageModel
         {
             Console.WriteLine("Model is invalid");
             return Page(); // Show page with previously entered data and error markers
-            
         }
         
-            try
+        try
+        {
+            await _service.FindAuthorByName(User.Identity.Name);
+        }
+        catch
+        {
+            await _service.CreateAuthor(new Author 
             {
-                Console.WriteLine("Trying to find author with name: " + User.Identity.Name);
-                await _service.FindAuthorByName(User.Identity.Name);
-                Console.WriteLine("Found User");
-            }
-            catch
-            {
-                Console.WriteLine("Did not found user");
-                await _service.CreateAuthor(new Author
-                {
-                    Name = User.Identity.Name,
-                    Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
-                    Cheeps = new List<Cheep>()
-                });
-                Console.WriteLine("Created User");
-            }
+                Name = User.Identity.Name,
+                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
+                Cheeps = new List<Cheep>()
+            });
+        }
 
-            try
-            {
-                Console.WriteLine("Creating Cheep");
-                Cheep cheep = new Cheep
-                {
-                    Text = Message,
-                    Author = await _service.FindAuthorByName(User.Identity.Name)
-                };
+        try
+        {
+            CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), User.Identity.Name);
+            await _service.CreateCheep(cheep);
                 
-                Author author3 = new Author() { AuthorId = 15, Name = " Amalia testPerson", Email = "Amalia+tpe@hotmail.com", Cheeps = new List<Cheep>() };
-                var cheep2 = new Cheep() { CheepId = 706, AuthorId = author3.AuthorId, Author = author3, Text = "Test string TP", TimeStamp = DateTime.Parse("2023-08-02 13:16:22") };
-                
-                Console.WriteLine("Trying to send cheep with message: " + cheep2.Text);
-                await _service.CreateCheep(cheep2);
-                Console.WriteLine("Created Cheep");
-                return Redirect(User.Identity.Name);
-            }
-            catch
-            {
-                Console.WriteLine("Did not create Cheep");
-                return Redirect("/");
-            }
-        
+            return Redirect(User.Identity.Name);
+        }
+        catch
+        {
+            return Redirect("/");
+        }
     }
 }

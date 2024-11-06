@@ -16,9 +16,9 @@ public class UserTimelineModel : PageModel
     
     [BindProperty]
     [Required]
-    [MinLength(10, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
+    [MinLength(2, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
     [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
-    public string Text { get; set; }
+    public string Message { get; set; }
     public UserTimelineModel(ICheepService service)
     {
         _service = service;
@@ -38,43 +38,36 @@ public class UserTimelineModel : PageModel
     }
     public async Task<IActionResult> OnPost()
     {
+        if (!ModelState.IsValid)
+        {
+            Console.WriteLine("Model is invalid");
+            return Page(); // Show page with previously entered data and error markers
+        }
         
-        Console.WriteLine("do we get this far");
         try
         {
-            Console.WriteLine("how about this");
             await _service.FindAuthorByName(User.Identity.Name);
-            Console.WriteLine("hey1");
         }
         catch
         {
-            Console.WriteLine("hey2");
-            await _service.CreateAuthor(new Author
+            await _service.CreateAuthor(new Author 
             {
                 Name = User.Identity.Name,
-                Email = User.Claims.FirstOrDefault(c => c.Type == "email")?.Value,
+                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
                 Cheeps = new List<Cheep>()
             });
-            Console.WriteLine("hey3");
         }
-        Console.WriteLine("hey4");
+
         try
         {
-            Cheep cheep = new Cheep
-            {
-                Author = await _service.FindAuthorByName(User.Identity.Name),
-                Text = this.Text,
-                CheepId = 999
-                
-            };
+            CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), User.Identity.Name);
             await _service.CreateCheep(cheep);
+                
             return Redirect(User.Identity.Name);
         }
         catch
         {
-            Console.WriteLine("hey4");
             return Redirect("/");
         }
-        
     }
 }

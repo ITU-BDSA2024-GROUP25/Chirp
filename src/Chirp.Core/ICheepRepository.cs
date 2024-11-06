@@ -12,5 +12,6 @@ public interface ICheepRepository
     
     // Commands
     public Task CreateCheep(Cheep cheep);
+    public Task CreateCheep(CheepDto cheep);
     public Task CreateAuthor(Author author);
 }
