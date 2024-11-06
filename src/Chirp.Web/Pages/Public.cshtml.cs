@@ -27,9 +27,9 @@ public class PublicModel : PageModel
 
     [BindProperty]
     [Required]
-    [MinLength(10, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
+    [MinLength(2, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
     [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
-    public string Text { get; set; }
+    public string Message { get; set; }
 
     public async Task<ActionResult> OnGet([FromQuery] int? page)
     {
@@ -53,46 +53,53 @@ public class PublicModel : PageModel
         }, "GitHub");
     }
 
-    public async Task<IActionResult> OnPost(string Message)
+    public async Task<IActionResult> OnPost()
     {
-        /*if (!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            Console.WriteLine("do we get this far1");
+            Console.WriteLine("Model is invalid");
             return Page(); // Show page with previously entered data and error markers
             
         }
-        */
-            Console.WriteLine("do we get this far");
+        
             try
             {
-                Console.WriteLine("how about this");
+                Console.WriteLine("Trying to find author with name: " + User.Identity.Name);
                 await _service.FindAuthorByName(User.Identity.Name);
-                Console.WriteLine("hey1");
+                Console.WriteLine("Found User");
             }
             catch
             {
-                Console.WriteLine("hey2");
+                Console.WriteLine("Did not found user");
                 await _service.CreateAuthor(new Author
                 {
                     Name = User.Identity.Name,
                     Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
                     Cheeps = new List<Cheep>()
                 });
-                Console.WriteLine("hey3");
+                Console.WriteLine("Created User");
             }
 
             try
             {
+                Console.WriteLine("Creating Cheep");
                 Cheep cheep = new Cheep
                 {
                     Text = Message,
                     Author = await _service.FindAuthorByName(User.Identity.Name)
                 };
-                await _service.CreateCheep(cheep);
+                
+                Author author3 = new Author() { AuthorId = 15, Name = " Amalia testPerson", Email = "Amalia+tpe@hotmail.com", Cheeps = new List<Cheep>() };
+                var cheep2 = new Cheep() { CheepId = 706, AuthorId = author3.AuthorId, Author = author3, Text = "Test string TP", TimeStamp = DateTime.Parse("2023-08-02 13:16:22") };
+                
+                Console.WriteLine("Trying to send cheep with message: " + cheep2.Text);
+                await _service.CreateCheep(cheep2);
+                Console.WriteLine("Created Cheep");
                 return Redirect(User.Identity.Name);
             }
             catch
             {
+                Console.WriteLine("Did not create Cheep");
                 return Redirect("/");
             }
         

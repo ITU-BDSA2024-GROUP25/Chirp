@@ -23,10 +23,10 @@
             </form>
         </div> */
         
-        <form asp-page="/">
-            <input type="text" asp-for="Text">
+        <form asp-page="/" method="post">
+            <input type="text" asp-for="Message">
             <input type="submit" value="Share">
-            <span asp-validation-for="Text"></span>
+            <span asp-validation-for="Message"></span>
 
         </form>
     }
