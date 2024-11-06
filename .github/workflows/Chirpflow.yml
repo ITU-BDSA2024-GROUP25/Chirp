@@ -6,7 +6,6 @@ on:
   push:
     tags:
       - v*.*.*
-  workflow_dispatch:
   
 jobs:
   build:
@@ -35,7 +34,7 @@ jobs:
     - name: Publish osx64
       run: dotnet publish --framework net8.0 --runtime osx-x64 --no-self-contained
     - name: Creating osx-64 zip
-      run: zip -r osxrelease.zip . -i src/Chirp.Web/bin/Release/net8.0/osx-x64/publish/
+      run: zip -r osxrelease.zip . -i src/Chirp.Web/bin/Release/net8.0/osx-x64/publish/*
       
     - name: Publish osxarm64
       run: dotnet publish --framework net8.0 --runtime osx-arm64 --no-self-contained
