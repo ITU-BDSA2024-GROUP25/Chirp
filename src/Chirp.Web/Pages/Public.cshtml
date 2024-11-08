@@ -12,7 +12,7 @@
 <div>
     <h2> Public Timeline </h2>
 
-    @if (User.Identity.IsAuthenticated)
+    @if (User?.Identity?.IsAuthenticated == true)
     {   
         /*
         <div class="cheepbox">

@@ -14,4 +14,5 @@ public interface ICheepRepository
     public Task CreateCheep(Cheep cheep);
     public Task CreateCheep(CheepDto cheep);
     public Task CreateAuthor(Author author);
+    public Task CreateAuthor(string authorName);
 }

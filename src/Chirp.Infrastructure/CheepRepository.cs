@@ -4,7 +4,7 @@ using Chirp.Core;
 
 namespace Chirp.Infrastructure;
 
-public class CheepRepository : ICheepRepository 
+public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDbContext _context;
     public CheepRepository(ChirpDbContext context)
@@ -12,20 +12,20 @@ public class CheepRepository : ICheepRepository
         _context = context;
         DbInitializer.SeedDatabase(context);
     }
-    public int CurrentPage { get; set;  }
+    public int CurrentPage { get; set; }
 
     //adapted from slides session 6 page 8
     public async Task<List<CheepDto>> GetCheeps(string? author = null)
     {
         var query = (from cheep in _context.Cheeps
-                orderby cheep.TimeStamp descending
-                select cheep)
+                     orderby cheep.TimeStamp descending
+                     select cheep)
             .Include(c => c.Author)
             .Where(c => author == null || c.Author.Name == author)
             .Skip(CurrentPage * 32).Take(32)
             .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
         var result = await query.ToListAsync();
-        return result; 
+        return result;
     }
 
     public int GetTotalCheepsCount(string? author = null)
@@ -39,7 +39,7 @@ public class CheepRepository : ICheepRepository
 
         return query.Count();
     }
-    
+
     public async Task<Author?> FindAuthorByName(string name)
     {
         return await _context.Authors
@@ -49,9 +49,16 @@ public class CheepRepository : ICheepRepository
 
     public async Task<Author?> FindAuthorByEmail(string email)
     {
-        return await _context.Authors
+        try
+        {
+            return await _context.Authors
             .Where(a => a.Email == email)
             .FirstOrDefaultAsync();
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     public async Task<Author?> GetAuthorById(int id)
@@ -60,7 +67,7 @@ public class CheepRepository : ICheepRepository
             .Where(a => a.AuthorId == id)
             .FirstOrDefaultAsync();
     }
-    
+
     public async Task CreateCheep(Cheep cheep)
     {
         if (await FindAuthorByName(cheep.Author.Name) == null)
@@ -70,7 +77,7 @@ public class CheepRepository : ICheepRepository
 
         if (cheep.TimeStamp == default)
             cheep.TimeStamp = DateTime.UtcNow;
-        
+
         _context.Cheeps.Add(cheep);
         await _context.SaveChangesAsync();
     }
@@ -79,36 +86,35 @@ public class CheepRepository : ICheepRepository
     {
         if (await FindAuthorByName(cheep.authorName) == null)
         {
-            Author newAuthor = await CreateNewAuthor(cheep.authorName);
-            await CreateAuthor(newAuthor);
+            await CreateAuthor(cheep.authorName);
         }
-        
+
+        Author? author = await FindAuthorByName(cheep.authorName);
+        if (author == null)
+        {
+            throw new Exception("Author not found"); // Replace with appropriate error handling.
+        }
+
         Cheep newCheep = new Cheep
         {
-            CheepId = await GetCheepId(),
+            CheepId = _context.Cheeps.Count() + 1,
             Text = cheep.text,
             TimeStamp = DateTime.Parse(cheep.postedTime),
             AuthorId = FindAuthorByName(cheep.authorName).Id,
-            Author = await FindAuthorByName(cheep.authorName)
+            Author = author
         };
-        
+
         _context.Cheeps.Add(newCheep);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<int> GetCheepId()
-    {
-        return _context.Cheeps.Count() + 1;
-        
-    }
-    
     public async Task CreateAuthor(Author author)
     {
         _context.Authors.Add(author);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Author> CreateNewAuthor(String authorName)
+    public async Task CreateAuthor(String authorName)
     {
         Author author = new Author
         {
@@ -117,6 +123,8 @@ public class CheepRepository : ICheepRepository
             Email = authorName,
             Cheeps = new List<Cheep>()
         };
-        return author;
+
+        _context.Authors.Add(author);
+        await _context.SaveChangesAsync();
     }
 }

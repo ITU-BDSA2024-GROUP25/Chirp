@@ -23,6 +23,7 @@ public class UserTimelineModel : PageModel
     {
         _service = service;
         Cheeps = new List<CheepDto>();
+        Message = string.Empty;
     }
 
     public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
@@ -36,6 +37,8 @@ public class UserTimelineModel : PageModel
 
         return Page();
     }
+    public string GetUserName => User.Identity?.Name ?? string.Empty;
+
     public async Task<IActionResult> OnPost()
     {
         if (!ModelState.IsValid)
@@ -46,24 +49,24 @@ public class UserTimelineModel : PageModel
         
         try
         {
-            await _service.FindAuthorByName(User.Identity.Name);
+            await _service.FindAuthorByName(GetUserName);
         }
         catch
         {
             await _service.CreateAuthor(new Author 
             {
-                Name = User.Identity.Name,
-                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
+                Name = GetUserName,
+                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? string.Empty,
                 Cheeps = new List<Cheep>()
             });
         }
 
         try
         {
-            CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), User.Identity.Name);
+            CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), GetUserName);
             await _service.CreateCheep(cheep);
                 
-            return Redirect(User.Identity.Name);
+            return Redirect(GetUserName);
         }
         catch
         {
