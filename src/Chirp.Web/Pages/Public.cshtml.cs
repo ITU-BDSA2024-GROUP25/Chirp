@@ -5,6 +5,7 @@ using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 
 namespace Chirp.Web.Pages;
@@ -19,6 +20,7 @@ public class PublicModel : PageModel
         _service = service;
         _service.CurrentPage = CurrentPage;
         Cheeps = new List<CheepDto>();
+        Message = string.Empty;
     }
 
     public int CurrentPage { get; set; }
@@ -53,6 +55,8 @@ public class PublicModel : PageModel
         }, "GitHub");
     }
 
+    public string GetUserName => User.Identity?.Name ?? string.Empty;
+
     public async Task<IActionResult> OnPost()
     {
         if (!ModelState.IsValid)
@@ -63,24 +67,24 @@ public class PublicModel : PageModel
         
         try
         {
-            await _service.FindAuthorByName(User.Identity.Name);
+            await _service.FindAuthorByName(GetUserName);
         }
         catch
         {
             await _service.CreateAuthor(new Author 
             {
-                Name = User.Identity.Name,
-                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value,
+                Name = GetUserName,
+                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? string.Empty,
                 Cheeps = new List<Cheep>()
             });
         }
 
         try
         {
-            CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), User.Identity.Name);
+            CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), GetUserName);
             await _service.CreateCheep(cheep);
                 
-            return Redirect(User.Identity.Name);
+            return Redirect(GetUserName);
         }
         catch
         {

@@ -8,17 +8,16 @@ public interface ICheepService
 {
     public Task<List<CheepDto>> GetCheeps(string? author);
     public int GetTotalCheepsCount(string? author);
-    public int CurrentPage { get; set;}
+    public int CurrentPage { get; set; }
     public Task CreateCheep(Cheep cheep);
     public Task CreateCheep(CheepDto cheep);
     public Task<Author?> FindAuthorByName(string name);
     public Task CreateAuthor(Author author);
-
 }
 
 public class CheepService : ICheepService
 {
-    
+
     private readonly ChirpDbContext _context;
     private CheepRepository _cheepRepo;
     public CheepService(ChirpDbContext context)
@@ -26,33 +25,18 @@ public class CheepService : ICheepService
         _context = context;
         _cheepRepo = new CheepRepository(context);
     }
- 
-    public int CurrentPage {get; set;}
 
-    public int GetTotalCheepsCount(string? author = null)
-    {
-        return _cheepRepo.GetTotalCheepsCount(author);
-    }
+    public int CurrentPage { get; set; }
 
-     public Task<List<CheepDto>> GetCheeps(string? author = null)
-     {
-        return _cheepRepo.GetCheeps(author);
-     }
+    public int GetTotalCheepsCount(string? author = null) => _cheepRepo.GetTotalCheepsCount(author);
 
-     public Task CreateCheep(Cheep cheep)
-     {
-         return _cheepRepo.CreateCheep(cheep);
-     }
-     
-     public Task CreateCheep(CheepDto cheep) => _cheepRepo.CreateCheep(cheep);
+    public Task<List<CheepDto>> GetCheeps(string? author = null) => _cheepRepo.GetCheeps(author);
 
-    public async Task<Author?> FindAuthorByName(string name) 
-    {
-        return await _cheepRepo.FindAuthorByName(name);
-    }
+    public Task CreateCheep(Cheep cheep) => _cheepRepo.CreateCheep(cheep);
 
-    public Task CreateAuthor(Author author) 
-    {
-        return _cheepRepo.CreateAuthor(author);
-    }
+    public Task CreateCheep(CheepDto cheep) => _cheepRepo.CreateCheep(cheep);
+
+    public async Task<Author?> FindAuthorByName(string name) => await _cheepRepo.FindAuthorByName(name);
+
+    public Task CreateAuthor(Author author) => _cheepRepo.CreateAuthor(author);
 }
