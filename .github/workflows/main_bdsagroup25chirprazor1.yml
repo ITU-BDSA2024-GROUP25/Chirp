@@ -78,4 +78,5 @@ jobs:
           app-name: 'bdsagroup25chirprazor1'
           slot-name: 'Production'
           package: .
+          AdditionalArguments: 'skip:objectName=filePath,absolutePath=data/chirp.db'
           
