@@ -50,6 +50,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ChirpDbContext>();
+    context.Database.EnsureCreated();
     DbInitializer.SeedDatabase(context);
 }
 

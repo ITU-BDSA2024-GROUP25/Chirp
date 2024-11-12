@@ -97,10 +97,10 @@ namespace Chirp.Web.Migrations
 
                     b.HasKey("AuthorId");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("AuthorId")
                         .IsUnique();
 
-                    b.HasIndex("Name")
+                    b.HasIndex("Email")
                         .IsUnique();
 
                     b.ToTable("Authors");
@@ -126,6 +126,9 @@ namespace Chirp.Web.Migrations
                     b.HasKey("CheepId");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("CheepId")
+                        .IsUnique();
 
                     b.ToTable("Cheeps");
                 });
@@ -205,11 +208,9 @@ namespace Chirp.Web.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
@@ -247,11 +248,9 @@ namespace Chirp.Web.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
