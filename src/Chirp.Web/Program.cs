@@ -45,6 +45,13 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 });
 
 var app = builder.Build();
+// got this code snippit from TA's to try and fix our problem with deleting the current database on deploymenrt 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ChirpDbContext>();
+    DbInitializer.SeedDatabase(context);
+}
 
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
