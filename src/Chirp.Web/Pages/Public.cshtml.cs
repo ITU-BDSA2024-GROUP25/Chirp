@@ -46,6 +46,12 @@ public class PublicModel : PageModel
         return Page();
     }
 
+    public IActionResult FollowUser(string authorName)
+    {
+        Console.WriteLine("Slow ass computer");
+        return null;
+    }
+    
     // code given from groupe number 3 
     public IActionResult OnGetLogin()
     {

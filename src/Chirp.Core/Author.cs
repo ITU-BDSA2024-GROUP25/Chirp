@@ -8,6 +8,8 @@ public class Author
     public required String Email { get; set; }
     public required ICollection<Cheep> Cheeps { get; set; }
     
+    public ICollection<Author> Followed { get; set; }
+    
     
     
 }

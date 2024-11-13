@@ -28,6 +28,12 @@ public class UserTimelineModel : PageModel
 
     public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
     {
+
+        if (author.Equals(User.Identity.Name))
+        {
+            
+        }
+        
         CurrentPage = page ?? 1;        
 
         int totalCheeps = _service.GetTotalCheepsCount(author);
