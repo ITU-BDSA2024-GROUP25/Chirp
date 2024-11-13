@@ -35,9 +35,7 @@
                         <small>&mdash; @cheep.postedTime</small>
                     </p>
                     <p align="right">
-                        <strong>
-                            <a asp-action="FollowUser" asp-route-username="@cheep.authorName">follow</a>
-                        </strong>
+                        <button onclick=@Model.FollowUser(cheep.authorName)>Follow</button>
                     </p>
                 </li>
             }

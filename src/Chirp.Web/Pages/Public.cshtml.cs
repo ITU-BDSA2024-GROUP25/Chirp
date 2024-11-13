@@ -48,8 +48,8 @@ public class PublicModel : PageModel
 
     public IActionResult FollowUser(string authorName)
     {
-        Console.WriteLine("Slow ass computer");
-        return null;
+        Console.WriteLine(authorName);
+        return Redirect("/");
     }
     
     // code given from groupe number 3 
