@@ -20,6 +20,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
 
+    <!--packages for Scaffolding -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
     
     <!--packages for project projectReference  -->
     <ProjectReference Include="..\Chirp.Infrastructure\Chirp.Infrastructure.csproj" />
