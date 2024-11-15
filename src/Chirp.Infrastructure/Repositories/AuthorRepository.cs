@@ -20,13 +20,13 @@ public class AuthorRepository : IAuthorRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task CreateAuthor(String authorName)
+    public async Task CreateAuthor(AuthorDto authorDto)
     {
         Author author = new Author
         {
             AuthorId = _context.Authors.Count() + 1,
-            Name = authorName,
-            Email = authorName,
+            Name = authorDto.userName,
+            Email = authorDto.email,
             Cheeps = new List<Cheep>()
         };
 
@@ -60,5 +60,40 @@ public class AuthorRepository : IAuthorRepository
         return await _context.Authors
             .Where(a => a.AuthorId == id)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task FollowAuthor(string userName, string targetUserName)
+    {
+        var author = await FindAuthorByEmail(userName);
+
+        var targetAuthor = await FindAuthorByName(targetUserName);
+
+        if (!author.Following.Contains(targetAuthor))
+        {
+            author.Following.Add(targetAuthor);
+            await _context.SaveChangesAsync(); 
+        }
+    }
+
+    public async Task<bool> IsFollowing(string userName, string targetUserName)
+    {
+        var author = await FindAuthorByEmail(userName);
+
+        var targetAuthor = await FindAuthorByName(targetUserName);
+        
+        return author.Following.Contains(targetAuthor);
+    }
+
+    public async Task UnfollowAuthor(string userName, string targetUserName)
+    {
+        var author = await FindAuthorByEmail(userName);
+
+        var targetAuthor = await FindAuthorByName(targetUserName);
+
+        if (!author.Following.Contains(targetAuthor))
+        {
+            author.Following.Remove(targetAuthor);
+            await _context.SaveChangesAsync(); 
+        }
     }
 }

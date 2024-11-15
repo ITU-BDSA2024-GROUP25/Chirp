@@ -62,12 +62,9 @@ public class UserTimelineModel : PageModel
         }
         catch
         {
-            await _authorService.CreateAuthor(new Author 
-            {
-                Name = GetUserName,
-                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? string.Empty,
-                Cheeps = new List<Cheep>()
-            });
+            string mail = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? string.Empty;
+            AuthorDto author = new AuthorDto(GetUserName, mail);
+            await _authorService.CreateAuthor(author);
         }
 
         try

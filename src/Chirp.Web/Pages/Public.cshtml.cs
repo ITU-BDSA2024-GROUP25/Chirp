@@ -49,9 +49,21 @@ public class PublicModel : PageModel
         return Page();
     }
 
+    public async Task<bool> IsFollowing(string targetAuthorName)
+    {
+        Console.WriteLine("LALALALLALAL");
+        var userName = GetUserName;
+        bool isFollowing = await _authorService.IsFollowing(userName, targetAuthorName);
+        return isFollowing;
+    }
+
     public IActionResult FollowUser(string authorName)
     {
-        Console.WriteLine(authorName);
+        return Redirect("/");
+    }
+    
+    public IActionResult UnFollowUser(string authorName)
+    {
         return Redirect("/");
     }
     
@@ -79,12 +91,9 @@ public class PublicModel : PageModel
         }
         catch
         {
-            await _authorService.CreateAuthor(new Author 
-            {
-                Name = GetUserName,
-                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? string.Empty,
-                Cheeps = new List<Cheep>()
-            });
+            string mail = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? string.Empty;
+            AuthorDto author = new AuthorDto(GetUserName, mail);
+            await _authorService.CreateAuthor(author);
         }
 
         try

@@ -5,7 +5,9 @@ namespace Chirp.Infrastructure;
 public interface IAuthorService
 {
         public Task<Author?> FindAuthorByName(string name);
-        public Task CreateAuthor(Author author);
+        public Task CreateAuthor(AuthorDto authorDto);
+        public Task FollowAuthor(string userName, string targetUserName);
+        public Task<bool> IsFollowing(string userName, string targetUserName);
 }
 
 public class AuthorService : IAuthorService
@@ -17,5 +19,8 @@ public class AuthorService : IAuthorService
         }
         
         public async Task<Author?> FindAuthorByName(string name) => await _authorRepo.FindAuthorByName(name);
-        public Task CreateAuthor(Author author) => _authorRepo.CreateAuthor(author);
+        public Task CreateAuthor(AuthorDto authorDto) => _authorRepo.CreateAuthor(authorDto);
+        public Task FollowAuthor(string userName, string targetUserName) => _authorRepo.FollowAuthor(userName, targetUserName);
+        public Task<bool> IsFollowing(string userName, string targetUserName) => _authorRepo.IsFollowing(userName, targetUserName);
+        public Task UnfollowAuthor(string userName, string targetUserName) => _authorRepo.UnfollowAuthor(userName, targetUserName);
 }
