@@ -10,8 +10,8 @@ public class CheepRepository : ICheepRepository
     public CheepRepository(ChirpDbContext context)
     {
         _context = context;
-// should be seeeded in program cs 
-        DbInitializer.SeedDatabase(context);
+        // should be seeeded in program cs : Arent we already?
+        // DbInitializer.SeedDatabase(context);
     }
     public int CurrentPage { get; set; }
 
@@ -41,41 +41,8 @@ public class CheepRepository : ICheepRepository
         return query.Count();
     }
 
-    public async Task<Author?> FindAuthorByName(string name)
-    {
-        return await _context.Authors
-            .Where(a => a.Name == name)
-            .FirstOrDefaultAsync();
-    }
-
-    public async Task<Author?> FindAuthorByEmail(string email)
-    {
-        try
-        {
-            return await _context.Authors
-            .Where(a => a.Email == email)
-            .FirstOrDefaultAsync();
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public async Task<Author?> GetAuthorById(int id)
-    {
-        return await _context.Authors
-            .Where(a => a.AuthorId == id)
-            .FirstOrDefaultAsync();
-    }
-
     public async Task CreateCheep(Cheep cheep)
     {
-        if (await FindAuthorByName(cheep.Author.Name) == null)
-        {
-            await CreateAuthor(cheep.Author);
-        }
-
         if (cheep.TimeStamp == default)
             cheep.TimeStamp = DateTime.UtcNow;
 
@@ -83,14 +50,12 @@ public class CheepRepository : ICheepRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task CreateCheep(CheepDto cheep)
+    public async Task CreateCheep(CheepDto cheep, string authorName)
     {
-        if (await FindAuthorByName(cheep.authorName) == null)
-        {
-            await CreateAuthor(cheep.authorName);
-        }
+        var author = await _context.Authors
+            .Where(a => a.Name == authorName)
+            .FirstOrDefaultAsync();
 
-        Author? author = await FindAuthorByName(cheep.authorName);
         if (author == null)
         {
             throw new Exception("Author not found"); // Replace with appropriate error handling.
@@ -101,31 +66,11 @@ public class CheepRepository : ICheepRepository
             CheepId = _context.Cheeps.Count() + 1,
             Text = cheep.text,
             TimeStamp = DateTime.Parse(cheep.postedTime),
-            AuthorId = FindAuthorByName(cheep.authorName).Id,
+            AuthorId = author.AuthorId,
             Author = author
         };
 
         _context.Cheeps.Add(newCheep);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task CreateAuthor(Author author)
-    {
-        _context.Authors.Add(author);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task CreateAuthor(String authorName)
-    {
-        Author author = new Author
-        {
-            AuthorId = _context.Authors.Count() + 1,
-            Name = authorName,
-            Email = authorName,
-            Cheeps = new List<Cheep>()
-        };
-
-        _context.Authors.Add(author);
         await _context.SaveChangesAsync();
     }
 }

@@ -9,7 +9,8 @@ namespace Chirp.Web.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly ICheepService _service;
+    private readonly ICheepService _cheepService;
+    private readonly IAuthorService _authorService;
     public int CurrentPage { get; set; }
     public int TotalPages { get; set; }
     public List<CheepDto> Cheeps { get; set; }
@@ -19,9 +20,11 @@ public class UserTimelineModel : PageModel
     [MinLength(2, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
     [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
     public string Message { get; set; }
-    public UserTimelineModel(ICheepService service)
+    public UserTimelineModel(ICheepService cheepService, IAuthorService authorService)
     {
-        _service = service;
+        _cheepService = cheepService;
+        _authorService = authorService;
+        
         Cheeps = new List<CheepDto>();
         Message = string.Empty;
     }
@@ -36,10 +39,10 @@ public class UserTimelineModel : PageModel
         
         CurrentPage = page ?? 1;        
 
-        int totalCheeps = _service.GetTotalCheepsCount(author);
+        int totalCheeps = _cheepService.GetTotalCheepsCount(author);
         TotalPages = (int)Math.Ceiling(totalCheeps / (double)32);
 
-        Cheeps = await _service.GetCheeps(author);
+        Cheeps = await _cheepService.GetCheeps(author);
 
         return Page();
     }
@@ -55,11 +58,11 @@ public class UserTimelineModel : PageModel
         
         try
         {
-            await _service.FindAuthorByName(GetUserName);
+            await _authorService.FindAuthorByName(GetUserName);
         }
         catch
         {
-            await _service.CreateAuthor(new Author 
+            await _authorService.CreateAuthor(new Author 
             {
                 Name = GetUserName,
                 Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? string.Empty,
@@ -70,7 +73,7 @@ public class UserTimelineModel : PageModel
         try
         {
             CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), GetUserName);
-            await _service.CreateCheep(cheep);
+            await _cheepService.CreateCheep(cheep, GetUserName);
                 
             return Redirect(GetUserName);
         }

@@ -10,19 +10,15 @@ public interface ICheepService
     public int GetTotalCheepsCount(string? author);
     public int CurrentPage { get; set; }
     public Task CreateCheep(Cheep cheep);
-    public Task CreateCheep(CheepDto cheep);
-    public Task<Author?> FindAuthorByName(string name);
-    public Task CreateAuthor(Author author);
+    public Task CreateCheep(CheepDto cheep, string authorName);
 }
 
 public class CheepService : ICheepService
 {
 
-    private readonly ChirpDbContext _context;
     private CheepRepository _cheepRepo;
     public CheepService(ChirpDbContext context)
     {
-        _context = context;
         _cheepRepo = new CheepRepository(context);
     }
 
@@ -34,9 +30,6 @@ public class CheepService : ICheepService
 
     public Task CreateCheep(Cheep cheep) => _cheepRepo.CreateCheep(cheep);
 
-    public Task CreateCheep(CheepDto cheep) => _cheepRepo.CreateCheep(cheep);
-
-    public async Task<Author?> FindAuthorByName(string name) => await _cheepRepo.FindAuthorByName(name);
-
-    public Task CreateAuthor(Author author) => _cheepRepo.CreateAuthor(author);
+    public Task CreateCheep(CheepDto cheep, string authorName) => _cheepRepo.CreateCheep(cheep, authorName);
+    
 }
