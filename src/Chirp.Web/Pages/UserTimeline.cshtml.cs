@@ -1,82 +1,35 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Chirp.Razor.Pages;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
-public class UserTimelineModel : PageModel
+public class UserTimelineModel : SharedModel
 {
-    private readonly ICheepService _cheepService;
-    private readonly IAuthorService _authorService;
-    public int CurrentPage { get; set; }
-    public int TotalPages { get; set; }
-    public List<CheepDto> Cheeps { get; set; }
+    public UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : base(cheepService, authorService) 
+    {
+
+    }
     
-    [BindProperty]
-    [Required]
-    [MinLength(2, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
-    [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
-    public string Message { get; set; }
-    public UserTimelineModel(ICheepService cheepService, IAuthorService authorService)
+    public override async Task<IList<CheepDto>> GetCheeps()
     {
-        _cheepService = cheepService;
-        _authorService = authorService;
-        
-        Cheeps = new List<CheepDto>();
-        Message = string.Empty;
-    }
+        var followers = await _authorService.GetFollowers(GetUserName);
 
-    public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
-    {
+        var allCheeps = new List<CheepDto>();
 
-        if (author.Equals(User.Identity.Name))
+        // Add Authors own cheeps
+        allCheeps.AddRange(await _cheepService.GetCheeps(GetUserName)); 
+
+        // Add Authors followers cheeps
+        foreach (var follower in followers)
         {
-            
-        }
-        
-        CurrentPage = page ?? 1;        
-
-        int totalCheeps = _cheepService.GetTotalCheepsCount(author);
-        TotalPages = (int)Math.Ceiling(totalCheeps / (double)32);
-
-        Cheeps = await _cheepService.GetCheeps(author);
-
-        return Page();
-    }
-    public string GetUserName => User.Identity?.Name ?? string.Empty;
-
-    public async Task<IActionResult> OnPost()
-    {
-        if (!ModelState.IsValid)
-        {
-            Console.WriteLine("Model is invalid");
-            return Page(); // Show page with previously entered data and error markers
-        }
-        
-        try
-        {
-            await _authorService.FindAuthorByName(GetUserName);
-        }
-        catch
-        {
-            string mail = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? string.Empty;
-            AuthorDto author = new AuthorDto(GetUserName, mail);
-            await _authorService.CreateAuthor(author);
+            allCheeps.AddRange(await _cheepService.GetCheeps(follower.userName)); 
         }
 
-        try
-        {
-            CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), GetUserName);
-            await _cheepService.CreateCheep(cheep, GetUserName);
-                
-            return Redirect(GetUserName);
-        }
-        catch
-        {
-            return Redirect("/");
-        }
+        return allCheeps;
     }
 }

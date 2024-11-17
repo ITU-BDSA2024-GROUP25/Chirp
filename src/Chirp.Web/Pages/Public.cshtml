@@ -33,10 +33,10 @@
                             @cheep.text
                             <small>&mdash; @cheep.postedTime</small>
                         </p>
-                        @if (true)
+                        @if (await Model.IsFollowing(cheep.authorName))
                         {
                             <p align="right">
-                                <button onclick=@Model.UnFollowUser(cheep.authorName)>Follow</button>
+                                <button onclick=@Model.UnFollowUser(cheep.authorName)>UnFollow</button>
                             </p>
                         }
                         else

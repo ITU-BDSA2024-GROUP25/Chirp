@@ -84,6 +84,20 @@ public class AuthorRepository : IAuthorRepository
         return author.Following.Contains(targetAuthor);
     }
 
+    public async Task<IList<AuthorDto>> GetFollowers(string authorName)
+    {
+        var author = await FindAuthorByName(authorName);
+        
+        if (author?.Following == null)
+        {
+            return new List<AuthorDto>();
+        }
+
+        return author.Following
+            .Select(follower => new AuthorDto(follower.Name, follower.Email))
+            .ToList();   
+    }
+
     public async Task UnfollowAuthor(string userName, string targetUserName)
     {
         var author = await FindAuthorByEmail(userName);
