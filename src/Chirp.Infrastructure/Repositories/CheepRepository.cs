@@ -22,10 +22,9 @@ public class CheepRepository : ICheepRepository
                      select cheep)
             .Include(c => c.Author)
             .Where(c => author == null || c.Author.Name == author)
-            .Skip(pageNumber * 32).Take(32)
+            .Skip((pageNumber - 1) * 32).Take(32)
             .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
         var result = await query.ToListAsync();
-        Console.WriteLine("GetCheeps() amount: " + result.Count());
         return result;
     }
 
@@ -38,7 +37,6 @@ public class CheepRepository : ICheepRepository
             query = query.Where(c => c.Author.Name == author);
         }
 
-        Console.WriteLine("GetTotalCheepsCount() amount: " + query.Count());
         return query.Count();
     }
 
