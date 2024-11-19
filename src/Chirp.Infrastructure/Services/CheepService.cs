@@ -22,8 +22,11 @@ public class CheepService : ICheepService
         _cheepRepo = new CheepRepository(context);
     }
 
-    public int CurrentPage { get; set; }
-
+    public int CurrentPage
+    {
+        get => _cheepRepo.CurrentPage;
+        set => _cheepRepo.CurrentPage = value;
+    }
     public int GetTotalCheepsCount(string? author = null) => _cheepRepo.GetTotalCheepsCount(author);
 
     public Task<List<CheepDto>> GetCheeps(string? author = null) => _cheepRepo.GetCheeps(author);

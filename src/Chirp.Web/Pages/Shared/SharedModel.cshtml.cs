@@ -15,7 +15,7 @@ public abstract class SharedModel : PageModel
         _authorService = authorService;
 
         Cheeps = new List<CheepDto>();
-        _cheepService.CurrentPage = CurrentPage;
+        //_cheepService.CurrentPage = CurrentPage;
         Message = string.Empty;
     }
     
@@ -25,6 +25,7 @@ public abstract class SharedModel : PageModel
     
     public int CurrentPage { get; set; }
 
+    public int CheepAmount { get; set; }
     public int TotalPages { get; set; }
 
     [BindProperty]
@@ -38,12 +39,14 @@ public abstract class SharedModel : PageModel
     public async Task<ActionResult> OnGet([FromQuery] int? page)
     {
         CurrentPage = page ?? 1;
-
-        int totalCheeps = _cheepService.GetTotalCheepsCount(null);
-        TotalPages = (int)Math.Ceiling(totalCheeps / (double)32);
+        
+        _cheepService.CurrentPage = CurrentPage;
 
         // Fetch the cheeps for the requested page
         Cheeps = await GetCheeps();
+        
+        // Fetch amount of cheeps to decide ammount of pages
+        TotalPages = (int)Math.Ceiling(CheepAmount / (double)32);
         
         return Page();
     }

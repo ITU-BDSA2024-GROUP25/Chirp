@@ -3,6 +3,7 @@ using System;
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,27 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Web.Migrations
 {
     [DbContext(typeof(ChirpDbContext))]
-    partial class ChirpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241118115027_UpdateAuthorId")]
+    partial class UpdateAuthorId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
-
-            modelBuilder.Entity("AuthorAuthor", b =>
-                {
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("FollowingAuthorId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("AuthorId", "FollowingAuthorId");
-
-                    b.HasIndex("FollowingAuthorId");
-
-                    b.ToTable("AuthorFollowings", (string)null);
-                });
 
             modelBuilder.Entity("Chirp.Core.AppUser", b =>
                 {
@@ -102,6 +90,9 @@ namespace Chirp.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("AuthorId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -111,6 +102,11 @@ namespace Chirp.Web.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("AuthorId");
+
+                    b.HasIndex("AuthorId")
+                        .IsUnique();
+
+                    b.HasIndex("AuthorId1");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -138,6 +134,9 @@ namespace Chirp.Web.Migrations
                     b.HasKey("CheepId");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("CheepId")
+                        .IsUnique();
 
                     b.ToTable("Cheeps");
                 });
@@ -270,19 +269,11 @@ namespace Chirp.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AuthorAuthor", b =>
+            modelBuilder.Entity("Chirp.Core.Author", b =>
                 {
                     b.HasOne("Chirp.Core.Author", null)
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Chirp.Core.Author", null)
-                        .WithMany()
-                        .HasForeignKey("FollowingAuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Following")
+                        .HasForeignKey("AuthorId1");
                 });
 
             modelBuilder.Entity("Chirp.Core.Cheep", b =>
@@ -350,6 +341,8 @@ namespace Chirp.Web.Migrations
             modelBuilder.Entity("Chirp.Core.Author", b =>
                 {
                     b.Navigation("Cheeps");
+
+                    b.Navigation("Following");
                 });
 #pragma warning restore 612, 618
         }

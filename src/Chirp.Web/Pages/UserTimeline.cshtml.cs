@@ -17,19 +17,28 @@ public class UserTimelineModel : SharedModel
     
     public override async Task<IList<CheepDto>> GetCheeps()
     {
-        var followers = await _authorService.GetFollowers(GetUserName);
+        var authorName = HttpContext.GetRouteValue("author")?.ToString();
+        var cheeps = new List<CheepDto>();
+        
+        CheepAmount = _cheepService.GetTotalCheepsCount(authorName);
+        
+        Console.WriteLine("Current user: "+GetUserName + " author name: "+ authorName);
+        
+        var userCheeps = await _cheepService.GetCheeps(authorName);
+        cheeps.AddRange(userCheeps);
 
-        var allCheeps = new List<CheepDto>();
-
-        // Add Authors own cheeps
-        allCheeps.AddRange(await _cheepService.GetCheeps(GetUserName)); 
-
-        // Add Authors followers cheeps
-        foreach (var follower in followers)
+        // If it is the users own account, followed cheeps should also be shown
+        if (authorName == GetUserName)
         {
-            allCheeps.AddRange(await _cheepService.GetCheeps(follower.userName)); 
+            var followers = await _authorService.GetFollowers(GetUserName);
+
+            foreach (var follower in followers)
+            {
+                CheepAmount += _cheepService.GetTotalCheepsCount(follower.userName);
+                cheeps.AddRange(await _cheepService.GetCheeps(follower.userName));
+            }
         }
 
-        return allCheeps;
+        return cheeps;
     }
 }

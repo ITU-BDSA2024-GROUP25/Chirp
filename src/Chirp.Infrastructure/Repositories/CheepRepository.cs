@@ -11,7 +11,7 @@ public class CheepRepository : ICheepRepository
     {
         _context = context;
         // should be seeeded in program cs : Arent we already?
-        // DbInitializer.SeedDatabase(context);
+        //DbInitializer.SeedDatabase(context);
     }
     public int CurrentPage { get; set; }
 
@@ -26,6 +26,7 @@ public class CheepRepository : ICheepRepository
             .Skip(CurrentPage * 32).Take(32)
             .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
         var result = await query.ToListAsync();
+        Console.WriteLine("GetCheeps() amount: " + result.Count());
         return result;
     }
 
@@ -38,6 +39,7 @@ public class CheepRepository : ICheepRepository
             query = query.Where(c => c.Author.Name == author);
         }
 
+        Console.WriteLine("GetTotalCheepsCount() amount: " + query.Count());
         return query.Count();
     }
 

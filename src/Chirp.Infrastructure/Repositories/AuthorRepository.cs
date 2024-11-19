@@ -11,27 +11,25 @@ public class AuthorRepository : IAuthorRepository
     {
         _context = context;
         // should be seeeded in program cs 
-        // DbInitializer.SeedDatabase(context);
-    }
-    
-    public async Task CreateAuthor(Author author)
-    {
-        _context.Authors.Add(author);
-        await _context.SaveChangesAsync();
+        //DbInitializer.SeedDatabase(context);
     }
 
     public async Task CreateAuthor(AuthorDto authorDto)
     {
-        Author author = new Author
-        {
-            AuthorId = _context.Authors.Count() + 1,
-            Name = authorDto.userName,
-            Email = authorDto.email,
-            Cheeps = new List<Cheep>()
-        };
+        bool doesAuthorExist = await _context.Authors.AnyAsync(a => a.Name == authorDto.userName);
 
-        _context.Authors.Add(author);
-        await _context.SaveChangesAsync();
+        if (!doesAuthorExist)
+        {
+            Author author = new Author
+            {
+                Name = authorDto.userName,
+                Email = authorDto.email,
+                Cheeps = new List<Cheep>()
+            };
+
+            _context.Authors.Add(author);
+            await _context.SaveChangesAsync();
+        }
     }
     
     public async Task<Author?> FindAuthorByName(string name)
@@ -43,16 +41,8 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<Author?> FindAuthorByEmail(string email)
     {
-        try
-        {
-            return await _context.Authors
-                .Where(a => a.Email == email)
-                .FirstOrDefaultAsync();
-        }
-        catch
-        {
-            return null;
-        }
+        return await _context.Authors
+            .FirstOrDefaultAsync(a => a.Email == email);
     }
 
     public async Task<Author?> GetAuthorById(int id)
@@ -68,6 +58,11 @@ public class AuthorRepository : IAuthorRepository
 
         var targetAuthor = await FindAuthorByName(targetUserName);
 
+        if (author.Following == null)
+        {
+            author.Following = new List<Author>();
+        }
+        
         if (!author.Following.Contains(targetAuthor))
         {
             author.Following.Add(targetAuthor);
@@ -77,9 +72,11 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task<bool> IsFollowing(string userName, string targetUserName)
     {
-        var author = await FindAuthorByEmail(userName);
+        var author = await FindAuthorByName(userName);
 
         var targetAuthor = await FindAuthorByName(targetUserName);
+        
+        if (author.Following == null) return false;
         
         return author.Following.Contains(targetAuthor);
     }

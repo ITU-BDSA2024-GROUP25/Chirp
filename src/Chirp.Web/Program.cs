@@ -1,3 +1,5 @@
+using System.Security.Authentication;
+using System.Security.Claims;
 using Chirp.Infrastructure;
 using Chirp.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,7 +23,24 @@ builder.Services.AddAuthentication(options =>
         options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
-    .AddCookie()
+    .AddCookie(options =>
+        {
+            options.Events.OnSignedIn = async context =>
+            {
+                // Get user details from ClaimsPrincipal
+                var claimsPrincipal = context.Principal;
+                var userName = claimsPrincipal?.Identity?.Name;
+                var email = claimsPrincipal?.FindFirst(ClaimTypes.Email)?.Value;
+
+                var authorService = context.HttpContext.RequestServices.GetRequiredService<IAuthorService>();
+
+                // Create a new user if current user does not exist in database
+                if (userName != null && email != null)
+                {
+                    await authorService.CreateAuthor(new AuthorDto(userName, email));
+                }
+            };
+        })
     .AddGitHub(o =>
     {
         o.ClientId = builder.Configuration["authentication:github:clientId"] ?? throw new InvalidOperationException("GitHub ClientId is not configured");
@@ -55,6 +74,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
     DbInitializer.SeedDatabase(context);
 }
+
 
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())

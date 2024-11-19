@@ -21,6 +21,7 @@ public class PublicModel : SharedModel
 
     public override async Task<IList<CheepDto>> GetCheeps()
     {
+        CheepAmount = _cheepService.GetTotalCheepsCount(null);
         return await _cheepService.GetCheeps(null);
     }
 }

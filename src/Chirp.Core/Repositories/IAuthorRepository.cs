@@ -10,7 +10,6 @@ public interface IAuthorRepository
     public Task<IList<AuthorDto>> GetFollowers(string authorName);
     
     // Commands
-    public Task CreateAuthor(Author author);
     public Task CreateAuthor(AuthorDto authorDto);
     public Task FollowAuthor(string userName, string targetUserName);
     public Task UnfollowAuthor(string userName, string targetUserName);
