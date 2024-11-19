@@ -3,8 +3,7 @@ namespace Chirp.Core;
 public interface ICheepRepository
 {
     // Queries
-    public int CurrentPage { get; set;  }
-    public Task<List<CheepDto>> GetCheeps(string? author);
+    public Task<List<CheepDto>> GetCheeps(string? author, int pageNumber);
     public int GetTotalCheepsCount(string? author);
 
     

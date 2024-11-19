@@ -11,5 +11,5 @@ public class Author
     public required string Email { get; set; }
     public required ICollection<Cheep> Cheeps { get; set; }
     
-    public ICollection<Author> Following { get; set; }
+    public ICollection<Author>? Following { get; set; }
 }

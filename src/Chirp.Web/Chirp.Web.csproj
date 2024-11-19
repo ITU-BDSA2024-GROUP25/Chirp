@@ -32,5 +32,8 @@
   <ItemGroup>
     <Folder Include="data\**" />
   </ItemGroup>
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
 
 </Project>

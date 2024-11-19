@@ -22,9 +22,7 @@ public class UserTimelineModel : SharedModel
         
         CheepAmount = _cheepService.GetTotalCheepsCount(authorName);
         
-        Console.WriteLine("Current user: "+GetUserName + " author name: "+ authorName);
-        
-        var userCheeps = await _cheepService.GetCheeps(authorName);
+        var userCheeps = await _cheepService.GetCheeps(authorName, CurrentPage);
         cheeps.AddRange(userCheeps);
 
         // If it is the users own account, followed cheeps should also be shown
@@ -35,7 +33,7 @@ public class UserTimelineModel : SharedModel
             foreach (var follower in followers)
             {
                 CheepAmount += _cheepService.GetTotalCheepsCount(follower.userName);
-                cheeps.AddRange(await _cheepService.GetCheeps(follower.userName));
+                cheeps.AddRange(await _cheepService.GetCheeps(follower.userName, CurrentPage));
             }
         }
 

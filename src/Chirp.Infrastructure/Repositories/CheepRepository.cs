@@ -13,17 +13,16 @@ public class CheepRepository : ICheepRepository
         // should be seeeded in program cs : Arent we already?
         //DbInitializer.SeedDatabase(context);
     }
-    public int CurrentPage { get; set; }
 
     //adapted from slides session 6 page 8
-    public async Task<List<CheepDto>> GetCheeps(string? author = null)
+    public async Task<List<CheepDto>> GetCheeps(string? author = null, int pageNumber = 1)
     {
         var query = (from cheep in _context.Cheeps
                      orderby cheep.TimeStamp descending
                      select cheep)
             .Include(c => c.Author)
             .Where(c => author == null || c.Author.Name == author)
-            .Skip(CurrentPage * 32).Take(32)
+            .Skip(pageNumber * 32).Take(32)
             .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
         var result = await query.ToListAsync();
         Console.WriteLine("GetCheeps() amount: " + result.Count());

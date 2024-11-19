@@ -40,8 +40,6 @@ public abstract class SharedModel : PageModel
     {
         CurrentPage = page ?? 1;
         
-        _cheepService.CurrentPage = CurrentPage;
-
         // Fetch the cheeps for the requested page
         Cheeps = await GetCheeps();
         
