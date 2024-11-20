@@ -14,6 +14,7 @@
 
     @if (User?.Identity?.IsAuthenticated == true)
     {   
+        Model.CreateAuthor();
         <form asp-page="/" method="post">
             <input type="text" asp-for="Message">
             <input type="submit" value="Share">

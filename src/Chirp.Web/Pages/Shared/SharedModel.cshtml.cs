@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Chirp.Core;
@@ -13,10 +14,21 @@ public abstract class SharedModel : PageModel
     {
         _cheepService = cheepService;
         _authorService = authorService;
-
+        
         Cheeps = new List<CheepDto>();
         //_cheepService.CurrentPage = CurrentPage;
         Message = string.Empty;
+    }
+
+    public void CreateAuthor()
+    {
+        if (User != null)
+        {
+            if (User.Identity != null)
+            {
+                if (User.Identity.IsAuthenticated) _authorService.CreateAuthor(new AuthorDto(GetUserName, GetUserEmail));
+            }
+        }
     }
     
     protected readonly ICheepService _cheepService;
@@ -34,6 +46,7 @@ public abstract class SharedModel : PageModel
     [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
     public string Message { get; set; }
     public string GetUserName => User.Identity?.Name ?? string.Empty;
+    public string GetUserEmail => User.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
     public abstract Task<IList<CheepDto>> GetCheeps(); 
     
     public async Task<ActionResult> OnGet([FromQuery] int? page)
