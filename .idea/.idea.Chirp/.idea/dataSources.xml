@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="Chirp" uuid="f8f859fb-a96f-487d-83f4-990c323e8c79">
-      <driver-ref>8ac5713e-b068-402a-b96d-fc87867dbcb2</driver-ref>
+      <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\ITU\DBSA\Chirp\Chirp\src\Chirp.Web\data\Chirp.db</jdbc-url>
