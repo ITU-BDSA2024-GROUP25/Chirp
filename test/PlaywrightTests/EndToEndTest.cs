@@ -54,7 +54,7 @@ public class EndToEndTest
 
     //tries to login and out with the test-user. If failed try to run RegisterUserTest() first
     [Test]
-    public async Task validLoginAndOutTest()
+    public async Task ValidLoginAndOutTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -79,7 +79,7 @@ public class EndToEndTest
 
     //test that check that it is not possible to login with an account that doesnt exist
     [Test]
-    public async Task invalidLoginattemptTest()
+    public async Task InvalidLoginAttemptTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -148,5 +148,30 @@ public class EndToEndTest
         await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         await Expect(page.Locator("#messagelist")).ToContainTextAsync("This is a valid cheep");
         await Expect(page.Locator("h2")).ToContainTextAsync("test's Timeline");
+    }
+    
+    //tries to cheep too short with the test-user. If failed try to run RegisterUserTest() first
+    [Test]
+    public async Task TooShortCheepTest()
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        });
+        var context = await browser.NewContextAsync();
+
+        var page = await context.NewPageAsync();
+        await page.GotoAsync("http://localhost:5273/");
+        await page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await page.GetByPlaceholder("Username").ClickAsync();
+        await page.GetByPlaceholder("Username").FillAsync("test");
+        await page.GetByPlaceholder("Username").PressAsync("Tab");
+        await page.GetByPlaceholder("password").FillAsync("password");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await page.Locator("#Message").ClickAsync();
+        await page.Locator("#Message").FillAsync("h");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await page.GetByText("hey man, its too short, needs").ClickAsync();
     }
 }
