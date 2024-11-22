@@ -23,24 +23,7 @@ builder.Services.AddAuthentication(options =>
         options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
     })
-    .AddCookie(options =>
-        {
-            options.Events.OnSignedIn = async context =>
-            {
-                // Get user details from ClaimsPrincipal
-                var claimsPrincipal = context.Principal;
-                var userName = claimsPrincipal?.Identity?.Name;
-                var email = claimsPrincipal?.FindFirst(ClaimTypes.Email)?.Value;
-
-                var authorService = context.HttpContext.RequestServices.GetRequiredService<IAuthorService>();
-
-                // Create a new user if current user does not exist in database
-                if (userName != null && email != null)
-                {
-                    await authorService.CreateAuthor(new AuthorDto(userName, email));
-                }
-            };
-        })
+    .AddCookie()
     .AddGitHub(o =>
     {
         o.ClientId = builder.Configuration["authentication:github:clientId"] ?? throw new InvalidOperationException("GitHub ClientId is not configured");

@@ -69,17 +69,48 @@ public abstract class SharedModel : PageModel
         return isFollowing;
     }
 
-    public IActionResult FollowUser(string authorName)
+    public async Task<IActionResult> OnPostFollow(string authorName)
     {
-        _authorService.FollowAuthor(GetUserName, authorName);
-        return Redirect("/");
+        if (string.IsNullOrEmpty(authorName))
+        {
+            ModelState.AddModelError(string.Empty, "Author name cannot be empty.");
+            return Page();
+        }
+
+        try
+        {
+            await _authorService.FollowAuthor(GetUserName, authorName);
+        }
+        catch (Exception ex)
+        {
+            // Log exception and handle errors
+            Console.WriteLine($"Error following author: {ex.Message}");
+        }
+
+        return RedirectToPage();
     }
-    
-    public IActionResult UnFollowUser(string authorName)
+
+    public async Task<IActionResult> OnPostUnfollow(string authorName)
     {
-        _authorService.UnfollowAuthor(GetUserName, authorName);
-        return Redirect("/");
+        if (string.IsNullOrEmpty(authorName))
+        {
+            ModelState.AddModelError(string.Empty, "Author name cannot be empty.");
+            return Page();
+        }
+
+        try
+        {
+            await _authorService.UnfollowAuthor(GetUserName, authorName);
+        }
+        catch (Exception ex)
+        {
+            // Log exception and handle errors
+            Console.WriteLine($"Error unfollowing author: {ex.Message}");
+        }
+
+        return RedirectToPage();
     }
+
     
     // code given from groupe number 3 
     public IActionResult OnGetLogin()

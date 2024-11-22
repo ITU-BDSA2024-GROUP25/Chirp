@@ -29,7 +29,17 @@ public class ChirpDbContext : IdentityDbContext<AppUser>
         modelBuilder.Entity<Author>()
             .HasMany(a => a.Following)
             .WithMany()
-            .UsingEntity(j => j.ToTable("AuthorFollowings"));
+            .UsingEntity<Dictionary<string, object>>(
+                "AuthorFollowings",
+                j => j.HasOne<Author>().WithMany().HasForeignKey("FollowingId"),
+                j => j.HasOne<Author>().WithMany().HasForeignKey("AuthorId"),
+                j =>
+                {
+                    j.HasKey("AuthorId", "FollowingId");
+                    j.ToTable("AuthorFollowings");
+                });
+        
+        
         modelBuilder.Entity<Cheep>()
             .HasKey(c => c.CheepId);
     }

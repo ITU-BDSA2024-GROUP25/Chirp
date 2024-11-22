@@ -35,6 +35,7 @@ public class AuthorRepository : IAuthorRepository
     public async Task<Author?> FindAuthorByName(string name)
     {
         return await _context.Authors
+            .Include(a => a.Following)
             .Where(a => a.Name == name)
             .FirstOrDefaultAsync();
     }
@@ -54,7 +55,7 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task FollowAuthor(string userName, string targetUserName)
     {
-        var author = await FindAuthorByEmail(userName);
+        var author = await FindAuthorByName(userName);
         if (author == null) throw new Exception("User: " + userName +" not found");
 
         
@@ -66,6 +67,7 @@ public class AuthorRepository : IAuthorRepository
         if (!author.Following.Contains(targetAuthor))
         {
             author.Following.Add(targetAuthor);
+            Console.WriteLine("Added follower: [" + targetAuthor.Name + "] to [" + author.Name + "] following list");
             await _context.SaveChangesAsync(); 
         }
     }
@@ -99,14 +101,14 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task UnfollowAuthor(string userName, string targetUserName)
     {
-        var author = await FindAuthorByEmail(userName);
+        var author = await FindAuthorByName(userName);
         if (author == null) throw new Exception("User: " + userName +" not found");
         if (author.Following == null) throw new Exception(targetUserName +"'s following list is null");
         
         var targetAuthor = await FindAuthorByName(targetUserName);
         if (targetAuthor == null) throw new Exception("User: " + targetUserName +" not found");
         
-        if (!author.Following.Contains(targetAuthor))
+        if (author.Following.Contains(targetAuthor))
         {
             author.Following.Remove(targetAuthor);
             await _context.SaveChangesAsync(); 

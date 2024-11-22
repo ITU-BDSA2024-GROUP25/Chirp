@@ -34,19 +34,24 @@
                             @cheep.text
                             <small>&mdash; @cheep.postedTime</small>
                         </p>
-                        @if (Model.GetUserName == cheep.authorName) 
-                        { }
-                        else if (await Model.IsFollowing(cheep.authorName))
+                        @if (Model.GetUserName != cheep.authorName)
                         {
-                            <p align="right">
-                                <button onclick=@Model.UnFollowUser(cheep.authorName)>UnFollow</button>
-                            </p>
-                        }
-                        else
-                        {
-                            <p align="right">
-                                <button onclick=@Model.FollowUser(cheep.authorName)>Follow</button>
-                            </p>
+                            <div style="text-align: right;">
+                            @if (await Model.IsFollowing(cheep.authorName))
+                            {
+                                <form method="post" asp-page-handler="Unfollow">
+                                    <input type="hidden" name="authorName" value="@cheep.authorName" />
+                                    <button type="submit">Unfollow</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" asp-page-handler="Follow">
+                                    <input type="hidden" name="authorName" value="@cheep.authorName" />
+                                    <button type="submit">Follow</button>
+                                </form>
+                            }
+                            </div>
                         }
                     </li>
                 }

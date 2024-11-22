@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Web.Migrations
 {
     [DbContext(typeof(ChirpDbContext))]
-    [Migration("20241118115407_UpdatedSchema")]
-    partial class UpdatedSchema
+    [Migration("20241122094819_UpdateSnapshot")]
+    partial class UpdateSnapshot
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,17 +20,17 @@ namespace Chirp.Web.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("AuthorAuthor", b =>
+            modelBuilder.Entity("AuthorFollowings", b =>
                 {
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FollowingAuthorId")
+                    b.Property<int>("FollowingId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("AuthorId", "FollowingAuthorId");
+                    b.HasKey("AuthorId", "FollowingId");
 
-                    b.HasIndex("FollowingAuthorId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("AuthorFollowings", (string)null);
                 });
@@ -273,7 +273,7 @@ namespace Chirp.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AuthorAuthor", b =>
+            modelBuilder.Entity("AuthorFollowings", b =>
                 {
                     b.HasOne("Chirp.Core.Author", null)
                         .WithMany()
@@ -283,7 +283,7 @@ namespace Chirp.Web.Migrations
 
                     b.HasOne("Chirp.Core.Author", null)
                         .WithMany()
-                        .HasForeignKey("FollowingAuthorId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
