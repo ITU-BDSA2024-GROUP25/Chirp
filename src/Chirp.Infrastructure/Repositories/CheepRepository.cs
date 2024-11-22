@@ -28,6 +28,23 @@ public class CheepRepository : ICheepRepository
         return result;
     }
 
+    public async Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers, int pageNumber = 1)
+    {
+        var authorNames = followers.Select(a => a.userName).ToList();
+        authorNames.Add(authorName); // also include owners cheeps
+        
+        var query = (from cheep in _context.Cheeps
+                where authorNames.Contains(cheep.Author.Name)
+                orderby cheep.TimeStamp descending
+                select cheep)
+            .Include(c => c.Author)
+            .Skip((pageNumber - 1) * 32).Take(32)
+            .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
+
+        var result = await query.ToListAsync();
+        return result;
+    }
+
     public int GetTotalCheepsCount(string? author = null)
     {
         var query = _context.Cheeps.AsQueryable();
