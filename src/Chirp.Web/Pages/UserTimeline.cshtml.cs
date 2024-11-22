@@ -33,10 +33,11 @@ public class UserTimelineModel : SharedModel
             foreach (var follower in followers)
             {
                 CheepAmount += _cheepService.GetTotalCheepsCount(follower.userName);
-                cheeps.AddRange(await _cheepService.GetCheeps(follower.userName, CurrentPage));
+                var followerCheeps = await _cheepService.GetCheeps(follower.userName, CurrentPage);
+                cheeps.AddRange(followerCheeps);
             }
         }
 
-        return cheeps;
+        return cheeps.OrderByDescending(c => c.postedTime).ToList();
     }
 }
