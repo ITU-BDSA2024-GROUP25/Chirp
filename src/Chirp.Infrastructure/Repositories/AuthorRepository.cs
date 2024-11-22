@@ -27,8 +27,7 @@ public class AuthorRepository : IAuthorRepository
                 Cheeps = new List<Cheep>()
             };
 
-            if (author.Email == null) author.Email = author.Name + "@group25ChirpMail.com";
-            
+            if (string.IsNullOrEmpty(author.Email)) author.Email = author.Name + "@group25ChirpMail.com"; // generates a spoof mail so that user can log in with a private GitHub mail            
             _context.Authors.Add(author);
             await _context.SaveChangesAsync();
         }
