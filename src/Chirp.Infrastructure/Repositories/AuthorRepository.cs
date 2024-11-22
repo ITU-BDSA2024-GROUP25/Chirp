@@ -27,6 +27,8 @@ public class AuthorRepository : IAuthorRepository
                 Cheeps = new List<Cheep>()
             };
 
+            if (author.Email == null) author.Email = author.Name + "@group25ChirpMail.com";
+            
             _context.Authors.Add(author);
             await _context.SaveChangesAsync();
         }
