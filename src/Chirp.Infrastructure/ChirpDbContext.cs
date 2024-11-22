@@ -22,14 +22,26 @@ public class ChirpDbContext : IdentityDbContext<AppUser>
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Author>()
-            .HasIndex(c => c.AuthorId)
-            .IsUnique();
+            .HasKey(c => c.AuthorId);
         modelBuilder.Entity<Author>()
             .HasIndex(c => c.Email)
             .IsUnique();
+        modelBuilder.Entity<Author>()
+            .HasMany(a => a.Following)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+                "AuthorFollowings",
+                j => j.HasOne<Author>().WithMany().HasForeignKey("FollowingId"),
+                j => j.HasOne<Author>().WithMany().HasForeignKey("AuthorId"),
+                j =>
+                {
+                    j.HasKey("AuthorId", "FollowingId");
+                    j.ToTable("AuthorFollowings");
+                });
+        
+        
         modelBuilder.Entity<Cheep>()
-            .HasIndex(c => c.CheepId)
-            .IsUnique();
+            .HasKey(c => c.CheepId);
     }
    
 }

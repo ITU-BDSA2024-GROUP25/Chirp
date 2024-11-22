@@ -1,76 +1,41 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Chirp.Core;
 using Chirp.Infrastructure;
+using Chirp.Razor.Pages;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
-public class UserTimelineModel : PageModel
+public class UserTimelineModel : SharedModel
 {
-    private readonly ICheepService _service;
-    public int CurrentPage { get; set; }
-    public int TotalPages { get; set; }
-    public List<CheepDto> Cheeps { get; set; }
+    public UserTimelineModel(ICheepService cheepService, IAuthorService authorService) : base(cheepService, authorService) 
+    {
+
+    }
     
-    [BindProperty]
-    [Required]
-    [MinLength(2, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
-    [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
-    public string Message { get; set; }
-    public UserTimelineModel(ICheepService service)
+    public override async Task<IList<CheepDto>> GetCheeps()
     {
-        _service = service;
-        Cheeps = new List<CheepDto>();
-        Message = string.Empty;
-    }
+        var authorName = HttpContext.GetRouteValue("author")?.ToString();
 
-    public async Task<ActionResult> OnGet(string author, [FromQuery] int? page)
-    {
-        CurrentPage = page ?? 1;        
-
-        int totalCheeps = _service.GetTotalCheepsCount(author);
-        TotalPages = (int)Math.Ceiling(totalCheeps / (double)32);
-
-        Cheeps = await _service.GetCheeps(author);
-
-        return Page();
-    }
-    public string GetUserName => User.Identity?.Name ?? string.Empty;
-
-    public async Task<IActionResult> OnPost()
-    {
-        if (!ModelState.IsValid)
+        // If it is the users own account, followed cheeps should also be shown
+        if (authorName == GetUserName)
         {
-            Console.WriteLine("Model is invalid");
-            return Page(); // Show page with previously entered data and error markers
-        }
-        
-        try
-        {
-            await _service.FindAuthorByName(GetUserName);
-        }
-        catch
-        {
-            await _service.CreateAuthor(new Author 
+            var followers = await _authorService.GetFollowers(authorName);
+            
+            CheepAmount = _cheepService.GetTotalCheepsCount(authorName);
+            foreach (var follower in followers)
             {
-                Name = GetUserName,
-                Email = User.Claims.FirstOrDefault(c => c.Type == "emails")?.Value ?? string.Empty,
-                Cheeps = new List<Cheep>()
-            });
+                CheepAmount += _cheepService.GetTotalCheepsCount(follower.userName);
+            }
+            
+            return await _cheepService.GetCheepsFromFollowers(authorName, followers, CurrentPage);
         }
-
-        try
+        else
         {
-            CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), GetUserName);
-            await _service.CreateCheep(cheep);
-                
-            return Redirect(GetUserName);
-        }
-        catch
-        {
-            return Redirect("/");
+            CheepAmount = _cheepService.GetTotalCheepsCount(authorName);
+            return await _cheepService.GetCheeps(authorName, CurrentPage);
         }
     }
 }
