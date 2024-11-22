@@ -32,7 +32,7 @@
                         @cheep.text
                         <small>&mdash; @cheep.postedTime</small>
                     </p>
-                    @if (Model.GetUserName != cheep.authorName)
+                    @if (Model.GetUserName != cheep.authorName && User?.Identity?.IsAuthenticated == true)
                     {
                     <div style="text-align: right;">
                         @if (await Model.IsFollowing(cheep.authorName))
