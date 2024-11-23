@@ -32,6 +32,25 @@
                         @cheep.text
                         <small>&mdash; @cheep.postedTime</small>
                     </p>
+                    @if (Model.GetUserName != cheep.authorName && User?.Identity?.IsAuthenticated == true)
+                    {
+                    <div style="text-align: right;">
+                        @if (await Model.IsFollowing(cheep.authorName))
+                        {
+                        <form method="post" asp-page-handler="Unfollow">
+                            <input type="hidden" name="authorName" value="@cheep.authorName" />
+                            <button type="submit">Unfollow</button>
+                        </form>
+                        }
+                        else
+                        {
+                        <form method="post" asp-page-handler="Follow">
+                            <input type="hidden" name="authorName" value="@cheep.authorName" />
+                            <button type="submit">Follow</button>
+                        </form>
+                        }
+                    </div>
+                    }
                 </li>
             }
         </ul>
@@ -44,17 +63,17 @@
     <div class="pagination">
         @if (Model.CurrentPage > 1)
         {
-        <a href="/@routeName/?page=@(Model.CurrentPage - 1)">Previous</a>
+            <a href="/@routeName/?page=@(Model.CurrentPage - 1)">Previous</a>
         }
 
         @for (var i = 1; i <= Model.TotalPages; i++)
         {
-        <a href="/@routeName/?page=@i" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+            <a href="/@routeName/?page=@i" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
         }
 
         @if (Model.CurrentPage < Model.TotalPages)
         {
-        <a href="/@routeName/?page=@(Model.CurrentPage + 1)">Next</a>
+            <a href="/@routeName/?page=@(Model.CurrentPage + 1)">Next</a>
         }
     </div>
 </div>

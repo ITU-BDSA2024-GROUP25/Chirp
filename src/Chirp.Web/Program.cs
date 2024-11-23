@@ -1,3 +1,5 @@
+using System.Security.Authentication;
+using System.Security.Claims;
 using Chirp.Infrastructure;
 using Chirp.Core;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -13,6 +15,8 @@ builder.Services.AddDbContext<ChirpDbContext>(options =>
 // Add services to the container
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepService, CheepService>();
+builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddAuthentication(options =>
     {
@@ -53,6 +57,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
     DbInitializer.SeedDatabase(context);
 }
+
 
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
