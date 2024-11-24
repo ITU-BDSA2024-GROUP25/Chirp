@@ -88,7 +88,7 @@ public class MyPageModel : SharedModel
         content.AppendLine("Cheeps:");
         if (GetCheeps != null)
         {
-            if (author.Following.Any())
+            if (GetCheeps().Result.Any())
             {
                 foreach (var cheep in await GetCheeps())
                 {
