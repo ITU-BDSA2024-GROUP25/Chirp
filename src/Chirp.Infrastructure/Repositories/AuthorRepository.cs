@@ -33,8 +33,9 @@ public class AuthorRepository : IAuthorRepository
         }
     }
     
-    public async Task<Author?> FindAuthorByName(string name)
+    public async Task<Author?> FindAuthorByName(string? name)
     {
+        if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
         return await _context.Authors
             .Include(a => a.Following)
             .Where(a => a.Name == name)
@@ -73,7 +74,7 @@ public class AuthorRepository : IAuthorRepository
         }
     }
 
-    public async Task<bool> IsFollowing(string userName, string targetUserName)
+    public async Task<bool> IsFollowing(string userName, string? targetUserName)
     {
         var author = await FindAuthorByName(userName);
         if (author == null) throw new Exception("User: " + userName +" not found");

@@ -6,6 +6,7 @@ public interface ICheepRepository
     public Task<List<CheepDto>> GetCheeps(string? author, int pageNumber);
     public int GetTotalCheepsCount(string? author);
     public Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers, int pageNumber);
+    public Task<List<CheepDto>> GetAllCheeps(string? author);
     
     // Commands
     public Task CreateCheep(Cheep cheep);

@@ -57,6 +57,19 @@ public class CheepRepository : ICheepRepository
         return query.Count();
     }
 
+    public async Task<List<CheepDto>> GetAllCheeps(string? author)
+    {
+        var query = (from cheep in _context.Cheeps
+                orderby cheep.TimeStamp descending
+                select cheep)
+            .Include(c => c.Author)
+            .Where(c => author == null || c.Author.Name == author)
+            .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
+        var result = await query.ToListAsync();
+        return result;
+    }
+
+
     public async Task CreateCheep(Cheep cheep)
     {
         if (cheep.TimeStamp == default)

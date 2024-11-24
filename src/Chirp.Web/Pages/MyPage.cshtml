@@ -1,0 +1,57 @@
+﻿@page "/{author}/MyPage"
+@model Chirp.Web.Pages.MyPageModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Chirp!";
+    Layout = "Shared/_Layout";
+    var routeName = HttpContext.GetRouteValue("author");
+}
+
+<div>
+    <strong> My Information: </strong>
+    <div class="cheepbox">
+        <p>Name: @User.Identity?.Name</p>
+        @if (!string.IsNullOrEmpty(Model.GetUserEmail))
+        {
+            <p>Email: @Model.GetUserEmail</p>
+        }
+        <p>Following:</p>
+        @foreach (var follower in await Model.Followers())
+        {
+            <li>
+                <a href="/@follower.userName">@follower.userName</a>
+            </li>
+        }
+    </div>
+</div>
+
+<div>
+    <strong> My Cheeps: </strong>
+    @if (Model.Cheeps.Any())
+    {
+        <ul id="messagelist" class="cheeps">
+            @foreach (var cheep in Model.Cheeps)
+            {
+                <li>
+                    <p>
+                        <strong>
+                            <a href="/@cheep.authorName">@cheep.authorName</a>
+                        </strong>
+                        @cheep.text
+                        <small>&mdash; @cheep.postedTime</small>
+                    </p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <em>You have no cheeps.</em>
+    }
+</div>
+
+<div style="text-align: right;">
+    <button class="w-100 btn btn-lg btn-danger" type="submit">Download Data</button>
+    <button class="w-100 btn btn-lg btn-danger" type="submit">Delete Data</button>
+</div>

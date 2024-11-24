@@ -16,6 +16,7 @@ public abstract class SharedModel : PageModel
         _authorService = authorService;
         
         Cheeps = new List<CheepDto>();
+        
         //_cheepService.CurrentPage = CurrentPage;
         Message = string.Empty;
     }
@@ -34,7 +35,7 @@ public abstract class SharedModel : PageModel
     protected readonly ICheepService _cheepService;
     protected readonly IAuthorService _authorService;
     public IList<CheepDto> Cheeps { get; set; }
-    
+    public async Task<IList<AuthorDto>> Followers() => await _authorService.GetFollowers(GetUserName);
     public int CurrentPage { get; set; }
 
     public int CheepAmount { get; set; }
@@ -62,7 +63,7 @@ public abstract class SharedModel : PageModel
         return Page();
     }
     
-    public async Task<bool> IsFollowing(string targetAuthorName)
+    public async Task<bool> IsFollowing(string? targetAuthorName)
     {
         var userName = GetUserName;
         bool isFollowing = await _authorService.IsFollowing(userName, targetAuthorName);
