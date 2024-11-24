@@ -9,11 +9,11 @@
 }
 
 <div>
-    <h2> @routeName's Timeline </h2>
     @if (User?.Identity?.IsAuthenticated == true)
     {
         @if (Model.GetUserName != @routeName?.ToString())
         {
+        <h2> @routeName's Timeline </h2>
             <div>
                 @if (await Model.IsFollowing(@routeName?.ToString()))
                 {
@@ -33,7 +33,7 @@
         }
         else
         {
-
+        <h2> My Timeline </h2>
             <form asp-page="/" method="post">
                 <input type="text" asp-for="Message">
                 <input type="submit" value="Share">
