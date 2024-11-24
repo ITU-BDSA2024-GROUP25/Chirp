@@ -88,10 +88,14 @@ public class MyPageModel : SharedModel
         content.AppendLine("Cheeps:");
         if (GetCheeps != null)
         {
-            foreach (var cheep in await GetCheeps())
+            if (author.Following.Any())
             {
-                content.AppendLine($"- \"{cheep.text}\" ({cheep.postedTime})");
+                foreach (var cheep in await GetCheeps())
+                {
+                    content.AppendLine($"- \"{cheep.text}\" ({cheep.postedTime})");
+                }
             }
+            else content.AppendLine("- No Cheeps");
         }
         else content.AppendLine("- No Cheeps");
         
