@@ -69,7 +69,6 @@ public class AuthorRepository : IAuthorRepository
         if (!author.Following.Contains(targetAuthor))
         {
             author.Following.Add(targetAuthor);
-            Console.WriteLine("Added follower: [" + targetAuthor.Name + "] to [" + author.Name + "] following list");
             await _context.SaveChangesAsync(); 
         }
     }
@@ -115,5 +114,30 @@ public class AuthorRepository : IAuthorRepository
             author.Following.Remove(targetAuthor);
             await _context.SaveChangesAsync(); 
         }
+    }
+
+    public async Task DeleteAuthor(string authorName)
+    {
+        Author? author = await FindAuthorByName(authorName);
+        if (author == null) throw new Exception("User: " + authorName +" not found");
+        
+        // Remove Author Relation
+        if (author.Following != null)
+        {
+            foreach (var followedAuthor in author.Following)
+            {
+                followedAuthor.Following?.Remove(author);
+            }
+        }
+        
+        // Remove Cheep Relation
+        var cheeps = _context.Cheeps.Where(c => c.Author.Name == author.Name);
+        foreach (var cheep in cheeps)
+        {
+            _context.Cheeps.Remove(cheep);
+        }
+        
+        _context.Authors.Remove(author);
+        await _context.SaveChangesAsync();
     }
 }
