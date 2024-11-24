@@ -68,16 +68,20 @@ public class MyPageModel : SharedModel
         
         content.AppendLine($"Name: {author.Name}");
         
-        if (!string.IsNullOrEmpty(author.Email)) content.AppendLine($"Email: {author.Email}");
+        if (!string.IsNullOrEmpty(author.Email) && author.Email != " ") content.AppendLine($"Email: {author.Email}");
         else content.AppendLine($"Email: No Email");
             
         content.AppendLine("Following:");
         if (author.Following != null)
         {
-            foreach (var follow in author.Following)
+            if (author.Following.Any())
             {
-                content.AppendLine($"- {follow.Name}");
+                foreach (var follow in author.Following)
+                {
+                    content.AppendLine($"- {follow.Name}");
+                }
             }
+            else content.AppendLine("- No Following");
         }
         else content.AppendLine($"- No Following");
             
