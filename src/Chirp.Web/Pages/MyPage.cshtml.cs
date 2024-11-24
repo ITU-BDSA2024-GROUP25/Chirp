@@ -68,7 +68,7 @@ public class MyPageModel : SharedModel
         
         content.AppendLine($"Name: {author.Name}");
         
-        if (!string.IsNullOrEmpty(author.Email)) content.AppendLine($"Email: {{author.Email}}");
+        if (!string.IsNullOrEmpty(author.Email)) content.AppendLine($"Email: {author.Email}");
         else content.AppendLine($"Email: No Email");
             
         content.AppendLine("Following:");
