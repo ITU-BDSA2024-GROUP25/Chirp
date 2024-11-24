@@ -51,7 +51,11 @@
     }
 </div>
 
-<div style="text-align: right;">
-    <button class="w-100 btn btn-lg btn-danger" type="submit">Download Data</button>
-    <button class="w-100 btn btn-lg btn-danger" type="submit">Delete Data</button>
+<div style="text-align: right; display: flex; justify-content: flex-end; gap: 10px;">
+    <form method="post" asp-page-handler="DownloadInfo">
+        <button class="w-100 btn btn-lg btn-danger" type="submit">Download Data</button>
+    </form>
+    <form method="post" asp-page-handler="DeleteData">
+        <button class="w-100 btn btn-lg btn-danger" type="submit">Delete User</button>
+    </form>
 </div>
