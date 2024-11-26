@@ -13,4 +13,6 @@ public interface IAuthorRepository
     public Task CreateAuthor(AuthorDto authorDto);
     public Task FollowAuthor(string userName, string targetUserName);
     public Task UnfollowAuthor(string userName, string targetUserName);
+    public Task DeleteAuthor(string authorName);
+ 
 }

@@ -27,14 +27,15 @@ public class AuthorRepository : IAuthorRepository
                 Cheeps = new List<Cheep>()
             };
 
-            if (string.IsNullOrEmpty(author.Email)) author.Email = author.Name + "@group25ChirpMail.com"; // generates a spoof mail so that user can log in with a private GitHub mail            
+            if (string.IsNullOrEmpty(author.Email)) author.Email = " "; // Empty mail            
             _context.Authors.Add(author);
             await _context.SaveChangesAsync();
         }
     }
     
-    public async Task<Author?> FindAuthorByName(string name)
+    public async Task<Author?> FindAuthorByName(string? name)
     {
+        if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
         return await _context.Authors
             .Include(a => a.Following)
             .Where(a => a.Name == name)
@@ -68,12 +69,11 @@ public class AuthorRepository : IAuthorRepository
         if (!author.Following.Contains(targetAuthor))
         {
             author.Following.Add(targetAuthor);
-            Console.WriteLine("Added follower: [" + targetAuthor.Name + "] to [" + author.Name + "] following list");
             await _context.SaveChangesAsync(); 
         }
     }
 
-    public async Task<bool> IsFollowing(string userName, string targetUserName)
+    public async Task<bool> IsFollowing(string userName, string? targetUserName)
     {
         var author = await FindAuthorByName(userName);
         if (author == null) throw new Exception("User: " + userName +" not found");
@@ -114,5 +114,30 @@ public class AuthorRepository : IAuthorRepository
             author.Following.Remove(targetAuthor);
             await _context.SaveChangesAsync(); 
         }
+    }
+
+    public async Task DeleteAuthor(string authorName)
+    {
+        Author? author = await FindAuthorByName(authorName);
+        if (author == null) throw new Exception("User: " + authorName +" not found");
+        
+        // Remove Author Relation
+        if (author.Following != null)
+        {
+            foreach (var followedAuthor in author.Following)
+            {
+                followedAuthor.Following?.Remove(author);
+            }
+        }
+        
+        // Remove Cheep Relation
+        var cheeps = _context.Cheeps.Where(c => c.Author.Name == author.Name);
+        foreach (var cheep in cheeps)
+        {
+            _context.Cheeps.Remove(cheep);
+        }
+        
+        _context.Authors.Remove(author);
+        await _context.SaveChangesAsync();
     }
 }

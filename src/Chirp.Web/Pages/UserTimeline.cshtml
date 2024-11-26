@@ -9,16 +9,40 @@
 }
 
 <div>
-    <h2> @routeName's Timeline </h2>
     @if (User?.Identity?.IsAuthenticated == true)
-    {   
-    <form asp-page="/" method="post">
-        <input type="text" asp-for="Message">
-        <input type="submit" value="Share">
-        <span asp-validation-for="Message"></span>
+    {
+        @if (Model.GetUserName != @routeName?.ToString())
+        {
+        <h2> @routeName's Timeline </h2>
+            <div>
+                @if (await Model.IsFollowing(@routeName?.ToString()))
+                {
+                    <form method="post" asp-page-handler="Unfollow">
+                        <input type="hidden" name="authorName" value="@routeName?.ToString()"/>
+                        <button type="submit">Unfollow</button>
+                    </form>
+                }
+                else
+                {
+                    <form method="post" asp-page-handler="Follow">
+                        <input type="hidden" name="authorName" value="@routeName?.ToString()"/>
+                        <button type="submit">Follow</button>
+                    </form>
+                }
+            </div>
+        }
+        else
+        {
+        <h2> My Timeline </h2>
+            <form asp-page="/" method="post">
+                <input type="text" asp-for="Message">
+                <input type="submit" value="Share">
+                <span asp-validation-for="Message"></span>
+            </form>
 
-    </form>
+        }
     }
+
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
@@ -32,24 +56,27 @@
                         @cheep.text
                         <small>&mdash; @cheep.postedTime</small>
                     </p>
-                    @if (Model.GetUserName != cheep.authorName && User?.Identity?.IsAuthenticated == true)
+                    @if (Model.GetUserName == @routeName?.ToString())
                     {
-                    <div style="text-align: right;">
-                        @if (await Model.IsFollowing(cheep.authorName))
+                        @if (Model.GetUserName != cheep.authorName && User?.Identity?.IsAuthenticated == true)
                         {
-                        <form method="post" asp-page-handler="Unfollow">
-                            <input type="hidden" name="authorName" value="@cheep.authorName" />
-                            <button type="submit">Unfollow</button>
-                        </form>
+                            <div style="text-align: right;">
+                                @if (await Model.IsFollowing(cheep.authorName))
+                                {
+                                    <form method="post" asp-page-handler="Unfollow">
+                                        <input type="hidden" name="authorName" value="@cheep.authorName" />
+                                        <button type="submit">Unfollow</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="Follow">
+                                        <input type="hidden" name="authorName" value="@cheep.authorName" />
+                                        <button type="submit">Follow</button>
+                                    </form>
+                                }
+                            </div>
                         }
-                        else
-                        {
-                        <form method="post" asp-page-handler="Follow">
-                            <input type="hidden" name="authorName" value="@cheep.authorName" />
-                            <button type="submit">Follow</button>
-                        </form>
-                        }
-                    </div>
                     }
                 </li>
             }
