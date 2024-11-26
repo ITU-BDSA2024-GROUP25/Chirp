@@ -10,12 +10,5 @@ public class _LoginPartial : PageModel
     {
         
     }
-  /*  // code given from groupe number 3 
-    public IActionResult OnGetLogin()
-    {
-        return Challenge(new AuthenticationProperties
-        {
-            RedirectUri = "/" 
-        }, "GitHub"); 
-    }*/
+
 }

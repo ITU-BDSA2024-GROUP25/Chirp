@@ -112,15 +112,6 @@ public abstract class SharedModel : PageModel
         return RedirectToPage();
     }
 
-    
-    // code given from groupe number 3 
-    public IActionResult OnGetLogin()
-    {
-        return Challenge(new AuthenticationProperties
-        {
-            RedirectUri = "/signin-github"
-        }, "GitHub");
-    }
 
     public async Task<IActionResult> OnPost()
     {
