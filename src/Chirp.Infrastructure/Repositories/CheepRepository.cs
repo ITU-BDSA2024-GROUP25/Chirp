@@ -102,4 +102,22 @@ public class CheepRepository : ICheepRepository
         _context.Cheeps.Add(newCheep);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteCheep(CheepDto cheepDto)
+    {
+        Console.WriteLine("CheepDto text: " + cheepDto.text);
+        var cheep = await _context.Cheeps
+            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text).FirstOrDefaultAsync();
+        
+        if (cheep == null) throw new Exception("Cannot delete cheep");
+
+        Console.WriteLine("Found Cheep with text: " + cheep.Text);
+        
+        if (cheep == null) throw new Exception("Cannot delete cheep");
+        
+        // Remove Cheep Relation
+        _context.Cheeps.Remove(cheep);
+        
+        await _context.SaveChangesAsync();
+    }
 }

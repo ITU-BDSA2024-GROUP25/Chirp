@@ -144,4 +144,11 @@ public abstract class SharedModel : PageModel
             return Redirect("/");
         }
     }
+
+    public async Task OnPostDelete(string cheepText, string time)
+    {
+        CheepDto cheep = new CheepDto(cheepText, time, GetUserName);
+        await Task.CompletedTask;
+        // await _cheepService.DeleteCheep(cheep);
+    }
 }
