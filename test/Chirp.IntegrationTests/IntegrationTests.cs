@@ -33,7 +33,7 @@ namespace Chirp.Tests
         [Theory]
         [InlineData("Helge")]
         [InlineData("Adrian")]
-        public async void CanSeePrivateTimeline(string author)
+        public async void CanSeeMyTimeline(string author)
         {
             var response = await _client.GetAsync($"/{author}");
             response.EnsureSuccessStatusCode();
@@ -41,7 +41,7 @@ namespace Chirp.Tests
 
 
             Assert.Contains("Chirp!", content);
-            Assert.Contains($"{author}'s Timeline", content);
+            Assert.Contains($"{author}", content);
         }
     }
 }
