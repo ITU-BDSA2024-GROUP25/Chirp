@@ -144,4 +144,20 @@ public abstract class SharedModel : PageModel
             return Redirect("/");
         }
     }
+
+    public async Task<IActionResult> OnPostDelete(string cheepText, string time)
+    {
+        CheepDto cheep = new CheepDto(cheepText, time, GetUserName);
+        Console.WriteLine("cheep text: " + cheepText + " time: " + time + " name: " + GetUserName);
+
+        try
+        {
+            await _cheepService.DeleteCheep(cheep);
+            return RedirectToPage();
+        }
+        catch
+        {
+            return Redirect("/");
+        }
+    }
 }

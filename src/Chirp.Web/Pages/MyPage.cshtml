@@ -16,12 +16,15 @@
         {
             <p>Email: @Model.GetUserEmail</p>
         }
-        <p>Following:</p>
-        @foreach (var follower in await Model.Followers())
+        @if (Model.Followers().Result.Any())
         {
-            <li>
-                <a href="/@follower.userName">@follower.userName</a>
-            </li>
+            <p>Following:</p>
+            @foreach (var follower in await Model.Followers())
+            {
+                <li>
+                    <a href="/@follower.userName">@follower.userName</a>
+                </li>
+            }
         }
     </div>
 </div>

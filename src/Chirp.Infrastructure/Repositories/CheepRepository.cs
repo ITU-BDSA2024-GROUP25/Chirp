@@ -102,4 +102,21 @@ public class CheepRepository : ICheepRepository
         _context.Cheeps.Add(newCheep);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteCheep(CheepDto cheepDto)
+    {
+        var cheep = await _context.Cheeps
+            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text).FirstOrDefaultAsync();
+        
+        if (cheep == null) throw new Exception("Cannot delete cheep, because it doesn't exist");
+        
+        // Remove Cheep Relation
+        var author = await _context.Authors.Where(a => a.Name == cheepDto.authorName).FirstOrDefaultAsync();
+        if (author == null) throw new Exception("Cannot delete cheep, author not found");
+        author.Cheeps.Remove(cheep);
+        
+        _context.Cheeps.Remove(cheep);
+        
+        await _context.SaveChangesAsync();
+    }
 }
