@@ -153,6 +153,35 @@ public class EndToEndTest
 
     }
     
+    //Testuseren test follows and unfollow Jacqualine
+    [Test]
+    public async Task FolloweringJacqualineTest()
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        });
+        var context = await browser.NewContextAsync();
+
+        var page = await context.NewPageAsync();
+        await page.GotoAsync("http://localhost:5273/");
+        await page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await page.GetByPlaceholder("Username").ClickAsync();
+        await page.GetByPlaceholder("Username").FillAsync("test");
+        await page.GetByPlaceholder("Username").PressAsync("Tab");
+        await page.GetByPlaceholder("password").FillAsync("password");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "My Timeline" }).ClickAsync();
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Public Timeline" }).ClickAsync();
+        await Expect(page.Locator("#messagelist")).ToContainTextAsync("Follow");
+
+        
+    }
+    
+
     //tries to cheep too short with the test-user. If failed try to run RegisterUserTest() first
     [Test]
     public async Task TooShortCheepTest()
@@ -177,6 +206,7 @@ public class EndToEndTest
         await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         await page.GetByText("hey man, its too short, needs").ClickAsync();
     }
+    
 
     [Test]
     public async Task DeleteUserTest()
