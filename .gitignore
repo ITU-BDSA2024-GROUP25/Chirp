@@ -27,7 +27,15 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
+[Bb]in/*
+!bin/Debug/
+
+bin/Debug/*
+!bin/Debug/net8.0/
+
+bin/Debug/net8.0/*
+!bin/Debug/net8.0/data/
+
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
