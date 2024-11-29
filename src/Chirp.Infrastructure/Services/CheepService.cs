@@ -12,6 +12,7 @@ public interface ICheepService
     public Task CreateCheep(CheepDto cheep, string authorName);
     public Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers, int pageNumber);
     public Task<List<CheepDto>> GetAllCheeps(string? author);
+    public Task DeleteCheep(CheepDto cheep);
 }
 
 public class CheepService : ICheepService
@@ -32,4 +33,5 @@ public class CheepService : ICheepService
     public Task CreateCheep(CheepDto cheep, string authorName) => _cheepRepo.CreateCheep(cheep, authorName);
     public Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers, int pageNumber) => _cheepRepo.GetCheepsFromFollowers(authorName, followers, pageNumber);
     public Task<List<CheepDto>> GetAllCheeps(string? author) => _cheepRepo.GetAllCheeps(author);
+    public Task DeleteCheep(CheepDto cheep) => _cheepRepo.DeleteCheep(cheep);
 }
