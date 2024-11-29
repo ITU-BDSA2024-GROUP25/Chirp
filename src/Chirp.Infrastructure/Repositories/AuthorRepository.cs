@@ -41,13 +41,6 @@ public class AuthorRepository : IAuthorRepository
             .Where(a => a.Name == name)
             .FirstOrDefaultAsync();
     }
-
-    public async Task<Author?> FindAuthorByEmail(string email)
-    {
-        return await _context.Authors
-            .FirstOrDefaultAsync(a => a.Email == email);
-    }
-
     public async Task<Author?> GetAuthorById(int id)
     {
         return await _context.Authors
