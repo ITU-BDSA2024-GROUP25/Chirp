@@ -145,12 +145,19 @@ public abstract class SharedModel : PageModel
         }
     }
 
-    public async Task OnPostDelete(string cheepText, string time)
+    public async Task<IActionResult> OnPostDelete(string cheepText, string time)
     {
         CheepDto cheep = new CheepDto(cheepText, time, GetUserName);
         Console.WriteLine("cheep text: " + cheepText + " time: " + time + " name: " + GetUserName);
-        await _cheepService.DeleteCheep(cheep);
-        
-        RedirectToPage();
+
+        try
+        {
+            await _cheepService.DeleteCheep(cheep);
+            return RedirectToPage();
+        }
+        catch
+        {
+            return Redirect("/");
+        }
     }
 }
