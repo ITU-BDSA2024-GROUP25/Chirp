@@ -1,10 +1,11 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+@model Chirp.Web.Pages.SharedModel
 <head>
-  
+
     @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers 
     <title>@ViewData["Title"]</title>
-    <link href="/css/style.css" rel="stylesheet" type="text/css"/>
+    <link id="themeStylesheet" href="/css/style.css" rel="stylesheet" type="text/css"/>
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
 <body>
@@ -33,19 +34,34 @@
                 <a class="nav-link text-dark" href="/Identity/Account/Register">register</a> |
                 <a class="nav-link text-dark" href="/Identity/Account/Login">login</a> |
             </div>
-            
-            
+
+
         }
-        
+        <div style="text-align: right; margin-top: 0px;">
+            <button onclick="switchStyles()">Switch Stylesheet</button>
+        </div>
     </div>
 
     <div class=body>
-            @RenderBody()
+        @RenderBody()
     </div>
     <div class=footer>
         Chirp &mdash; An ASP.NET Application
     </div>
 </div>
+
+<script>
+    function switchStyles() {
+        const stylesheet = document.getElementById('themeStylesheet');
+        const currentHref = stylesheet.getAttribute('href');
+
+        if (currentHref === '/css/style.css') {
+            stylesheet.setAttribute('href', '/css/style2.css');
+        } else {
+            stylesheet.setAttribute('href', '/css/style.css');
+        }
+    }
+</script>
 
 </body>
 @await RenderSectionAsync("Scripts", required: false)

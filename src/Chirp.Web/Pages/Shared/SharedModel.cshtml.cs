@@ -6,7 +6,7 @@ using Chirp.Core;
 using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 
-namespace Chirp.Razor.Pages;
+namespace Chirp.Web.Pages;
 
 public abstract class SharedModel : PageModel
 {
