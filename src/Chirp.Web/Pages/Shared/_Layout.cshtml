@@ -33,11 +33,12 @@
                 <a class="nav-link text-dark" href="/Identity/Account/Register">Register</a> |
                 <a class="nav-link text-dark" href="/Identity/Account/Login">Login</a> |
             </div>
-
-
         }
-        <div style="text-align: right; margin-top: 0px;">
-            <button onclick="switchStyles()">Switch Stylesheet</button>
+        
+        <div class="theme-switch" align="right">
+            <label class="switch">
+                <span class="slider"></span>
+            </label>
         </div>
     </div>
 
@@ -50,32 +51,32 @@
 </div>
 
 
-<script>    
-    // This code was inspired by code provided by a LLM giving the suggestion of -
-    // using Local Storage for remembering value when changing pages
+<script>
+    /// This code was inspired by code given from LLM suggesting to use Javascript to layout page (We could not
+    /// get Model to work) and also to use local storage to remember values when switching between pages
+    const slider = document.querySelector('.slider');
     const stylesheet = document.getElementById('themeStylesheet');
 
     function loadStyle() {
         const savedTheme = localStorage.getItem('selectedTheme');
         if (savedTheme) {
             stylesheet.setAttribute('href', savedTheme);
+            slider.classList.toggle('checked', savedTheme === '/css/style2.css');
         }
     }
 
-    function switchStyles() {
-        const currentHref = stylesheet.getAttribute('href');
-
-        if (currentHref === '/css/style.css') {
+    slider.addEventListener('click', () => {
+        const isChecked = slider.classList.toggle('checked');
+        if (isChecked) {
             stylesheet.setAttribute('href', '/css/style2.css');
             localStorage.setItem('selectedTheme', '/css/style2.css');
         } else {
             stylesheet.setAttribute('href', '/css/style.css');
             localStorage.setItem('selectedTheme', '/css/style.css');
         }
-    }
+    });
 
     document.addEventListener('DOMContentLoaded', loadStyle);
-
 </script>
 
 </body>
