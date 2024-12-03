@@ -209,5 +209,147 @@ public class UnitTests
 
         // Assert
         Assert.Equal(1, authorAmount);
-    }       
+    }      
+    
+    [Fact]
+    public async void deleteAuthor_ShouldDeleteAuthor()
+    {
+        // Arrange 
+        using var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
+
+        using var context = new ChirpDbContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+
+        authorRepository = new AuthorRepository(context);
+
+        context.Cheeps.ExecuteDelete();
+        context.Authors.ExecuteDelete();
+
+        AuthorDto author = new AuthorDto( "John Doe", "John+Doe@hotmail.com");
+
+        var newAuthor = authorRepository.CreateAuthor(author);
+        await context.SaveChangesAsync();
+
+        //Act
+        authorRepository.DeleteAuthor("John Doe");
+        var authorAmount = await context.Authors.CountAsync();
+
+        // Assert 
+        Assert.Equal(0, authorAmount);
+    }
+
+    [Fact]
+    public async void deleteCheep_ShouldDeleteCheep()
+    {
+        // Arrange 
+        using var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
+
+        using var context = new ChirpDbContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+
+        authorRepository = new AuthorRepository(context);
+        cheepRepository = new CheepRepository(context);
+
+        context.Cheeps.ExecuteDelete();
+        context.Authors.ExecuteDelete();
+
+        AuthorDto author = new AuthorDto( "John Doe", "John+Doe@hotmail.com");
+        var newAuthor = authorRepository.CreateAuthor(author);
+
+        CheepDto cheepDto1 = new CheepDto("test cheep", "2023-08-01 13:15:22","John Doe");
+        CheepDto cheepDto2 = new CheepDto("test cheep2", "2023-08-01 13:15:24","John Doe");
+        CheepDto cheepDto3 = new CheepDto("test cheep3", "2023-08-01 13:15:27","John Doe");
+        
+        await cheepRepository.CreateCheep(cheepDto1, "John Doe");
+        await cheepRepository.CreateCheep(cheepDto2, "John Doe");
+        await cheepRepository.CreateCheep(cheepDto3, "John Doe");
+
+
+        // Act 
+        cheepRepository.DeleteCheep(cheepDto2);
+        var newCheep = await context.Cheeps.CountAsync();
+        
+        await context.SaveChangesAsync();
+        
+        // Assert 
+        Assert.Equal(2, context.Cheeps.Count());
+    }
+
+    [Fact]
+    public async void FollowAuthor_ShouldFollowAuthor()
+    {
+        //Arrange 
+        using var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
+
+        using var context = new ChirpDbContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+        
+        authorRepository = new AuthorRepository(context);
+
+        context.Cheeps.ExecuteDelete();
+        context.Authors.ExecuteDelete();
+        
+        Author author1 = new Author() { AuthorId = 13, Name = "John Doe", Email = "John+Doe@hotmail.com", Cheeps = new List<Cheep>() };
+        Author author2 = new Author() { AuthorId = 14, Name = "Jane Dig", Email = "Jane+Dig@hotmail.com", Cheeps = new List<Cheep>() };
+        Author author3 = new Author() { AuthorId = 15, Name = "Test User", Email = "test+user@hotmail.com", Cheeps = new List<Cheep>()};
+
+        var authors = new List<Author>() { author1, author2, author3};
+        context.Authors.AddRange(authors);
+        await context.SaveChangesAsync();
+        
+        // Act 
+        await authorRepository.FollowAuthor(author1.Name, author2.Name);
+
+        var isFollowing = author1.Following.Contains(author2); 
+        
+        // Assert 
+        Assert.True(isFollowing);
+        
+
+    }
+
+    [Fact]
+    public async void UnfollowDecreasesListOfFollowers()
+    {
+        //Arrange 
+        using var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
+
+        using var context = new ChirpDbContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+        
+        authorRepository = new AuthorRepository(context);
+
+        context.Cheeps.ExecuteDelete();
+        context.Authors.ExecuteDelete();
+        
+        Author author1 = new Author() { AuthorId = 13, Name = "John Doe", Email = "John+Doe@hotmail.com", Cheeps = new List<Cheep>() };
+        Author author2 = new Author() { AuthorId = 14, Name = "Jane Dig", Email = "Jane+Dig@hotmail.com", Cheeps = new List<Cheep>() };
+        Author author3 = new Author() { AuthorId = 15, Name = "Test User", Email = "test+user@hotmail.com", Cheeps = new List<Cheep>()};
+
+        var authors = new List<Author>() { author1, author2, author3};
+        context.Authors.AddRange(authors);
+        await context.SaveChangesAsync();
+        await authorRepository.FollowAuthor(author1.Name, author2.Name);
+        
+        //act
+        
+        await authorRepository.UnfollowAuthor(author1.Name, author2.Name);
+        
+        
+        
+        var isFollowing = !author1.Following.Contains(author2); 
+        
+        // Assert 
+        Assert.True(isFollowing);
+
+    }
+    
 }
