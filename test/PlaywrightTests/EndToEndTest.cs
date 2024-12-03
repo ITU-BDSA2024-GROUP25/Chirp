@@ -3,13 +3,16 @@ using NUnit;
 using static Microsoft.Playwright.Assertions;
 
 namespace PlaywrightTests;
-
+/**
+Playwright runs tests in alphabetical order so to ensure the intended order the tests are labeled 
+with a letter in front of the name.
+*/
 public class EndToEndTest
 {
     //Registers the user with username: test, email: test@test.dk, password: password
-    //If username is already taken try to discard changes on database in git
+    //If username is already taken try to run the test Z_DeleteUserTest() manually
     [Test]
-    public async Task RegisterUserTest()
+    public async Task A_RegisterUserTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -38,7 +41,7 @@ public class EndToEndTest
     }
 
     [Test]
-    public async Task IsolateAuthorCheepsTest()
+    public async Task B_IsolateAuthorCheepsTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -56,7 +59,7 @@ public class EndToEndTest
 
     //tries to login and out with the test-user. If failed try to run RegisterUserTest() first
     [Test]
-    public async Task ValidLoginAndOutTest()
+    public async Task C_ValidLoginAndOutTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -81,7 +84,7 @@ public class EndToEndTest
 
     //test that check that it is not possible to login with an account that doesnt exist
     [Test]
-    public async Task InvalidLoginAttemptTest()
+    public async Task D_InvalidLoginAttemptTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -102,7 +105,7 @@ public class EndToEndTest
     }
     //Test that a user cant make a username with a "/" in front that redirects to another page
     [Test]
-    public async Task TestingForRedirectionAttempt()
+    public async Task E_TestingForRedirectionAttempt()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -128,7 +131,7 @@ public class EndToEndTest
     }
     //tries to cheep with the test-user. If failed try to run RegisterUserTest() first
     [Test]
-    public async Task ValidCheepTest()
+    public async Task F_ValidCheepTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -155,7 +158,7 @@ public class EndToEndTest
     
     //Testuseren test follows and unfollow Jacqualine
     [Test]
-    public async Task FolloweringJacqualineTest()
+    public async Task G_FolloweringJacqualineTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -184,7 +187,7 @@ public class EndToEndTest
 
     //tries to cheep too short with the test-user. If failed try to run RegisterUserTest() first
     [Test]
-    public async Task TooShortCheepTest()
+    public async Task H_TooShortCheepTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -209,7 +212,7 @@ public class EndToEndTest
     
 
     [Test]
-    public async Task DeleteUserTest()
+    public async Task Z_DeleteUserTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
