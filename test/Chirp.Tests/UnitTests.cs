@@ -239,4 +239,30 @@ public class UnitTests
         // Assert 
         Assert.Equal(0, authorAmount);
     }
-}
+
+    public async void deleteCheep_ShouldDeleteCheep()
+    {
+        // Arrange 
+        using var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
+
+        using var context = new ChirpDbContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+
+        authorRepository = new AuthorRepository(context);
+        cheepRepository = new cheepRepository(context);
+
+        context.Cheeps.ExecuteDelete();
+        context.Authors.ExecuteDelete();
+
+        AuthorDto author = new AuthorDto( "John Doe", "John+Doe@hotmail.com");
+        
+        
+
+        var newAuthor = authorRepository.CreateAuthor(author);
+        
+        
+        await context.SaveChangesAsync();
+    }
+}// need to test comit issue 
