@@ -39,9 +39,34 @@ public class EndToEndTest
         await Expect(page.Locator("body")).ToContainTextAsync("Logout [test]");
 
     }
-
+    
     [Test]
-    public async Task B_IsolateAuthorCheepsTest()
+    public async Task B_DeleteCheepTest()
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        });
+        var context = await browser.NewContextAsync();
+
+        var page = await context.NewPageAsync();
+        await page.GotoAsync("http://localhost:5273/");
+        await page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await page.GetByPlaceholder("Username").ClickAsync();
+        await page.GetByPlaceholder("Username").FillAsync("test");
+        await page.GetByPlaceholder("Username").PressAsync("Tab");
+        await page.GetByPlaceholder("password").FillAsync("password");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await page.Locator("#Message").ClickAsync();
+        await page.Locator("#Message").FillAsync("Delete this");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Delete Icon" }).ClickAsync();
+
+    } 
+ 
+    [Test]
+    public async Task C_IsolateAuthorCheepsTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -59,7 +84,7 @@ public class EndToEndTest
 
     //tries to login and out with the test-user. If failed try to run RegisterUserTest() first
     [Test]
-    public async Task C_ValidLoginAndOutTest()
+    public async Task D_ValidLoginAndOutTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -84,7 +109,7 @@ public class EndToEndTest
 
     //test that check that it is not possible to login with an account that doesnt exist
     [Test]
-    public async Task D_InvalidLoginAttemptTest()
+    public async Task E_InvalidLoginAttemptTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -105,7 +130,7 @@ public class EndToEndTest
     }
     //Test that a user cant make a username with a "/" in front that redirects to another page
     [Test]
-    public async Task E_TestingForRedirectionAttempt()
+    public async Task F_TestingForRedirectionAttempt()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -131,7 +156,7 @@ public class EndToEndTest
     }
     //tries to cheep with the test-user. If failed try to run RegisterUserTest() first
     [Test]
-    public async Task F_ValidCheepTest()
+    public async Task G_ValidCheepTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -158,7 +183,7 @@ public class EndToEndTest
     
     //Testuseren test follows and unfollow Jacqualine
     [Test]
-    public async Task G_FolloweringJacqualineTest()
+    public async Task H_FolloweringJacqualineTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -180,14 +205,12 @@ public class EndToEndTest
         await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
         await page.GetByRole(AriaRole.Link, new() { Name = "Public Timeline" }).ClickAsync();
         await Expect(page.Locator("#messagelist")).ToContainTextAsync("Follow");
-
-        
     }
     
 
     //tries to cheep too short with the test-user. If failed try to run RegisterUserTest() first
     [Test]
-    public async Task H_TooShortCheepTest()
+    public async Task I_TooShortCheepTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -210,8 +233,9 @@ public class EndToEndTest
         await page.GetByText("hey man, its too short, needs").ClickAsync();
     }
 
+    //This test only test that the dark mode slider exist 
     [Test]
-    public async Task H_DeleteCheepTest()
+    public async Task J_DarkModeTest()
     {
         using var playwright = await Playwright.CreateAsync();
         await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -222,18 +246,10 @@ public class EndToEndTest
 
         var page = await context.NewPageAsync();
         await page.GotoAsync("http://localhost:5273/");
-        await page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
-        await page.GetByPlaceholder("Username").ClickAsync();
-        await page.GetByPlaceholder("Username").FillAsync("test");
-        await page.GetByPlaceholder("Username").PressAsync("Tab");
-        await page.GetByPlaceholder("password").FillAsync("password");
-        await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-        await page.Locator("#Message").ClickAsync();
-        await page.Locator("#Message").FillAsync("Delete this");
-        await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
-        await page.GetByRole(AriaRole.Button, new() { Name = "Delete Icon" }).ClickAsync();
-
+        await page.Locator(".theme-switch").ClickAsync();
+        await page.Locator("span").ClickAsync();
     }
+
 
     [Test]
     public async Task Z_DeleteUserTest()
