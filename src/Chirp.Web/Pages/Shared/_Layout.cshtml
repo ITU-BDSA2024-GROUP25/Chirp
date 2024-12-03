@@ -49,17 +49,33 @@
     </div>
 </div>
 
-<script>
+
+<script>    
+    // This code was inspired by code provided by a LLM giving the suggestion of -
+    // using Local Storage for remembering value when changing pages
+    const stylesheet = document.getElementById('themeStylesheet');
+
+    function loadStyle() {
+        const savedTheme = localStorage.getItem('selectedTheme');
+        if (savedTheme) {
+            stylesheet.setAttribute('href', savedTheme);
+        }
+    }
+
     function switchStyles() {
-        const stylesheet = document.getElementById('themeStylesheet');
         const currentHref = stylesheet.getAttribute('href');
 
         if (currentHref === '/css/style.css') {
             stylesheet.setAttribute('href', '/css/style2.css');
+            localStorage.setItem('selectedTheme', '/css/style2.css');
         } else {
             stylesheet.setAttribute('href', '/css/style.css');
+            localStorage.setItem('selectedTheme', '/css/style.css');
         }
     }
+
+    document.addEventListener('DOMContentLoaded', loadStyle);
+
 </script>
 
 </body>
