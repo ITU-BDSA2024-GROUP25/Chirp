@@ -57,7 +57,7 @@
                         <small>&mdash; @cheep.postedTime</small>
                     </p>
 
-                    @if (Model.GetUserName != cheep.authorName)
+                    @if (Model.GetUserName != cheep.authorName && Model.GetUserName == @routeName?.ToString())
                     {
                     <form method="post" asp-page-handler="@((await Model.IsFollowing(cheep.authorName)) ? "Unfollow" : "Follow")"
                           style="position: absolute; top: 7px; right: 10px;">
@@ -74,7 +74,7 @@
                         </button>
                     </form>
                     }
-                    else
+                    else if (Model.GetUserName == cheep.authorName)
                     {
                     <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
                         <input type="hidden" name="cheepText" value="@cheep.text" />
