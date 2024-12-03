@@ -209,7 +209,31 @@ public class EndToEndTest
         await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         await page.GetByText("hey man, its too short, needs").ClickAsync();
     }
-    
+
+    [Test]
+    public async Task H_DeleteCheepTest()
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        });
+        var context = await browser.NewContextAsync();
+
+        var page = await context.NewPageAsync();
+        await page.GotoAsync("http://localhost:5273/");
+        await page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await page.GetByPlaceholder("Username").ClickAsync();
+        await page.GetByPlaceholder("Username").FillAsync("test");
+        await page.GetByPlaceholder("Username").PressAsync("Tab");
+        await page.GetByPlaceholder("password").FillAsync("password");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await page.Locator("#Message").ClickAsync();
+        await page.Locator("#Message").FillAsync("Delete this");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Delete Icon" }).ClickAsync();
+
+    }
 
     [Test]
     public async Task Z_DeleteUserTest()
@@ -232,7 +256,6 @@ public class EndToEndTest
         await page.GetByRole(AriaRole.Link, new() { Name = "My Page" }).ClickAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Delete User" }).ClickAsync();
         await Expect(page.Locator("h2")).ToContainTextAsync("Public Timeline");
-
     }
 
 }
