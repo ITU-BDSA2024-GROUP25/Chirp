@@ -36,14 +36,21 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/@cheep.authorName">@cheep.authorName</a>
-                        </strong>
-                        @cheep.text
-                        <small>&mdash; @cheep.postedTime</small>
-                    </p>
+            <li style="position: relative; padding-right: 60px;">
+                <p>
+                    <strong>
+                        <a href="/@cheep.authorName">@cheep.authorName</a>
+                    </strong>
+                    @cheep.text
+                    <small>&mdash; @cheep.postedTime</small>
+                </p>
+                <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
+                    <input type="hidden" name="cheepText" value="@cheep.text" />
+                    <input type="hidden" name="time" value="@cheep.postedTime" />
+                    <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
+                        <img src="/images/Xicon.png" alt="Delete Icon" style="width: 12px; height: 12px;" />
+                    </button>
+                </form>
                 </li>
             }
         </ul>
