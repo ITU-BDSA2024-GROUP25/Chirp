@@ -106,7 +106,7 @@ public class CheepRepository : ICheepRepository
     public async Task DeleteCheep(CheepDto cheepDto)
     {
         var cheep = await _context.Cheeps
-            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text).FirstOrDefaultAsync();
+            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text && a.TimeStamp.ToString() == cheepDto.postedTime).FirstOrDefaultAsync();
         
         if (cheep == null) throw new Exception("Cannot delete cheep, because it doesn't exist");
         
