@@ -12,4 +12,6 @@ public interface ICheepRepository
     public Task CreateCheep(Cheep cheep);
     public Task CreateCheep(CheepDto cheep, string userName);
     public Task DeleteCheep(CheepDto cheep);
+
+    public Task<int> FindCheepID(CheepDto cheepDto); 
 }
