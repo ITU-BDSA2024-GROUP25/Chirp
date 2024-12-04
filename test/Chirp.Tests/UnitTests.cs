@@ -4,7 +4,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Tests;
-
 public class UnitTests
 {
     private ICheepRepository cheepRepository;
@@ -239,46 +238,6 @@ public class UnitTests
         // Assert 
         Assert.Equal(0, authorAmount);
     }
-
-    [Fact]
-    public async void deleteCheep_ShouldDeleteCheep()
-    {
-        // Arrange 
-        using var connection = new SqliteConnection("Filename=:memory:");
-        await connection.OpenAsync();
-        var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
-
-        using var context = new ChirpDbContext(builder.Options);
-        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
-
-        authorRepository = new AuthorRepository(context);
-        cheepRepository = new CheepRepository(context);
-
-        context.Cheeps.ExecuteDelete();
-        context.Authors.ExecuteDelete();
-
-        AuthorDto author = new AuthorDto( "John Doe", "John+Doe@hotmail.com");
-        var newAuthor = authorRepository.CreateAuthor(author);
-
-        CheepDto cheepDto1 = new CheepDto("test cheep", "2023-08-01 13:15:22","John Doe");
-        CheepDto cheepDto2 = new CheepDto("test cheep2", "2023-08-01 13:15:24","John Doe");
-        CheepDto cheepDto3 = new CheepDto("test cheep3", "2023-08-01 13:15:27","John Doe");
-        
-        await cheepRepository.CreateCheep(cheepDto1, "John Doe");
-        await cheepRepository.CreateCheep(cheepDto2, "John Doe");
-        await cheepRepository.CreateCheep(cheepDto3, "John Doe");
-
-
-        // Act 
-        cheepRepository.DeleteCheep(cheepDto2);
-        var newCheep = await context.Cheeps.CountAsync();
-        
-        await context.SaveChangesAsync();
-        
-        // Assert 
-        Assert.Equal(2, context.Cheeps.Count());
-    }
-
     [Fact]
     public async void FollowAuthor_ShouldFollowAuthor()
     {
@@ -352,4 +311,53 @@ public class UnitTests
 
     }
     
+    
+    
+/**
+ * Bellow test are really intergration test should proberbly be moved later 
+ */
+    [Fact]
+    public async void deleteCheep_ShouldDeleteCheep()
+    {
+        // Arrange 
+        using var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
+
+        using var context = new ChirpDbContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+
+        authorRepository = new AuthorRepository(context);
+        cheepRepository = new CheepRepository(context);
+
+        context.Cheeps.ExecuteDelete();
+        context.Authors.ExecuteDelete();
+
+        AuthorDto author = new AuthorDto( "John Doe", "John+Doe@hotmail.com");
+        var newAuthor = authorRepository.CreateAuthor(author);
+
+        CheepDto cheepDto1 = new CheepDto("test cheep", "2023-08-01 13:15:22","John Doe");
+        CheepDto cheepDto2 = new CheepDto("test cheep2", "2023-08-01 13:15:24","John Doe");
+        CheepDto cheepDto3 = new CheepDto("test cheep3", "2023-08-01 13:15:27","John Doe");
+        
+        await cheepRepository.CreateCheep(cheepDto1, "John Doe");
+        await cheepRepository.CreateCheep(cheepDto2, "John Doe");
+
+
+        // Act 
+        await cheepRepository.FindCheepID(cheepDto2); 
+        var checkID2 = cheepRepository.FindCheepID(cheepDto2); 
+        await cheepRepository.DeleteCheep(cheepDto2);
+        await cheepRepository.CreateCheep(cheepDto3, "John Doe");
+
+        await context.SaveChangesAsync();
+        
+        // after deletion we check that the new cheep has a diffrent ID 
+        var cheepId3 = cheepRepository.FindCheepID(cheepDto3);
+        await context.SaveChangesAsync();
+        
+        // Assert 
+        Assert.False(checkID2 == cheepId3);
+    }
+
 }

@@ -7,6 +7,7 @@ namespace Chirp.Infrastructure;
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDbContext _context;
+
     public CheepRepository(ChirpDbContext context)
     {
         _context = context;
@@ -16,8 +17,8 @@ public class CheepRepository : ICheepRepository
     public async Task<List<CheepDto>> GetCheeps(string? author = null, int pageNumber = 1)
     {
         var query = (from cheep in _context.Cheeps
-                     orderby cheep.TimeStamp descending
-                     select cheep)
+                orderby cheep.TimeStamp descending
+                select cheep)
             .Include(c => c.Author)
             .Where(c => author == null || c.Author.Name == author)
             .Skip((pageNumber - 1) * 32).Take(32)
@@ -26,11 +27,12 @@ public class CheepRepository : ICheepRepository
         return result;
     }
 
-    public async Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers, int pageNumber = 1)
+    public async Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers,
+        int pageNumber = 1)
     {
         var authorNames = followers.Select(a => a.userName).ToList();
         authorNames.Add(authorName); // also include owners cheeps
-        
+
         var query = (from cheep in _context.Cheeps
                 where authorNames.Contains(cheep.Author.Name)
                 orderby cheep.TimeStamp descending
@@ -103,17 +105,35 @@ public class CheepRepository : ICheepRepository
     public async Task DeleteCheep(CheepDto cheepDto)
     {
         var cheep = await _context.Cheeps
-            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text && a.TimeStamp.ToString() == cheepDto.postedTime).FirstOrDefaultAsync();
-        
+            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text &&
+                        a.TimeStamp.ToString() == cheepDto.postedTime).FirstOrDefaultAsync();
+
         if (cheep == null) throw new Exception("Cannot delete cheep, because it doesn't exist");
-        
+
         // Remove Cheep Relation
         var author = await _context.Authors.Where(a => a.Name == cheepDto.authorName).FirstOrDefaultAsync();
         if (author == null) throw new Exception("Cannot delete cheep, author not found");
         author.Cheeps.Remove(cheep);
-        
+
         _context.Cheeps.Remove(cheep);
-        
+
         await _context.SaveChangesAsync();
     }
+
+    public Task F()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<int> FindCheepID(CheepDto cheepDto)
+    {
+        var cheep = await _context.Cheeps
+            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text &&
+                        a.TimeStamp.ToString() == cheepDto.postedTime).FirstOrDefaultAsync();
+
+        if (cheep == null) throw new Exception("Cannot fecth cheep ID, because it doesn't exist");
+
+        return cheep.CheepId;
+    }
+
 }
