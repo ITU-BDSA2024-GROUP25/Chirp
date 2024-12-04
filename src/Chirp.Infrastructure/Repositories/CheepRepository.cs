@@ -10,8 +10,6 @@ public class CheepRepository : ICheepRepository
     public CheepRepository(ChirpDbContext context)
     {
         _context = context;
-        // should be seeeded in program cs : Arent we already?
-        //DbInitializer.SeedDatabase(context);
     }
 
     //adapted from slides session 6 page 8
