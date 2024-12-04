@@ -92,7 +92,6 @@ public class CheepRepository : ICheepRepository
 
         Cheep newCheep = new Cheep
         {
-            CheepId = _context.Cheeps.Count() + 1,
             Text = cheep.text,
             TimeStamp = DateTime.Parse(cheep.postedTime),
             AuthorId = author.AuthorId,
