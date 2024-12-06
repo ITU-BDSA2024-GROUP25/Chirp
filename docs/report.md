@@ -39,5 +39,6 @@ Here comes a description of our domain model. ( this is just template stuff for 
 # Ethics
 
 ## License
-
+This project is licensed under the MIT License (see full License her: https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/LICENSE).
+In the document NOTICE.MD we have provided additional informations about other Licenses and copywrites for packages used, that do not fall under MIT (see https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/NOTICE.md).
 ## LLMs, ChatGPT, CoPilot, and others
