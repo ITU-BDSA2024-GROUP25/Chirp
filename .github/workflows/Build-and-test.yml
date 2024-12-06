@@ -6,6 +6,11 @@ name: .NET
 on:
   push:
     branches: [ "main" ]
+    # should make sure workflow does not run when it's only a md file getting updated 
+    # used info from this tread : https://stackoverflow.com/questions/62968897/is-it-possible-to-not-run-github-action-for-readme-updates
+    paths-ignore:
+    - '**.md'
+    
   pull_request:
     branches: [ "main" ]
 
