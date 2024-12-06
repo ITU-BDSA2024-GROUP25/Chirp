@@ -10,8 +10,6 @@ public class AuthorRepository : IAuthorRepository
     public AuthorRepository(ChirpDbContext context)
     {
         _context = context;
-        // should be seeeded in program cs 
-        //DbInitializer.SeedDatabase(context);
     }
 
     public async Task CreateAuthor(AuthorDto authorDto)
