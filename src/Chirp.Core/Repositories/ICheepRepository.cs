@@ -7,11 +7,17 @@ public interface ICheepRepository
     public int GetTotalCheepsCount(string? author);
     public Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers, int pageNumber);
     public Task<List<CheepDto>> GetAllCheeps(string? author);
+    public Task<bool> IsCheepLikedByAuthor(string authorName, CheepDto cheep);
+    public Task<bool> IsCheepDislikedByAuthor(string authorName, CheepDto cheep);
+
     
     // Commands
     public Task CreateCheep(Cheep cheep);
     public Task CreateCheep(CheepDto cheep, string userName);
     public Task DeleteCheep(CheepDto cheep);
-
     public Task<int> FindCheepID(CheepDto cheepDto); 
+    public Task LikeCheep(string authorName, CheepDto cheep);
+    public Task DislikeCheep(string authorName, CheepDto cheep);
+    public Task RemoveLikeCheep(string authorName, CheepDto cheep);
+    public Task RemoveDislikeCheep(string authorName, CheepDto cheep);
 }

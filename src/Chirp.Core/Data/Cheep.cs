@@ -12,5 +12,6 @@ public class Cheep
     public int AuthorId { get; set; }
     [Required]
     public required Author Author { get; set; }
-    
+    public int LikeAmount { get; set; }
+    public int DislikeAmount { get; set; }
 }

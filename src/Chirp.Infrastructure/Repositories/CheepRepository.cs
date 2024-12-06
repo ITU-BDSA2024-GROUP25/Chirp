@@ -120,11 +120,6 @@ public class CheepRepository : ICheepRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task F()
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<int> FindCheepID(CheepDto cheepDto)
     {
         var cheep = await _context.Cheeps
@@ -136,4 +131,116 @@ public class CheepRepository : ICheepRepository
         return cheep.CheepId;
     }
 
+    public async Task<bool> IsCheepLikedByAuthor(string authorName, CheepDto cheep)
+    {
+        var author = await _context.Authors
+            .Include(a => a.LikedCheeps)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new Exception("Author not found");
+        if (author.LikedCheeps == null) author.LikedCheeps = new List<Cheep>();
+
+        
+        var cheepId = await FindCheepID(cheep);
+        return author.LikedCheeps.Any(c => c.CheepId == cheepId);
+    }
+
+    public async Task<bool> IsCheepDislikedByAuthor(string authorName, CheepDto cheep)
+    {
+        var author = await _context.Authors
+            .Include(a => a.LikedCheeps)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new Exception("Author not found");
+        if (author.DislikedCheeps == null) author.DislikedCheeps = new List<Cheep>();
+
+        
+        var cheepId = await FindCheepID(cheep);
+        return author.DislikedCheeps.Any(c => c.CheepId == cheepId);
+    }
+
+    public async Task LikeCheep(string authorName, CheepDto cheepDto)
+    {
+        var author = await _context.Authors
+            .Include(a => a.LikedCheeps)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new Exception("Author not found");
+        if (author.LikedCheeps == null) author.LikedCheeps = new List<Cheep>();
+        
+        var cheepId = await FindCheepID(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+
+        if (cheep == null) throw new Exception("Cheep not found");
+
+        if (!author.LikedCheeps.Contains(cheep))
+        {
+            author.LikedCheeps.Add(cheep);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task DislikeCheep(string authorName, CheepDto cheepDto)
+    {
+        var author = await _context.Authors
+            .Include(a => a.LikedCheeps)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new Exception("Author not found");
+        if (author.DislikedCheeps == null) author.DislikedCheeps = new List<Cheep>();
+        
+        var cheepId = await FindCheepID(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+
+        if (cheep == null) throw new Exception("Cheep not found");
+
+        if (!author.DislikedCheeps.Contains(cheep))
+        {
+            author.DislikedCheeps.Add(cheep);
+            await _context.SaveChangesAsync();
+        }
+    }
+    
+    public async Task RemoveLikeCheep(string authorName, CheepDto cheepDto)
+    {
+        var author = await _context.Authors
+            .Include(a => a.LikedCheeps)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new Exception("Author not found");
+        if (author.LikedCheeps == null) author.LikedCheeps = new List<Cheep>();
+        
+        var cheepId = await FindCheepID(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+
+        if (cheep == null) throw new Exception("Cheep not found");
+
+        if (author.LikedCheeps.Contains(cheep))
+        {
+            author.LikedCheeps.Remove(cheep);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task RemoveDislikeCheep(string authorName, CheepDto cheepDto)
+    {
+        var author = await _context.Authors
+            .Include(a => a.DislikedCheeps)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new Exception("Author not found");
+        if (author.DislikedCheeps == null) author.DislikedCheeps = new List<Cheep>();
+
+        
+        var cheepId = await FindCheepID(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+
+        if (cheep == null) throw new Exception("Cheep not found");
+
+        if (author.DislikedCheeps.Contains(cheep))
+        {
+            author.DislikedCheeps.Remove(cheep);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
