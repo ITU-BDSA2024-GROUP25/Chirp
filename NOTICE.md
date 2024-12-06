@@ -1,4 +1,4 @@
-This file contains notice of additional licenses used in project  
+<img width="611" alt="image" src="https://github.com/user-attachments/assets/cebf641d-91d2-4e8f-b6f8-e2de6a3803f1">This file contains notice of additional licenses used in project  
 ## XUnit 2.4.2
 Copyright (C) .NET Foundation
 ### Apache License 2.0
@@ -55,6 +55,7 @@ https://spdx.org/licenses/Apache-2.0.html
 
 ## NUnit 3.14.0 
 Copyright (c) 2023 Charlie Poole, Rob Prouse
+License link: https://www.nuget.org/packages/NUnit/3.14.0/License
 
 ### NUnit 3.14.0 License Text
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -74,4 +75,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
