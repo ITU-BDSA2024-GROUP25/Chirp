@@ -14,4 +14,6 @@ public class Cheep
     public required Author Author { get; set; }
     public int LikeAmount { get; set; }
     public int DislikeAmount { get; set; }
+    public ICollection<Author>? LikedBy { get; set; }
+    public ICollection<Author>? DislikedBy { get; set; }
 }
