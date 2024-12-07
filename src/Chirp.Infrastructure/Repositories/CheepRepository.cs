@@ -122,10 +122,10 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> FindCheepID(CheepDto cheepDto)
     {
+        Console.WriteLine("Trying to find cheep with author: " + cheepDto.authorName + ", text: " + cheepDto.text + ", posted time: "+ cheepDto.postedTime );
         var cheep = await _context.Cheeps
             .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text &&
                         a.TimeStamp.ToString() == cheepDto.postedTime).FirstOrDefaultAsync();
-
         if (cheep == null) throw new Exception("Cannot fecth cheep ID, because it doesn't exist");
 
         return cheep.CheepId;
@@ -176,6 +176,7 @@ public class CheepRepository : ICheepRepository
         if (!author.LikedCheeps.Contains(cheep))
         {
             author.LikedCheeps.Add(cheep);
+            cheep.LikeAmount += 1;
             await _context.SaveChangesAsync();
         }
     }
@@ -197,6 +198,7 @@ public class CheepRepository : ICheepRepository
         if (!author.DislikedCheeps.Contains(cheep))
         {
             author.DislikedCheeps.Add(cheep);
+            cheep.DislikeAmount += 1;
             await _context.SaveChangesAsync();
         }
     }
@@ -218,6 +220,7 @@ public class CheepRepository : ICheepRepository
         if (author.LikedCheeps.Contains(cheep))
         {
             author.LikedCheeps.Remove(cheep);
+            cheep.LikeAmount -= 1;
             await _context.SaveChangesAsync();
         }
     }
@@ -240,7 +243,28 @@ public class CheepRepository : ICheepRepository
         if (author.DislikedCheeps.Contains(cheep))
         {
             author.DislikedCheeps.Remove(cheep);
+            cheep.DislikeAmount -= 1;
             await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task<int> GetCheepLikesCount(CheepDto cheepDto)
+    {
+        var cheepId = await FindCheepID(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+        
+        if (cheep == null) throw new Exception("Cheep not found");
+        
+        return cheep.LikeAmount;
+    }
+
+    public async Task<int> GetCheepDislikesCount(CheepDto cheepDto)
+    {
+        var cheepId = await FindCheepID(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+                
+        if (cheep == null) throw new Exception("Cheep not found");
+        
+        return cheep.DislikeAmount;
     }
 }

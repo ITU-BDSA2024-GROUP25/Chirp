@@ -6,7 +6,6 @@
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
     <partial name="_LoginPartial" />
-
 }
 
 <div>
@@ -34,20 +33,42 @@
                         @cheep.text
                         <small>&mdash; @cheep.postedTime</small>
                     </p>
+                    <p>
+                        Likes: @await Model.CheepLikesAmount(cheep) | Dislikes: @await Model.CheepDislikeAmount(cheep)
+                    </p>
 
                     @if (Model.GetUserName != cheep.authorName)
                     {
-                    <form method="post" asp-page-handler="@((await Model.IsFollowing(cheep.authorName)) ? "Unfollow" : "Follow")"
-                          style="position: absolute; top: 7px; right: 10px;">
-                        <input type="hidden" name="authorName" value="@cheep.authorName" />
-                        <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
-                            @if (await Model.IsFollowing(cheep.authorName))
+                    <form method="post" asp-page-handler="@((await Model.IsCheepLikedByAuthor(cheep)) ? "RemoveLikeCheep" : "LikeCheep")"
+                          style="display: inline;">
+                        <input type="hidden" name="cheep.Text" value="@cheep.text" />
+                        <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
+                        <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
+                        <button type="submit" style="background: none; border: none; cursor: pointer;">
+                            @if (await Model.IsCheepLikedByAuthor(cheep))
                             {
-                            <span style="color: #cc6e6e; font-size: 12px;">Unfollow</span>
+                                <span style="color: #cc6e6e;">Unlike</span>
                             }
                             else
                             {
-                            <span style="color: green; font-size: 12px;">Follow</span>
+                                <span style="color: green;">Like</span>
+                            }
+                        </button>
+                    </form>
+
+                    <form method="post" asp-page-handler="@((await Model.IsCheepDislikedByAuthor(cheep)) ? "RemoveDislikeCheep" : "DislikeCheep")"
+                          style="display: inline; margin-left: 10px;">
+                        <input type="hidden" name="cheep.Text" value="@cheep.text" />
+                        <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
+                        <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
+                        <button type="submit" style="background: none; border: none; cursor: pointer;">
+                            @if (await Model.IsCheepDislikedByAuthor(cheep))
+                            {
+                                <span style="color: #cc6e6e;">Remove Dislike</span>
+                            }
+                            else
+                            {
+                                <span style="color: red;">Dislike</span>
                             }
                         </button>
                     </form>
@@ -85,6 +106,9 @@
                             </strong>
                             @cheep.text
                             <small>&mdash; @cheep.postedTime</small>
+                        </p>
+                        <p>
+                            Likes: @await Model.CheepLikesAmount(cheep) | Dislikes: @await Model.CheepDislikeAmount(cheep)
                         </p>
                     </li>
                 }

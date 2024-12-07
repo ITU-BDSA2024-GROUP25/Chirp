@@ -9,7 +9,8 @@ public interface ICheepRepository
     public Task<List<CheepDto>> GetAllCheeps(string? author);
     public Task<bool> IsCheepLikedByAuthor(string authorName, CheepDto cheep);
     public Task<bool> IsCheepDislikedByAuthor(string authorName, CheepDto cheep);
-
+    public Task<int> GetCheepLikesCount(CheepDto cheep);
+    public Task<int> GetCheepDislikesCount(CheepDto cheep);
     
     // Commands
     public Task CreateCheep(Cheep cheep);

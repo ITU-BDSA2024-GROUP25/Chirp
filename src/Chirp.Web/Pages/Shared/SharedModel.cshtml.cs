@@ -36,6 +36,10 @@ public abstract class SharedModel : PageModel
     protected readonly IAuthorService _authorService;
     public IList<CheepDto> Cheeps { get; set; }
     public async Task<IList<AuthorDto>> Followers() => await _authorService.GetFollowers(GetUserName);
+    public async Task<int> CheepLikesAmount(CheepDto cheep) => await _cheepService.GetCheepLikesCount(cheep);
+    public async Task<int> CheepDislikeAmount(CheepDto cheep) => await _cheepService.GetCheepDislikesCount(cheep);
+    public async Task<bool> IsCheepLikedByAuthor(CheepDto cheep) => await _cheepService.IsCheepLikedByAuthor(GetUserName, cheep);
+    public async Task<bool> IsCheepDislikedByAuthor(CheepDto cheep) => await _cheepService.IsCheepDislikedByAuthor(GetUserName, cheep);
     public int CurrentPage { get; set; }
 
     public int CheepAmount { get; set; }
@@ -159,17 +163,6 @@ public abstract class SharedModel : PageModel
         {
             return Redirect("/");
         }
-    }
-    
-    public async Task<bool> IsCheepLikedByAuthor(CheepDto cheep)
-    {
-        return await _cheepService.IsCheepLikedByAuthor(GetUserName, cheep);
-    }
-    
-    public async Task<bool> IsCheepDislikedByAuthor(CheepDto cheep)
-    {
-        return await _cheepService.IsCheepDislikedByAuthor(GetUserName, cheep);
-
     }
 
     public async Task<IActionResult> OnPostLikeCheep(CheepDto cheep)

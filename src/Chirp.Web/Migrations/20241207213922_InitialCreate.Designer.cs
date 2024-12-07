@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Web.Migrations
 {
     [DbContext(typeof(ChirpDbContext))]
-    [Migration("20241207150044_UpdateDatabaseWithLikesAndDislikes")]
-    partial class UpdateDatabaseWithLikesAndDislikes
+    [Migration("20241207213922_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
