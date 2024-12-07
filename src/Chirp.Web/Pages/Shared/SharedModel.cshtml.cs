@@ -160,4 +160,43 @@ public abstract class SharedModel : PageModel
             return Redirect("/");
         }
     }
+    
+    public async Task<bool> IsCheepLikedByAuthor(CheepDto cheep)
+    {
+        return await _cheepService.IsCheepLikedByAuthor(GetUserName, cheep);
+    }
+    
+    public async Task<bool> IsCheepDislikedByAuthor(CheepDto cheep)
+    {
+        return await _cheepService.IsCheepDislikedByAuthor(GetUserName, cheep);
+
+    }
+
+    public async Task<IActionResult> OnPostLikeCheep(CheepDto cheep)
+    {
+        await _cheepService.LikeCheep(GetUserName, cheep);
+        
+        return RedirectToPage();
+    }
+    
+    public async Task<IActionResult> OnPostRemoveLikeCheep(CheepDto cheep)
+    {
+        await _cheepService.RemoveLikeCheep(GetUserName, cheep);
+        
+        return RedirectToPage();
+    }
+    
+    public async Task<IActionResult> OnPostDislikeCheep(CheepDto cheep)
+    {
+        await _cheepService.DislikeCheep(GetUserName, cheep);
+        
+        return RedirectToPage();
+    }
+    
+    public async Task<IActionResult> OnPostRemoveDislikeCheep(CheepDto cheep)
+    {
+        await _cheepService.RemoveDislikeCheep(GetUserName, cheep);
+
+        return RedirectToPage();
+    }
 }
