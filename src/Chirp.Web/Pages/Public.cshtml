@@ -39,49 +39,67 @@
 
                     @if (Model.GetUserName != cheep.authorName)
                     {
-                    <form method="post" asp-page-handler="@((await Model.IsCheepLikedByAuthor(cheep)) ? "RemoveLikeCheep" : "LikeCheep")"
-                          style="display: inline;">
-                        <input type="hidden" name="cheep.Text" value="@cheep.text" />
-                        <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
-                        <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
-                        <button type="submit" style="background: none; border: none; cursor: pointer;">
-                            @if (await Model.IsCheepLikedByAuthor(cheep))
-                            {
-                                <span style="color: #cc6e6e;">Unlike</span>
-                            }
-                            else
-                            {
-                                <span style="color: green;">Like</span>
-                            }
-                        </button>
-                    </form>
+                        <!-- Follow/Unfollow Button -->
+                        <form method="post" asp-page-handler="@((await Model.IsFollowing(cheep.authorName)) ? "Unfollow" : "Follow")"
+                              style="position: absolute; top: 7px; right: 10px;">
+                            <input type="hidden" name="authorName" value="@cheep.authorName" />
+                            <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
+                                @if (await Model.IsFollowing(cheep.authorName))
+                                {
+                                    <span style="color: #cc6e6e; font-size: 12px;">Unfollow</span>
+                                }
+                                else
+                                {
+                                    <span style="color: green; font-size: 12px;">Follow</span>
+                                }
+                            </button>
+                        </form>
 
-                    <form method="post" asp-page-handler="@((await Model.IsCheepDislikedByAuthor(cheep)) ? "RemoveDislikeCheep" : "DislikeCheep")"
-                          style="display: inline; margin-left: 10px;">
-                        <input type="hidden" name="cheep.Text" value="@cheep.text" />
-                        <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
-                        <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
-                        <button type="submit" style="background: none; border: none; cursor: pointer;">
-                            @if (await Model.IsCheepDislikedByAuthor(cheep))
-                            {
-                                <span style="color: #cc6e6e;">Remove Dislike</span>
-                            }
-                            else
-                            {
-                                <span style="color: red;">Dislike</span>
-                            }
-                        </button>
-                    </form>
+                        <!-- Like/Dislike Buttons -->
+                        <form method="post" asp-page-handler="@((await Model.IsCheepLikedByAuthor(cheep)) ? "RemoveLikeCheep" : "LikeCheep")"
+                              style="display: inline; margin-right: 10px;">
+                            <input type="hidden" name="cheep.Text" value="@cheep.text" />
+                            <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
+                            <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
+                            <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                @if (await Model.IsCheepLikedByAuthor(cheep))
+                                {
+                                    <span style="color: #cc6e6e;">Unlike</span>
+                                }
+                                else
+                                {
+                                    <span style="color: green;">Like</span>
+                                }
+                            </button>
+                        </form>
+
+                        <form method="post" asp-page-handler="@((await Model.IsCheepDislikedByAuthor(cheep)) ? "RemoveDislikeCheep" : "DislikeCheep")"
+                              style="display: inline;">
+                            <input type="hidden" name="cheep.Text" value="@cheep.text" />
+                            <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
+                            <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
+                            <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                @if (await Model.IsCheepDislikedByAuthor(cheep))
+                                {
+                                    <span style="color: #cc6e6e;">Remove Dislike</span>
+                                }
+                                else
+                                {
+                                    <span style="color: red;">Dislike</span>
+                                }
+                            </button>
+                        </form>
                     }
                     else
                     {
-                    <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
-                        <input type="hidden" name="cheepText" value="@cheep.text" />
-                        <input type="hidden" name="time" value="@cheep.postedTime" />
-                        <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
-                            <img src="/images/Xicon.png" alt="Delete Icon" style="width: 12px; height: 12px;" />
-                        </button>
-                    </form>
+                        <!-- Delete Button for Author's Own Cheeps -->
+                        <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
+                            <input type="hidden" name="cheepText" value="@cheep.text" />
+                            <input type="hidden" name="time" value="@cheep.postedTime" />
+                            <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
+                                <img src="/images/Xicon.png" alt="Delete Icon" style="width: 12px; height: 12px;" />
+                            </button>
+                        </form>
                     }
                     </li>
                 }
