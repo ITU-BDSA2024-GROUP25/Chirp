@@ -34,6 +34,8 @@ Layout = "Shared/_Layout";
                 <small>&mdash; @cheep.postedTime</small>
             </p>
 
+            @if (Model.GetUserName != cheep.authorName)
+            {
             <!-- Right-aligned Like/Dislike Buttons -->
             <div style="position: absolute; top: 35%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
                 <form method="post" asp-page-handler="@((await Model.IsCheepLikedByAuthor(cheep)) ? "RemoveLikeCheep" : "LikeCheep")">
@@ -55,9 +57,7 @@ Layout = "Shared/_Layout";
                     </button>
                 </form>
             </div>
-
-            @if (Model.GetUserName != cheep.authorName)
-            {
+            
             <!-- Follow/Unfollow Button -->
             <form method="post" asp-page-handler="@((await Model.IsFollowing(cheep.authorName)) ? "Unfollow" : "Follow")"
                   style="position: absolute; top: 5px; right: 10px;">
@@ -76,6 +76,18 @@ Layout = "Shared/_Layout";
             }
             else
             {
+            <!-- Disabled Like/Dislike Buttons for own cheeps -->
+            <div style="position: absolute; top: 40%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
+                <button style="background: none; border: none; cursor: default;" disabled>
+                    <img src="/images/unlike.png" alt="Like Button" style="width: 16px; height: 16px;" />
+                    <span class="cheep-amount">@await Model.CheepLikesAmount(cheep)</span>
+                </button>
+                <button style="background: none; border: none; cursor: default;" disabled>
+                    <img src="/images/undislike.png" alt="Dislike Button" style="width: 16px; height: 16px;" />
+                    <span class="cheep-amount">@await Model.CheepDislikeAmount(cheep)</span>
+                </button>
+            </div>
+            
             <!-- Delete Button for Author's Own Cheeps -->
             <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
                 <input type="hidden" name="cheepText" value="@cheep.text" />
@@ -110,15 +122,15 @@ Layout = "Shared/_Layout";
                 <small>&mdash; @cheep.postedTime</small>
             </p>
 
-            <!-- Right-aligned Like/Dislike Buttons -->
+            <!-- Disabled Like/Dislike Buttons for unauthorized author-->
             <div style="position: absolute; top: 40%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
                 <button style="background: none; border: none; cursor: default;" disabled>
                     <img src="/images/unlike.png" alt="Like Button" style="width: 16px; height: 16px;" />
-                    @await Model.CheepLikesAmount(cheep)
+                    <span class="cheep-amount">@await Model.CheepLikesAmount(cheep)</span>
                 </button>
                 <button style="background: none; border: none; cursor: default;" disabled>
                     <img src="/images/undislike.png" alt="Dislike Button" style="width: 16px; height: 16px;" />
-                    @await Model.CheepDislikeAmount(cheep)
+                    <span class="cheep-amount">@await Model.CheepDislikeAmount(cheep)</span>
                 </button>
             </div>
         </li>
