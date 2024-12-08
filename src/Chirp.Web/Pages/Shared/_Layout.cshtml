@@ -77,6 +77,20 @@
     });
 
     document.addEventListener('DOMContentLoaded', loadStyle);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Restore scroll position
+        const scrollPos = sessionStorage.getItem('scrollPosition');
+        if (scrollPos) {
+            window.scrollTo(0, parseInt(scrollPos, 10));
+            sessionStorage.removeItem('scrollPosition');
+        }
+
+        // Save scroll position before leaving the page
+        window.addEventListener('beforeunload', function () {
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+        });
+    });
 </script>
 
 </body>
