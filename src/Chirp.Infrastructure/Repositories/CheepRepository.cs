@@ -148,7 +148,7 @@ public class CheepRepository : ICheepRepository
     public async Task<bool> IsCheepDislikedByAuthor(string authorName, CheepDto cheep)
     {
         var author = await _context.Authors
-            .Include(a => a.LikedCheeps)
+            .Include(a => a.DislikedCheeps)
             .FirstOrDefaultAsync(a => a.Name == authorName);
 
         if (author == null) throw new Exception("Author not found");
@@ -184,7 +184,7 @@ public class CheepRepository : ICheepRepository
     public async Task DislikeCheep(string authorName, CheepDto cheepDto)
     {
         var author = await _context.Authors
-            .Include(a => a.LikedCheeps)
+            .Include(a => a.DislikedCheeps)
             .FirstOrDefaultAsync(a => a.Name == authorName);
 
         if (author == null) throw new Exception("Author not found");
@@ -233,7 +233,6 @@ public class CheepRepository : ICheepRepository
 
         if (author == null) throw new Exception("Author not found");
         if (author.DislikedCheeps == null) author.DislikedCheeps = new List<Cheep>();
-
         
         var cheepId = await FindCheepID(cheepDto);
         var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
