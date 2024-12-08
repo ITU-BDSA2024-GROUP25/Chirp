@@ -270,6 +270,11 @@ ul.nav li a:hover {
     background-color: #995e5e;
 }
 
+.cheep-amount {
+    color: #ccc;
+    font-size: 14px;
+}
+
 /* Toggle switch button styling recieved by LLM*/
 .switch {
     position: relative;

@@ -42,7 +42,7 @@ Layout = "Shared/_Layout";
                     <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
                     <button type="submit" style="background: none; border: none; cursor: pointer;">
                         <img src="/images/@(await Model.IsCheepLikedByAuthor(cheep) ? "like.png" : "unlike.png")" alt="Like Button" style="width: 16px; height: 16px;" />
-                        @await Model.CheepLikesAmount(cheep)
+                        <span class="cheep-amount">@await Model.CheepLikesAmount(cheep)</span>
                     </button>
                 </form>
                 <form method="post" asp-page-handler="@((await Model.IsCheepDislikedByAuthor(cheep)) ? "RemoveDislikeCheep" : "DislikeCheep")">
@@ -51,7 +51,7 @@ Layout = "Shared/_Layout";
                     <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
                     <button type="submit" style="background: none; border: none; cursor: pointer;">
                         <img src="/images/@(await Model.IsCheepDislikedByAuthor(cheep) ? "dislike.png" : "undislike.png")" alt="Dislike Button" style="width: 16px; height: 16px;" />
-                        @await Model.CheepDislikeAmount(cheep)
+                        <span class="cheep-amount">@await Model.CheepDislikeAmount(cheep)</span>
                     </button>
                 </form>
             </div>
