@@ -168,6 +168,7 @@ public abstract class SharedModel : PageModel
     public async Task<IActionResult> OnPostLikeCheep(CheepDto cheep)
     {
         await _cheepService.LikeCheep(GetUserName, cheep);
+        if (await IsCheepDislikedByAuthor(cheep)) await _cheepService.RemoveDislikeCheep(GetUserName, cheep);
         
         return RedirectToPage();
     }
@@ -182,6 +183,7 @@ public abstract class SharedModel : PageModel
     public async Task<IActionResult> OnPostDislikeCheep(CheepDto cheep)
     {
         await _cheepService.DislikeCheep(GetUserName, cheep);
+        if (await IsCheepLikedByAuthor(cheep)) await _cheepService.RemoveLikeCheep(GetUserName, cheep);
         
         return RedirectToPage();
     }
