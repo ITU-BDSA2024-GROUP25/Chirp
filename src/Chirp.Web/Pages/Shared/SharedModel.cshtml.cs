@@ -47,8 +47,8 @@ public abstract class SharedModel : PageModel
 
     [BindProperty]
     [Required]
-    [MinLength(2, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
-    [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
+    [MinLength(2, ErrorMessage = "Cheep is too short, needs to contain more than {1} characters")]
+    [MaxLength(160, ErrorMessage = "Cheep is too long, needs to contain less than {1} characters")]
     public string Message { get; set; }
     public string GetUserName => User?.Identity?.Name ?? string.Empty;
     public string GetUserEmail => User.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
@@ -119,6 +119,8 @@ public abstract class SharedModel : PageModel
     {
         if (!ModelState.IsValid)
         {
+            Cheeps = await GetCheeps();
+
             // Model isn't valid so no action is done
             return Page(); 
         }
@@ -139,11 +141,11 @@ public abstract class SharedModel : PageModel
             CheepDto cheep = new CheepDto(Message, DateTime.UtcNow.ToString(), GetUserName);
             await _cheepService.CreateCheep(cheep, GetUserName);
                 
-            return Redirect(GetUserName);
+            return RedirectToPage();
         }
         catch
         {
-            return Redirect("/");
+            return RedirectToPage();
         }
     }
 
@@ -158,7 +160,7 @@ public abstract class SharedModel : PageModel
         }
         catch
         {
-            return Redirect("/");
+            return RedirectToPage();
         }
     }
 
