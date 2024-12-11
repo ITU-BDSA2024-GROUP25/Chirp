@@ -9,22 +9,22 @@ var routeName = HttpContext.GetRouteValue("author");
 }
 
 <div>
-    <strong> My Information: </strong>
+    <h2> My Information: </h2>
     <div class="cheepbox">
         <p>Name: @User.Identity?.Name</p>
         @if (!string.IsNullOrEmpty(Model.GetUserEmail))
         {
-        <p>Email: @Model.GetUserEmail</p>
+            <p>Email: @Model.GetUserEmail</p>
         }
         @if (Model.Followers().Result.Any())
         {
-        <p>Following:</p>
-        @foreach (var follower in await Model.Followers())
-        {
-        <li>
-            <a href="/@follower.userName">@follower.userName</a>
-        </li>
-        }
+            <p>Following:</p>
+            @foreach (var follower in await Model.Followers())
+            {
+                <li>
+                    <a href="/@follower.userName">@follower.userName</a>
+                </li>
+            }
         }
     </div>
 </div>
@@ -68,7 +68,7 @@ var routeName = HttpContext.GetRouteValue("author");
     }
     else
     {
-    <em>You have no cheeps.</em>
+    <p>- You have no cheeps.</p>
     }
 </div>
 
@@ -114,7 +114,7 @@ var routeName = HttpContext.GetRouteValue("author");
     }
     else
     {
-    <em>You have not liked any cheeps.</em>
+    <p>- You have not liked any cheeps.</p>
     }
 </div>
 
@@ -159,7 +159,7 @@ var routeName = HttpContext.GetRouteValue("author");
     }
     else
     {
-    <em>You have not disliked any cheeps.</em>
+    <p>- You have not disliked any cheeps.</p>
     }
 </div>
 

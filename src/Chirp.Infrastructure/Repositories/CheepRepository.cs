@@ -104,21 +104,47 @@ public class CheepRepository : ICheepRepository
 
     public async Task DeleteCheep(CheepDto cheepDto)
     {
+        // Find the cheep by matching DTO
         var cheep = await _context.Cheeps
-            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text &&
-                        a.TimeStamp.ToString() == cheepDto.postedTime).FirstOrDefaultAsync();
+            .Include(c => c.LikedBy)
+            .Include(c => c.DislikedBy)
+            .Include(c => c.Author)
+            .FirstOrDefaultAsync(c =>
+                c.Author.Name == cheepDto.authorName &&
+                c.Text == cheepDto.text &&
+                c.TimeStamp == DateTime.Parse(cheepDto.postedTime));
 
         if (cheep == null) throw new Exception("Cannot delete cheep, because it doesn't exist");
 
-        // Remove Cheep Relation
-        var author = await _context.Authors.Where(a => a.Name == cheepDto.authorName).FirstOrDefaultAsync();
+        // Remove the cheep from the author's Cheeps collection
+        var author = cheep.Author;
         if (author == null) throw new Exception("Cannot delete cheep, author not found");
         author.Cheeps.Remove(cheep);
 
-        _context.Cheeps.Remove(cheep);
+        // Remove relations from LikedBy
+        if (cheep.LikedBy != null)
+        {
+            foreach (var likedByAuthor in cheep.LikedBy.ToList())
+            {
+                likedByAuthor.LikedCheeps?.Remove(cheep);
+            }
+            cheep.LikedBy.Clear();
+        }
 
+        // Remove relations from DislikedBy
+        if (cheep.DislikedBy != null)
+        {
+            foreach (var dislikedByAuthor in cheep.DislikedBy.ToList())
+            {
+                dislikedByAuthor.DislikedCheeps?.Remove(cheep);
+            }
+            cheep.DislikedBy.Clear();
+        }
+
+        _context.Cheeps.Remove(cheep);
         await _context.SaveChangesAsync();
     }
+
 
     public async Task<int> FindCheepID(CheepDto cheepDto)
     {

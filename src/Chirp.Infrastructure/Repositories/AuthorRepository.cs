@@ -109,25 +109,48 @@ public class AuthorRepository : IAuthorRepository
 
     public async Task DeleteAuthor(string authorName)
     {
+        // Find the author by name
         Author? author = await FindAuthorByName(authorName);
-        if (author == null) throw new Exception("User: " + authorName +" not found");
-        
-        // Remove Author Relation
+        if (author == null) throw new Exception($"User: {authorName} not found");
+
+        // Remove Author Following Relation
         if (author.Following != null)
         {
-            foreach (var followedAuthor in author.Following)
+            foreach (var followedAuthor in author.Following.ToList())
             {
                 followedAuthor.Following?.Remove(author);
             }
         }
-        
-        // Remove Cheep Relation
-        var cheeps = _context.Cheeps.Where(c => c.Author.Name == author.Name);
+
+        // Remove Cheep Relations
+        var cheeps = _context.Cheeps.Where(c => c.Author.Name == author.Name).ToList();
         foreach (var cheep in cheeps)
         {
             _context.Cheeps.Remove(cheep);
         }
-        
+
+        // Remove Liked Cheep Relation
+        if (author.LikedCheeps != null)
+        {
+            foreach (var likedCheep in author.LikedCheeps.ToList())
+            {
+                likedCheep.LikeAmount -= 1;
+                likedCheep.LikedBy?.Remove(author);
+            }
+            author.LikedCheeps.Clear();
+        }
+
+        // Remove Disliked Cheep Relation
+        if (author.DislikedCheeps != null)
+        {
+            foreach (var dislikedCheep in author.DislikedCheeps.ToList())
+            {
+                dislikedCheep.DislikeAmount -= 1;
+                dislikedCheep.DislikedBy?.Remove(author);
+            }
+            author.DislikedCheeps.Clear();
+        }
+
         _context.Authors.Remove(author);
         await _context.SaveChangesAsync();
     }
