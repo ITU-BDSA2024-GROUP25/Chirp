@@ -16,7 +16,7 @@ public class MyPageModel : SharedModel
     public string? AuthorName => HttpContext.GetRouteValue("author")?.ToString();
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
-
+    
     public MyPageModel(ICheepService cheepService, IAuthorService authorService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) : base(cheepService, authorService) 
     {
         _userManager = userManager;
@@ -28,6 +28,20 @@ public class MyPageModel : SharedModel
         if (AuthorName == null) throw new Exception("Author Name is null");
         
         return await _cheepService.GetAllCheeps(AuthorName);
+    }
+    
+    public async Task<IList<CheepDto>> GetLikedCheeps()
+    {
+        if (AuthorName == null) throw new Exception("Author Name is null");
+        
+        return await _cheepService.GetLikedCheeps(AuthorName);
+    }
+
+    public async Task<IList<CheepDto>> GetDislikedCheeps()
+    {
+        if (AuthorName == null) throw new Exception("Author Name is null");
+        
+        return await _cheepService.GetDislikedCheeps(AuthorName);
     }
 
     public async Task<IActionResult> OnPostDeleteDataAsync()
@@ -48,8 +62,6 @@ public class MyPageModel : SharedModel
         
         await _signInManager.SignOutAsync();
         
-        Console.WriteLine("User authenticated: " + User.Identity?.IsAuthenticated.ToString());
-        Console.WriteLine("User name " + GetUserName);
         return Redirect("/");
     }
 
@@ -69,6 +81,7 @@ public class MyPageModel : SharedModel
         
         if (!string.IsNullOrEmpty(author.Email) && author.Email != " ") content.AppendLine($"Email: {author.Email}");
         else content.AppendLine($"Email: No Email");
+        content.AppendLine("");
             
         content.AppendLine("Following:");
         if (author.Following != null)
@@ -83,7 +96,8 @@ public class MyPageModel : SharedModel
             else content.AppendLine("- No Following");
         }
         else content.AppendLine($"- No Following");
-            
+        content.AppendLine("");    
+        
         content.AppendLine("Cheeps:");
         if (GetCheeps != null)
         {
@@ -92,11 +106,46 @@ public class MyPageModel : SharedModel
                 foreach (var cheep in await GetCheeps())
                 {
                     content.AppendLine($"- \"{cheep.text}\" ({cheep.postedTime})");
+                    content.AppendLine($"  Likes: {await CheepLikesAmount(cheep)} Dislikes: {await CheepDislikeAmount(cheep)}");
                 }
             }
             else content.AppendLine("- No Cheeps");
         }
         else content.AppendLine("- No Cheeps");
+        content.AppendLine("");
+        
+        content.AppendLine("Liked Cheeps:");
+        var likedCheeps = await GetLikedCheeps();
+        if (likedCheeps != null)
+        {
+            if (likedCheeps.Any())
+            {
+                foreach (var cheep in likedCheeps)
+                {
+                    content.AppendLine($"- {cheep.authorName}: \"{cheep.text}\" ({cheep.postedTime})");
+                    content.AppendLine($"  Likes: {await CheepLikesAmount(cheep)} Dislikes: {await CheepDislikeAmount(cheep)}");
+                }
+            }
+            else content.AppendLine("- No Liked Cheeps");
+        }
+        else content.AppendLine("- No Liked Cheeps");
+        content.AppendLine("");
+        
+        content.AppendLine("Disliked Cheeps:");
+        var dislikedCheeps = await GetDislikedCheeps();
+        if (dislikedCheeps != null)
+        {
+            if (dislikedCheeps.Any())
+            {
+                foreach (var cheep in dislikedCheeps)
+                {
+                    content.AppendLine($"- {cheep.authorName}: \"{cheep.text}\" ({cheep.postedTime})");
+                    content.AppendLine($"  Likes: {await CheepLikesAmount(cheep)} Dislikes: {await CheepDislikeAmount(cheep)}");
+                }
+            }
+            else content.AppendLine("- No Disliked Cheeps");
+        }
+        else content.AppendLine("- No Disliked Cheeps");
         
         // Convert content to bytes and return file
         byte[] fileBytes = Encoding.UTF8.GetBytes(content.ToString());

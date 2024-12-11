@@ -21,6 +21,8 @@ public interface ICheepService
     public Task RemoveDislikeCheep(string authorName, CheepDto cheep);
     public Task<int> GetCheepLikesCount(CheepDto cheep);
     public Task<int> GetCheepDislikesCount(CheepDto cheep);
+    public Task<List<CheepDto>> GetLikedCheeps(string? authorName);
+    public Task<List<CheepDto>> GetDislikedCheeps(string? authorName);
 }
 
 public class CheepService : ICheepService
@@ -50,4 +52,6 @@ public class CheepService : ICheepService
     public Task RemoveDislikeCheep(string authorName, CheepDto cheep) => _cheepRepo.RemoveDislikeCheep(authorName, cheep);
     public Task<int> GetCheepLikesCount(CheepDto cheep) => _cheepRepo.GetCheepLikesCount(cheep);
     public Task<int> GetCheepDislikesCount(CheepDto cheep) => _cheepRepo.GetCheepDislikesCount(cheep);
+    public Task<List<CheepDto>> GetLikedCheeps(string? authorName) => _cheepRepo.GetLikedCheeps(authorName); 
+    public Task<List<CheepDto>> GetDislikedCheeps(string? authorName) => _cheepRepo.GetDislikedCheeps(authorName);
 }

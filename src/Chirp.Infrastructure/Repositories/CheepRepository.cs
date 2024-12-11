@@ -122,11 +122,10 @@ public class CheepRepository : ICheepRepository
 
     public async Task<int> FindCheepID(CheepDto cheepDto)
     {
-        Console.WriteLine("Trying to find cheep with author: " + cheepDto.authorName + ", text: " + cheepDto.text + ", posted time: "+ cheepDto.postedTime );
         var cheep = await _context.Cheeps
             .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text &&
-                        a.TimeStamp.ToString() == cheepDto.postedTime).FirstOrDefaultAsync();
-        if (cheep == null) throw new Exception("Cannot fecth cheep ID, because it doesn't exist");
+                        a.TimeStamp == DateTime.Parse(cheepDto.postedTime)).FirstOrDefaultAsync();
+        if (cheep == null) throw new Exception("Cannot fetch cheep ID, because it doesn't exist");
 
         return cheep.CheepId;
     }
@@ -265,5 +264,49 @@ public class CheepRepository : ICheepRepository
         if (cheep == null) throw new Exception("Cheep not found");
         
         return cheep.DislikeAmount;
+    }
+
+    public async Task<List<CheepDto>> GetLikedCheeps(string? authorName)
+    {
+        var author = await _context.Authors
+            .Include(a => a.LikedCheeps!.AsQueryable()) // Ensure compatibility
+            .ThenInclude(c => c.Author)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new Exception("Author not found");
+
+        if (author.LikedCheeps == null || !author.LikedCheeps.Any())
+            return new List<CheepDto>();
+        
+        var likedCheeps = author.LikedCheeps
+            .Where(c => c.Author != null) // Exclude null authors
+            .OrderByDescending(c => c.TimeStamp)
+            .Select(c => new CheepDto(c.Text, c.TimeStamp.ToString(), c.Author!.Name)) 
+            .ToList();
+
+        return likedCheeps;
+    }
+
+
+
+    public async Task<List<CheepDto>> GetDislikedCheeps(string? authorName)
+    {
+        var author = await _context.Authors
+            .Include(a => a.DislikedCheeps!.AsQueryable()) // Ensure compatibility
+            .ThenInclude(c => c.Author)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new Exception("Author not found");
+
+        if (author.DislikedCheeps == null || !author.DislikedCheeps.Any())
+            return new List<CheepDto>();
+        
+        var dislikedCheeps = author.DislikedCheeps
+            .Where(c => c.Author != null) // Exclude null authors
+            .OrderByDescending(c => c.TimeStamp)
+            .Select(c => new CheepDto(c.Text, c.TimeStamp.ToString(), c.Author!.Name)) 
+            .ToList();
+
+        return dislikedCheeps;
     }
 }

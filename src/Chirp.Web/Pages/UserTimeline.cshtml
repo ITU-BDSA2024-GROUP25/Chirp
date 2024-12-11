@@ -59,7 +59,7 @@ var routeName = HttpContext.GetRouteValue("author");
             @if (Model.GetUserName == cheep.authorName)
             {
             <!-- Disabled Like/Dislike Buttons for Own Cheeps -->
-            <div style="position: absolute; top: 35%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
+            <div style="position: absolute; top: 40%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
                 <button style="background: none; border: none; cursor: default;" disabled>
                     <img src="/images/unlike.png" alt="Like Button" style="width: 16px; height: 16px;" />
                     <span class="cheep-amount">@await Model.CheepLikesAmount(cheep)</span>

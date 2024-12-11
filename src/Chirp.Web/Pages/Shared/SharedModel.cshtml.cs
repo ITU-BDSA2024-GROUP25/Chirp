@@ -50,7 +50,7 @@ public abstract class SharedModel : PageModel
     [MinLength(2, ErrorMessage = "hey man, its too short, needs to be longer than {1}")]
     [MaxLength(160, ErrorMessage = "dude nobody will read all that, max length is {1}")]
     public string Message { get; set; }
-    public string GetUserName => User.Identity?.Name ?? string.Empty;
+    public string GetUserName => User?.Identity?.Name ?? string.Empty;
     public string GetUserEmail => User.FindFirstValue(ClaimTypes.Email) ?? string.Empty;
     public abstract Task<IList<CheepDto>> GetCheeps(); 
     
@@ -86,10 +86,9 @@ public abstract class SharedModel : PageModel
         {
             await _authorService.FollowAuthor(GetUserName, authorName);
         }
-        catch (Exception ex)
+        catch
         {
-            // Log exception and handle errors
-            Console.WriteLine($"Error following author: {ex.Message}");
+            throw new Exception("Could not follow author");
         }
 
         return RedirectToPage();
@@ -107,10 +106,9 @@ public abstract class SharedModel : PageModel
         {
             await _authorService.UnfollowAuthor(GetUserName, authorName);
         }
-        catch (Exception ex)
+        catch 
         {
-            // Log exception and handle errors
-            Console.WriteLine($"Error unfollowing author: {ex.Message}");
+            throw new Exception("Could not unfollow author");
         }
 
         return RedirectToPage();
@@ -121,8 +119,8 @@ public abstract class SharedModel : PageModel
     {
         if (!ModelState.IsValid)
         {
-            Console.WriteLine("Model is invalid");
-            return Page(); // Show page with previously entered data and error markers
+            // Model isn't valid so no action is done
+            return Page(); 
         }
         
         try
@@ -152,7 +150,6 @@ public abstract class SharedModel : PageModel
     public async Task<IActionResult> OnPostDelete(string cheepText, string time)
     {
         CheepDto cheep = new CheepDto(cheepText, time, GetUserName);
-        Console.WriteLine("cheep text: " + cheepText + " time: " + time + " name: " + GetUserName);
 
         try
         {
