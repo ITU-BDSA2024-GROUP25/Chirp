@@ -59,9 +59,6 @@ public class AuthorRepository : IAuthorRepository
     {
         var author = await FindAuthorByName(authorName);
 
-        // Return an empty list if the user's following list is not instantiated
-        author.Following ??= new List<Author>();
-
         return author.Following
             .Select(follower => new AuthorDto(follower.Name, follower.Email))
             .ToList();
@@ -78,14 +75,14 @@ public class AuthorRepository : IAuthorRepository
 
         if (!doesAuthorExist)
         {
-            Author author = new Author
+            var author = new Author
             {
                 Name = authorDto.userName,
                 Email = authorDto.email,
                 Cheeps = new List<Cheep>()
             };
 
-            // Set email as empty if none is provided (e.g., for GitHub login)
+            // Set email as empty if none is provided (e.g. for GitHub login)
             if (string.IsNullOrEmpty(author.Email)) author.Email = " ";
 
             _context.Authors.Add(author);
@@ -98,9 +95,6 @@ public class AuthorRepository : IAuthorRepository
     {
         var author = await FindAuthorByName(userName);
         var targetAuthor = await FindAuthorByName(targetUserName);
-
-        // Instantiate the following list if it is null
-        author.Following ??= new List<Author>();
 
         // Only follow authors that are not already followed
         if (!author.Following.Contains(targetAuthor))
@@ -115,9 +109,7 @@ public class AuthorRepository : IAuthorRepository
     {
         var author = await FindAuthorByName(userName);
         var targetAuthor = await FindAuthorByName(targetUserName);
-
-        if (author.Following == null) throw new Exception($"{userName}'s following list is null.");
-
+        
         // Only unfollow authors that are currently followed
         if (author.Following.Contains(targetAuthor))
         {
@@ -132,11 +124,8 @@ public class AuthorRepository : IAuthorRepository
         var author = await FindAuthorByName(authorName);
 
         // Remove relationships from following list
-        if (author.Following != null)
-        {
-            foreach (var followedAuthor in author.Following.ToList())
+        foreach (var followedAuthor in author.Following.ToList())
                 followedAuthor.Following?.Remove(author);
-        }
 
         // Remove the author's cheeps
         var cheeps = _context.Cheeps.Where(c => c.Author.Name == author.Name).ToList();
@@ -146,27 +135,21 @@ public class AuthorRepository : IAuthorRepository
         }
 
         // Remove liked cheep relationships
-        if (author.LikedCheeps != null)
+        foreach (var likedCheep in author.LikedCheeps.ToList())
         {
-            foreach (var likedCheep in author.LikedCheeps.ToList())
-            {
-                likedCheep.LikeAmount -= 1;
-                likedCheep.LikedBy?.Remove(author);
-            }
-            author.LikedCheeps.Clear();
+            likedCheep.LikeAmount -= 1;
+            likedCheep.LikedBy?.Remove(author);
         }
+        author.LikedCheeps.Clear();
 
         // Remove disliked cheep relationships
-        if (author.DislikedCheeps != null)
+        foreach (var dislikedCheep in author.DislikedCheeps.ToList())
         {
-            foreach (var dislikedCheep in author.DislikedCheeps.ToList())
-            {
-                dislikedCheep.DislikeAmount -= 1;
-                dislikedCheep.DislikedBy?.Remove(author);
-            }
-            author.DislikedCheeps.Clear();
+            dislikedCheep.DislikeAmount -= 1;
+            dislikedCheep.DislikedBy?.Remove(author);
         }
-
+        author.DislikedCheeps.Clear();
+        
         // Remove the author
         _context.Authors.Remove(author);
         await _context.SaveChangesAsync();

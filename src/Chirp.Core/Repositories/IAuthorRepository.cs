@@ -60,7 +60,6 @@ public interface IAuthorRepository
     /// </summary>
     /// <param name="userName">The name of the user currently logged in</param>
     /// <param name="targetUserName">The name of the author that the user wants to follow</param>
-    /// <exception cref="NullReferenceException">Thrown if the author following list is not found in the database</exception>
     public Task UnfollowAuthor(string userName, string targetUserName);
     
     /// <summary>
