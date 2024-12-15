@@ -89,7 +89,7 @@ public class AuthorRepository : IAuthorRepository
         var targetAuthor = await FindAuthorByName(targetUserName);
 
         // Instantiate a list of following author if the author does not have one
-        if (author.Following == null) author.Following = new List<Author>();
+        author.Following ??= new List<Author>();
         
         // Only follow authors that are not followed already
         if (!author.Following.Contains(targetAuthor))
@@ -131,9 +131,7 @@ public class AuthorRepository : IAuthorRepository
         var targetAuthor = await FindAuthorByName(targetUserName);
         
         // Return false if the users following list is not instantiated, meaning it is empty
-        if (author.Following == null) return false;
-        
-        return author.Following.Contains(targetAuthor);
+        return author.Following?.Contains(targetAuthor) ?? false;
     }
 
     /// <summary>
@@ -146,7 +144,7 @@ public class AuthorRepository : IAuthorRepository
         var author = await FindAuthorByName(authorName);
         
         // Return empty list if the users following list is not instantiated, meaning it is empty
-        if (author?.Following == null) return new List<AuthorDto>();
+        author.Following ??= new List<Author>();
 
         return author.Following
             .Select(follower => new AuthorDto(follower.Name, follower.Email))
