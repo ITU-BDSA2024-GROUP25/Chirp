@@ -69,6 +69,8 @@ public abstract class SharedModel : PageModel
     
     public async Task<bool> IsFollowing(string? targetAuthorName)
     {
+        if (targetAuthorName == null) throw new ArgumentNullException(nameof(targetAuthorName));
+        
         var userName = GetUserName;
         bool isFollowing = await _authorService.IsFollowing(userName, targetAuthorName);
         return isFollowing;
