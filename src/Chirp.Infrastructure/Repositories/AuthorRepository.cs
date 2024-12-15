@@ -4,24 +4,77 @@ using Chirp.Core;
 namespace Chirp.Infrastructure;
 
 /// <summary>
-/// This class provides CRUD operation used on the author entity and managing database relationships
+/// This class provides CRUD operations for the author entity and manages database relationships.
 /// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpDbContext _context;
-    
+
     /// <summary>
-    /// Initializes a new instance of the AuthorRepository class with a specified database context
+    /// Initializes a new instance of the AuthorRepository class with a specified database context.
     /// </summary>
-    /// <param name="context">Is used to access the specified database</param>
+    /// <param name="context">The database context used for accessing the database.</param>
     public AuthorRepository(ChirpDbContext context)
     {
         _context = context;
     }
-    
+
+    #region Queries
+
+    /// <inheritdoc/>
+    public async Task<Author> FindAuthorByName(string name)
+    {
+        var author = await _context.Authors
+            .Include(a => a.Following)
+            .Where(a => a.Name == name)
+            .FirstOrDefaultAsync();
+
+        if (author == null) throw new NullReferenceException("Author not found.");
+        return author;
+    }
+
+    /// <inheritdoc/>
+    public async Task<Author> GetAuthorById(int id)
+    {
+        var author = await _context.Authors
+            .Where(a => a.AuthorId == id)
+            .FirstOrDefaultAsync();
+
+        if (author == null) throw new NullReferenceException("Author not found.");
+        return author;
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> IsFollowing(string userName, string targetUserName)
+    {
+        var author = await FindAuthorByName(userName);
+        var targetAuthor = await FindAuthorByName(targetUserName);
+
+        // Return false if the user's following list is not instantiated, meaning it is empty
+        return author.Following?.Contains(targetAuthor) ?? false;
+    }
+
+    /// <inheritdoc/>
+    public async Task<IList<AuthorDto>> GetFollowers(string authorName)
+    {
+        var author = await FindAuthorByName(authorName);
+
+        // Return an empty list if the user's following list is not instantiated
+        author.Following ??= new List<Author>();
+
+        return author.Following
+            .Select(follower => new AuthorDto(follower.Name, follower.Email))
+            .ToList();
+    }
+
+    #endregion
+
+    #region Commands
+
+    /// <inheritdoc/>
     public async Task CreateAuthor(AuthorDto authorDto)
     {
-        bool doesAuthorExist = await _context.Authors.AnyAsync(a => a.Name == authorDto.userName);
+        var doesAuthorExist = await _context.Authors.AnyAsync(a => a.Name == authorDto.userName);
 
         if (!doesAuthorExist)
         {
@@ -32,106 +85,67 @@ public class AuthorRepository : IAuthorRepository
                 Cheeps = new List<Cheep>()
             };
 
-            // Set mail as empty if none is provided (In case of GitHub login) 
-            if (string.IsNullOrEmpty(author.Email)) author.Email = " ";   
-            
+            // Set email as empty if none is provided (e.g., for GitHub login)
+            if (string.IsNullOrEmpty(author.Email)) author.Email = " ";
+
             _context.Authors.Add(author);
             await _context.SaveChangesAsync();
         }
     }
-    
-    public async Task<Author> FindAuthorByName(string name)
-    {
-        var author = await _context.Authors
-            .Include(a => a.Following)
-            .Where(a => a.Name == name)
-            .FirstOrDefaultAsync();
-        
-        if (author == null) throw new NullReferenceException("Author not found");
-        return author;
-    }
-    
-    public async Task<Author> GetAuthorById(int id)
-    {
-        var author = await _context.Authors
-            .Where(a => a.AuthorId == id)
-            .FirstOrDefaultAsync();
-        
-        if (author == null) throw new NullReferenceException("Author not found");
-        return author;
-    }
-    
+
+    /// <inheritdoc/>
     public async Task FollowAuthor(string userName, string targetUserName)
     {
         var author = await FindAuthorByName(userName);
         var targetAuthor = await FindAuthorByName(targetUserName);
 
-        // Instantiate a list of following author if the author does not have one
+        // Instantiate the following list if it is null
         author.Following ??= new List<Author>();
-        
-        // Only follow authors that are not followed already
+
+        // Only follow authors that are not already followed
         if (!author.Following.Contains(targetAuthor))
         {
             author.Following.Add(targetAuthor);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
         }
     }
-    
+
+    /// <inheritdoc/>
     public async Task UnfollowAuthor(string userName, string targetUserName)
     {
         var author = await FindAuthorByName(userName);
         var targetAuthor = await FindAuthorByName(targetUserName);
 
-        if (author.Following == null) throw new Exception(userName +"'s following list is null");
-        
-        // Only unfollow authors that are followed
+        if (author.Following == null) throw new Exception($"{userName}'s following list is null.");
+
+        // Only unfollow authors that are currently followed
         if (author.Following.Contains(targetAuthor))
         {
             author.Following.Remove(targetAuthor);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
         }
     }
-    
-    public async Task<bool> IsFollowing(string userName, string targetUserName)
-    {
-        var author = await FindAuthorByName(userName);
-        var targetAuthor = await FindAuthorByName(targetUserName);
-        
-        // Return false if the users following list is not instantiated, meaning it is empty
-        return author.Following?.Contains(targetAuthor) ?? false;
-    }
-    
-    public async Task<IList<AuthorDto>> GetFollowers(string authorName)
-    {
-        var author = await FindAuthorByName(authorName);
-        
-        // Return empty list if the users following list is not instantiated, meaning it is empty
-        author.Following ??= new List<Author>();
 
-        return author.Following
-            .Select(follower => new AuthorDto(follower.Name, follower.Email))
-            .ToList();   
-    }
-    
+    /// <inheritdoc/>
     public async Task DeleteAuthor(string authorName)
     {
         var author = await FindAuthorByName(authorName);
-        
-        // Remove each author following relation
+
+        // Remove relationships from following list
         if (author.Following != null)
         {
             foreach (var followedAuthor in author.Following.ToList())
                 followedAuthor.Following?.Remove(author);
         }
 
-        // Remove each cheep of the author's cheeps
+        // Remove the author's cheeps
         var cheeps = _context.Cheeps.Where(c => c.Author.Name == author.Name).ToList();
         foreach (var cheep in cheeps)
         {
             _context.Cheeps.Remove(cheep);
         }
 
-        // Remove each liked cheep relation
+        // Remove liked cheep relationships
         if (author.LikedCheeps != null)
         {
             foreach (var likedCheep in author.LikedCheeps.ToList())
@@ -142,7 +156,7 @@ public class AuthorRepository : IAuthorRepository
             author.LikedCheeps.Clear();
         }
 
-        // Remove each disliked cheep relation
+        // Remove disliked cheep relationships
         if (author.DislikedCheeps != null)
         {
             foreach (var dislikedCheep in author.DislikedCheeps.ToList())
@@ -153,7 +167,10 @@ public class AuthorRepository : IAuthorRepository
             author.DislikedCheeps.Clear();
         }
 
+        // Remove the author
         _context.Authors.Remove(author);
         await _context.SaveChangesAsync();
     }
+
+    #endregion
 }
