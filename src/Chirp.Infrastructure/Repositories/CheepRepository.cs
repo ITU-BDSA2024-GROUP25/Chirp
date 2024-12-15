@@ -4,6 +4,9 @@ using Chirp.Core;
 
 namespace Chirp.Infrastructure;
 
+/// <summary>
+/// This class represents all Cheep related methods
+/// </summary>
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDbContext _context;

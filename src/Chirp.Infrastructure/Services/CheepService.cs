@@ -4,6 +4,9 @@ namespace Chirp.Infrastructure;
 
 public record CheepViewModel(string Author, string Message, string Timestamp);
 
+/// <summary>
+/// Interface for the Author Service governing methods for the service  
+/// </summary>
 public interface ICheepService
 {
     public Task<List<CheepDto>> GetCheeps(string? author, int pageNumber);

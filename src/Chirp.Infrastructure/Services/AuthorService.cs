@@ -2,6 +2,9 @@ using Chirp.Core;
 
 namespace Chirp.Infrastructure;
 
+/// <summary>
+/// Interface for the Author Service governing methods for the service  
+/// </summary>
 public interface IAuthorService
 {
         public Task<Author?> FindAuthorByName(string? name);
@@ -18,7 +21,7 @@ public class AuthorService : IAuthorService
         private AuthorRepository _authorRepo;
         public AuthorService(ChirpDbContext context)
         {
-                _authorRepo = new AuthorRepository(context);
+            _authorRepo = new AuthorRepository(context);
         }
         
         public async Task<Author?> FindAuthorByName(string? name) => await _authorRepo.FindAuthorByName(name);

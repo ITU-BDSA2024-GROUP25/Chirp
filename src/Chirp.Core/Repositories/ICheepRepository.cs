@@ -1,5 +1,8 @@
 namespace Chirp.Core;
 
+/// <summary>
+/// Interface for the Cheep Repository governing methods for the repository  
+/// </summary>
 public interface ICheepRepository
 {
     // Queries

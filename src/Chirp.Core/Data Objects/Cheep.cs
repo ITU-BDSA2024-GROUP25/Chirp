@@ -2,6 +2,9 @@ namespace Chirp.Core;
 
 using System.ComponentModel.DataAnnotations;
 
+/// <summary>
+/// This class represents the Cheep entity
+/// </summary>
 public class Cheep
 {
     public int CheepId { get; set; }

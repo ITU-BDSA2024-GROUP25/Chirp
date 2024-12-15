@@ -1,5 +1,8 @@
 namespace Chirp.Core;
 
+/// <summary>
+/// Interface for the Author Repository governing methods for the repository  
+/// </summary>
 public interface IAuthorRepository
 {
     // Queries

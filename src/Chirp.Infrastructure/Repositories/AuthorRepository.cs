@@ -3,6 +3,9 @@ using Chirp.Core;
 
 namespace Chirp.Infrastructure;
 
+/// <summary>
+/// This class represents all Author related methods
+/// </summary>
 public class AuthorRepository : IAuthorRepository
 {
     private readonly ChirpDbContext _context;
@@ -25,7 +28,9 @@ public class AuthorRepository : IAuthorRepository
                 Cheeps = new List<Cheep>()
             };
 
-            if (string.IsNullOrEmpty(author.Email)) author.Email = " "; // Empty mail            
+            if (string.IsNullOrEmpty(author.Email)) author.Email = " "; // Empty mail    
+            
+            // Database action
             _context.Authors.Add(author);
             await _context.SaveChangesAsync();
         }
