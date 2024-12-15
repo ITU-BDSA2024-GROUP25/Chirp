@@ -6,6 +6,6 @@ using Microsoft.AspNetCore.Identity.UI;
 namespace Chirp.Core;
 
 /// <summary>
-/// This is the entiy model that represents a user and is used for claims
+/// This is the entiy model that represents a user and is used for claims / authentication
 /// </summary>
 public class AppUser : IdentityUser { }

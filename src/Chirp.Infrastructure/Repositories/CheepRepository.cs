@@ -5,7 +5,7 @@ using Chirp.Core;
 namespace Chirp.Infrastructure;
 
 /// <summary>
-/// This class represents all Cheep related methods
+/// This class provides CRUD operation used on the cheep entity and managing database relationships
 /// </summary>
 public class CheepRepository : ICheepRepository
 {
@@ -122,6 +122,7 @@ public class CheepRepository : ICheepRepository
         // Remove the cheep from the author's Cheeps collection
         var author = cheep.Author;
         if (author == null) throw new Exception("Cannot delete cheep, author not found");
+        if (author.Cheeps == null) throw new Exception("Could not delete cheep, author cheep list not found");
         author.Cheeps.Remove(cheep);
 
         // Remove relations from LikedBy

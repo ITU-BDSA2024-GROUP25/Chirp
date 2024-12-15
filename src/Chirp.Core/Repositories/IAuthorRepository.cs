@@ -6,8 +6,8 @@ namespace Chirp.Core;
 public interface IAuthorRepository
 {
     // Queries
-    public Task<Author?> FindAuthorByName(string name);
-    public Task<Author?> GetAuthorById (int id);
+    public Task<Author> FindAuthorByName(string name);
+    public Task<Author> GetAuthorById (int id);
     public Task<bool> IsFollowing(string userName, string targetUserName);
     public Task<IList<AuthorDto>> GetFollowers(string authorName);
     
