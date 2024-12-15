@@ -4,7 +4,7 @@ using Chirp.Core;
 namespace Chirp.Infrastructure;
 
 /// <summary>
-/// This code was provided by the course
+/// This code was provided by the course.
 /// </summary>
 public static class DbInitializer
 {

@@ -5,8 +5,8 @@ using Chirp.Core;
 namespace Chirp.Infrastructure;
 
 /// <summary>
-/// Represents the database context providing configurations for the author and cheep entities
-/// Developed with the help of an LLM
+/// Represents the database context providing configurations for the author and cheep entities.
+/// Developed with the help of an LLM.
 /// </summary>
 public class ChirpDbContext : IdentityDbContext<AppUser>
 {

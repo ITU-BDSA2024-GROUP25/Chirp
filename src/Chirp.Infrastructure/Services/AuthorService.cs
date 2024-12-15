@@ -28,16 +28,16 @@ public interface IAuthorService
 }
 
 /// <summary>
-/// Service implementation for managing authors and their relationships.
+/// Service implementation for managing authors and their relationships
 /// </summary>
 public class AuthorService : IAuthorService
 {
     private AuthorRepository _authorRepo;
         
     /// <summary>
-    /// Initializes a new instance of the AuthorRepository class with a specified database context.
+    /// Initializes a new instance of the AuthorRepository class with a specified database context
     /// </summary>
-    /// <param name="context">The database context used for accessing the database.</param>
+    /// <param name="context">The database context used for accessing the database</param>
     public AuthorService(ChirpDbContext context)
     {
         _authorRepo = new AuthorRepository(context);

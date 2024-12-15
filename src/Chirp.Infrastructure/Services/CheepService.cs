@@ -3,9 +3,9 @@ using Chirp.Core;
 namespace Chirp.Infrastructure;
 
 /// <summary>
-/// Interface for the cheep service governing cheep related methods for the service
-/// This service layer primarily delegates to the CheepRepository class 
-/// This structure ensures abstraction of data access details from the upper layers
+/// Interface for the cheep service governing cheep related methods for the service.
+/// This service layer primarily delegates to the CheepRepository class.
+/// This structure ensures abstraction of data access details from the upper layers.
 /// </summary>
 public interface ICheepService
 {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Chirp.Core;
 
 /// <summary>
-/// This class represents the Author entity also known as Users
+/// This class represents the Author entity also known as Users.
 /// </summary>
 public class Author
 {

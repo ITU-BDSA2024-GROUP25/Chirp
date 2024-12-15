@@ -3,7 +3,7 @@ namespace Chirp.Core;
 using System.ComponentModel.DataAnnotations;
 
 /// <summary>
-/// This class represents the Cheep entity
+/// This class represents the Cheep entity.
 /// </summary>
 public class Cheep
 {
