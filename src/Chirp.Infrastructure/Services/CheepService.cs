@@ -2,10 +2,10 @@ using Chirp.Core;
 
 namespace Chirp.Infrastructure;
 
-public record CheepViewModel(string Author, string Message, string Timestamp);
-
 /// <summary>
-/// Interface for the Author Service governing methods for the service  
+/// Interface for the cheep service governing cheep related methods for the service
+/// This service layer primarily delegates to the CheepRepository class 
+/// This structure ensures abstraction of data access details from the upper layers
 /// </summary>
 public interface ICheepService
 {
@@ -38,8 +38,12 @@ public interface ICheepService
 
 public class CheepService : ICheepService
 {
-
     private CheepRepository _cheepRepo;
+    
+    /// <summary>
+    /// Initializes a new instance of the CheepRepository class with a specified database context.
+    /// </summary>
+    /// <param name="context">The database context used for accessing the database.</param>
     public CheepService(ChirpDbContext context)
     {
         _cheepRepo = new CheepRepository(context);
