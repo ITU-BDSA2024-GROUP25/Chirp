@@ -18,12 +18,7 @@ public class AuthorRepository : IAuthorRepository
     {
         _context = context;
     }
-
-    /// <summary>
-    /// Creates a new author if it does not already exist
-    /// </summary>
-    /// <param name="authorDto">Data transfer object of an author from the front-end</param>
-    /// <returns>Asynchronous operation</returns>
+    
     public async Task CreateAuthor(AuthorDto authorDto)
     {
         bool doesAuthorExist = await _context.Authors.AnyAsync(a => a.Name == authorDto.userName);
@@ -45,12 +40,6 @@ public class AuthorRepository : IAuthorRepository
         }
     }
     
-    /// <summary>
-    /// Finds an Author entity from its corresponding name
-    /// </summary>
-    /// <param name="name">The name attribute of the author</param>
-    /// <returns>Returns the author found in the database, otherwise null</returns>
-    /// <exception cref="Exception">Thrown if the author is not found in the database from the name</exception>
     public async Task<Author> FindAuthorByName(string name)
     {
         var author = await _context.Authors
@@ -62,12 +51,6 @@ public class AuthorRepository : IAuthorRepository
         return author;
     }
     
-    /// <summary>
-    /// Finds an Author entity from its corresponding Id
-    /// </summary>
-    /// <param name="id">The id property of the author</param>
-    /// <returns>Returns the author found in the database, otherwise null</returns>
-    /// <exception cref="Exception">Thrown if the author is not found in the database from the id</exception>
     public async Task<Author> GetAuthorById(int id)
     {
         var author = await _context.Authors
@@ -77,12 +60,7 @@ public class AuthorRepository : IAuthorRepository
         if (author == null) throw new NullReferenceException("Author not found");
         return author;
     }
-
-    /// <summary>
-    /// Creates a following relationship between the current user and the target author
-    /// </summary>
-    /// <param name="userName">The name of the user currently logged in</param>
-    /// <param name="targetUserName">The name of the author that the user wants to follow</param>
+    
     public async Task FollowAuthor(string userName, string targetUserName)
     {
         var author = await FindAuthorByName(userName);
@@ -99,11 +77,6 @@ public class AuthorRepository : IAuthorRepository
         }
     }
     
-    /// <summary>
-    /// Removes the following relationship between the current user and the target author
-    /// </summary>
-    /// <param name="userName">The name of the user currently logged in</param>
-    /// <param name="targetUserName">The name of the author that the user wants to follow</param>
     public async Task UnfollowAuthor(string userName, string targetUserName)
     {
         var author = await FindAuthorByName(userName);
@@ -118,13 +91,7 @@ public class AuthorRepository : IAuthorRepository
             await _context.SaveChangesAsync(); 
         }
     }
-
-    /// <summary>
-    /// Determines whether the user is following the target author
-    /// </summary>
-    /// <param name="userName">The name of the user currently logged in</param>
-    /// <param name="targetUserName">The name of the author that the user wants to follow</param>
-    /// <returns>True if the user follows the target author, false otherwise</returns>
+    
     public async Task<bool> IsFollowing(string userName, string targetUserName)
     {
         var author = await FindAuthorByName(userName);
@@ -133,12 +100,7 @@ public class AuthorRepository : IAuthorRepository
         // Return false if the users following list is not instantiated, meaning it is empty
         return author.Following?.Contains(targetAuthor) ?? false;
     }
-
-    /// <summary>
-    /// Finds the list of followers of a specified author
-    /// </summary>
-    /// <param name="authorName">The name attribute of the author</param>
-    /// <returns>A list of author DTOs that a specified author follows</returns>
+    
     public async Task<IList<AuthorDto>> GetFollowers(string authorName)
     {
         var author = await FindAuthorByName(authorName);
@@ -150,11 +112,7 @@ public class AuthorRepository : IAuthorRepository
             .Select(follower => new AuthorDto(follower.Name, follower.Email))
             .ToList();   
     }
-
-    /// <summary>
-    /// Finds and deletes a specified author
-    /// </summary>
-    /// <param name="authorName">The name attribute of the author</param>
+    
     public async Task DeleteAuthor(string authorName)
     {
         var author = await FindAuthorByName(authorName);
