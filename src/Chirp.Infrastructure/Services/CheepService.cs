@@ -9,12 +9,11 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 /// </summary>
 public interface ICheepService
 {
-    public Task<List<CheepDto>> GetCheeps(string? author, int pageNumber);
-    public int GetTotalCheepsCount(string? author);
-    public Task CreateCheep(Cheep cheep);
+    public Task<List<CheepDto>> GetCheeps(string author, int pageNumber);
+    public int GetTotalCheepsCount(string author);
     public Task CreateCheep(CheepDto cheep, string authorName);
     public Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers, int pageNumber);
-    public Task<List<CheepDto>> GetAllCheeps(string? author);
+    public Task<List<CheepDto>> GetAllCheeps(string author);
     public Task DeleteCheep(CheepDto cheep);
     public Task<bool> IsCheepLikedByAuthor(string authorName, CheepDto cheep);
     public Task<bool> IsCheepDislikedByAuthor(string authorName, CheepDto cheep);
@@ -24,8 +23,8 @@ public interface ICheepService
     public Task RemoveDislikeCheep(string authorName, CheepDto cheep);
     public Task<int> GetCheepLikesCount(CheepDto cheep);
     public Task<int> GetCheepDislikesCount(CheepDto cheep);
-    public Task<List<CheepDto>> GetLikedCheeps(string? authorName);
-    public Task<List<CheepDto>> GetDislikedCheeps(string? authorName);
+    public Task<List<CheepDto>> GetLikedCheeps(string authorName);
+    public Task<List<CheepDto>> GetDislikedCheeps(string authorName);
 }
 
 public class CheepService : ICheepService
@@ -40,12 +39,9 @@ public class CheepService : ICheepService
     public int GetTotalCheepsCount(string? author = null) => _cheepRepo.GetTotalCheepsCount(author);
 
     public Task<List<CheepDto>> GetCheeps(string? author, int pageNumber) => _cheepRepo.GetCheeps(author, pageNumber);
-
-    public Task CreateCheep(Cheep cheep) => _cheepRepo.CreateCheep(cheep);
-
     public Task CreateCheep(CheepDto cheep, string authorName) => _cheepRepo.CreateCheep(cheep, authorName);
     public Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers, int pageNumber) => _cheepRepo.GetCheepsFromFollowers(authorName, followers, pageNumber);
-    public Task<List<CheepDto>> GetAllCheeps(string? author) => _cheepRepo.GetAllCheeps(author);
+    public Task<List<CheepDto>> GetAllCheeps(string author) => _cheepRepo.GetAllCheeps(author);
     public Task DeleteCheep(CheepDto cheep) => _cheepRepo.DeleteCheep(cheep);
     public Task<bool> IsCheepLikedByAuthor(string authorName, CheepDto cheep) => _cheepRepo.IsCheepLikedByAuthor(authorName, cheep);
     public Task<bool> IsCheepDislikedByAuthor(string authorName, CheepDto cheep) => _cheepRepo.IsCheepDislikedByAuthor(authorName, cheep);
@@ -55,6 +51,6 @@ public class CheepService : ICheepService
     public Task RemoveDislikeCheep(string authorName, CheepDto cheep) => _cheepRepo.RemoveDislikeCheep(authorName, cheep);
     public Task<int> GetCheepLikesCount(CheepDto cheep) => _cheepRepo.GetCheepLikesCount(cheep);
     public Task<int> GetCheepDislikesCount(CheepDto cheep) => _cheepRepo.GetCheepDislikesCount(cheep);
-    public Task<List<CheepDto>> GetLikedCheeps(string? authorName) => _cheepRepo.GetLikedCheeps(authorName); 
-    public Task<List<CheepDto>> GetDislikedCheeps(string? authorName) => _cheepRepo.GetDislikedCheeps(authorName);
+    public Task<List<CheepDto>> GetLikedCheeps(string authorName) => _cheepRepo.GetLikedCheeps(authorName); 
+    public Task<List<CheepDto>> GetDislikedCheeps(string authorName) => _cheepRepo.GetDislikedCheeps(authorName);
 }

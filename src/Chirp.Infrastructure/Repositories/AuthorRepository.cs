@@ -130,9 +130,7 @@ public class AuthorRepository : IAuthorRepository
         // Remove the author's cheeps
         var cheeps = _context.Cheeps.Where(c => c.Author.Name == author.Name).ToList();
         foreach (var cheep in cheeps)
-        {
             _context.Cheeps.Remove(cheep);
-        }
 
         // Remove liked cheep relationships
         foreach (var likedCheep in author.LikedCheeps.ToList())

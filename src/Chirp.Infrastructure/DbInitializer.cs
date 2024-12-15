@@ -2,6 +2,10 @@ using System;
 using Chirp.Core;
 
 namespace Chirp.Infrastructure;
+
+/// <summary>
+/// This code was provided by the course
+/// </summary>
 public static class DbInitializer
 {
     public static void SeedDatabase(ChirpDbContext chirpContext)
