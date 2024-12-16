@@ -22,7 +22,4 @@
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
 </Project>

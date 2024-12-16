@@ -49,8 +49,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 });
 
 var app = builder.Build();
-
-// Code received from one of the TA's to fix a problem with deleting the current database on deployment 
+// got this code snippit from TA's to try and fix our problem with deleting the current database on deploymenrt 
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
