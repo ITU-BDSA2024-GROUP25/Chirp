@@ -247,7 +247,32 @@ public class EndToEndTest
         await page.Locator("label span").ClickAsync();
         await page.Locator("label span").ClickAsync();
     }
+    //Test that a user can like and dislike cheeps
+    [Test]
+    public async Task K_LikeAndDisLikeTest()
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        });
+        var context = await browser.NewContextAsync();
 
+        var page = await context.NewPageAsync();
+        await page.GotoAsync("http://localhost:5273/");
+        await page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await page.GetByPlaceholder("Username").ClickAsync();
+        await page.GetByPlaceholder("Username").FillAsync("test");
+        await page.GetByPlaceholder("Username").PressAsync("Tab");
+        await page.GetByPlaceholder("password").FillAsync("password");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine The train" }).GetByRole(AriaRole.Button).First.ClickAsync();
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine The train" }).GetByRole(AriaRole.Button).Nth(1).ClickAsync();
+        await Expect(page.Locator("#messagelist")).ToContainTextAsync("0");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Dislike Button 1" }).ClickAsync();
+
+       
+    }
 
     [Test]
     public async Task Z_DeleteUserTest()
