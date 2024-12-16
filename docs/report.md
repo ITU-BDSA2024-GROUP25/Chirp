@@ -19,7 +19,7 @@ Here comes a description of our domain model. ( this is just template stuff for 
 ![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModel.drawio.png)
 
 ## Architecture — In the small
-![Illustration of the _Chirp!_ ONION](images/ONIONDIAGRAMWIP.png)
+![Illustration of the _Chirp!_ ONION](images/OnionDiagram.png)
 ## Architecture of deployed application
 
 ## User activities
