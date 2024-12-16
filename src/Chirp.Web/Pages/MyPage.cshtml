@@ -8,6 +8,14 @@
     var routeName = HttpContext.GetRouteValue("author");
 }
 
+@{
+    // Provides the HTML for the My-Page page, which only logged-in users can access.
+    // This page shows all the stored data about the user including:
+    //  - Name, Mail, Following, Cheeps, Liked Cheeps and Disliked Cheeps
+    // Includes the functionality to download data and delete user.
+    // Also includes standard cheep operations e.g. like/dislike, follow/unfollow, etc.
+}
+
 @* General user information *@
 <div>
     <h2> My Information: </h2>

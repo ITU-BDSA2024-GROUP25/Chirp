@@ -9,7 +9,7 @@ using Chirp.Infrastructure;
 namespace Chirp.Web.Pages;
 
 /// <summary>
-/// Provides shared behavior and properties code between all Razor pages
+/// Provides shared behavior and properties between all Razor pages
 /// </summary>
 public abstract class SharedModel : PageModel
 {

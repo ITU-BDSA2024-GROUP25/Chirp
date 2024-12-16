@@ -7,11 +7,18 @@
     <link id="themeStylesheet" href="/css/style.css" rel="stylesheet" type="text/css"/>
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
+
+@{
+    // Shared layout and styling between all the pages. 
+    // Also includes JavaScript code for miscellaneous behavior.    
+}
+
 <body>
 <div class=page>
     <h1><img src="/images/icon1.png" alt="Icon1"/>Chirp!</h1>
 
     <div class=navigation>
+        @* If the user is logged in *@
         @if (User?.Identity?.IsAuthenticated == true)
         {
             <div>
@@ -23,8 +30,9 @@
             </div>
             <div asp-validation-summary="ModelOnly">
             </div>
-            
+
         }
+        @* if the user is not logged in *@
         else
         {
             <div>
@@ -33,7 +41,7 @@
                 <a class="nav-link text-dark" href="/Identity/Account/Login">Login</a> |
             </div>
         }
-        
+
         @* Switch button *@
         <div class="theme-switch" align="right">
             <label class="switch">

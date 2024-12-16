@@ -8,6 +8,17 @@
     var routeName = HttpContext.GetRouteValue("author");
 }
 
+@{
+    // Provides the HTML for User timeline also known as Private timeline.
+    // Contains two states:
+    //  - User is on own timeline: 
+    //      - User can do standard cheep operations e.g. post, like/dislike, follow/unfollow, etc. 
+    //  - User is not on own timeline: 
+    //      - Only that authors cheeps are shown with a centralized follow button at the top
+    //      - User can not post cheeps
+    //      - User can still like/dislike cheeps
+}
+
 <div>
     @* If the author is logged in *@
     @if (User.Identity?.IsAuthenticated == true)
