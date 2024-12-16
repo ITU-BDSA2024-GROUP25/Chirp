@@ -73,7 +73,7 @@
                         <small>&mdash; @cheep.postedTime</small>
                     </p>
 
-                    @if (Model.GetUserName == cheep.authorName)
+                    @if (Model.GetUserName == cheep.authorName || User.Identity?.IsAuthenticated == false)
                     {
                         // Disabled Like/Dislike Buttons for Own Cheeps
                         <div
@@ -87,7 +87,7 @@
                                 <span class="cheep-amount">@await Model.CheepDislikeAmount(cheep)</span>
                             </button>
                         </div>
-
+                    @if (Model.GetUserName == cheep.authorName){
                         // Delete button for author's own cheeps
                         <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
                             <input type="hidden" name="cheepText" value="@cheep.text" />
@@ -95,7 +95,7 @@
                             <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
                                 <img src="/images/Xicon.png" alt="Delete Icon" style="width: 12px; height: 12px;" />
                             </button>
-                        </form>
+                        </form>}
                     }
                     else
                     {
