@@ -56,7 +56,7 @@ var routeName = HttpContext.GetRouteValue("author");
                 <small>&mdash; @cheep.postedTime</small>
             </p>
 
-            @if (Model.GetUserName == cheep.authorName)
+            @if (Model.GetUserName == cheep.authorName || User?.Identity?.IsAuthenticated == false)
             {
             <!-- Disabled Like/Dislike Buttons for Own Cheeps -->
             <div style="position: absolute; top: 40%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
