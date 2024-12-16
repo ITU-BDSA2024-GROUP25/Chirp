@@ -10,10 +10,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e806a164-dec6-4f68-bae3-dcd3ddd2f6af" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Chirp.Infrastructure/Repositories/AuthorRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Chirp.Infrastructure/Repositories/AuthorRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.src/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.src/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.src/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.src/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chirp.Core/Repositories/ICheepRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Chirp.Core/Repositories/ICheepRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chirp.Infrastructure/Repositories/CheepRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Chirp.Infrastructure/Repositories/CheepRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chirp.Infrastructure/Services/CheepService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Chirp.Infrastructure/Services/CheepService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chirp.Web/Chirp.Web.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Chirp.Web/Chirp.Web.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chirp.Web/Migrations/20241122094819_UpdateSnapshot.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chirp.Web/Migrations/20241122094819_UpdateSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chirp.Web/Migrations/20241207150044_UpdateDatabaseWithLikesAndDislikes.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chirp.Web/Migrations/20241207150044_UpdateDatabaseWithLikesAndDislikes.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chirp.Web/Migrations/ChirpDbContextModelSnapshot.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Chirp.Web/Pages/Public.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Chirp.Web/Pages/Public.cshtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Chirp.Web/Pages/Shared/SharedModel.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Chirp.Web/Pages/Shared/SharedModel.cshtml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Chirp.Web/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Chirp.Web/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Chirp.Web/data/Chirp.db" beforeDir="false" afterPath="$PROJECT_DIR$/Chirp.Web/data/Chirp.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +33,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Lund5teen&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ITU-BDSA2024-GROUP25/Chirp.git&quot;,
+    &quot;accountId&quot;: &quot;6445e919-da46-4bd2-8a16-5664a872f3e1&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 7
@@ -36,7 +57,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Following&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Like-Dislike&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -110,6 +131,8 @@
       <workItem from="1732121058988" duration="74000" />
       <workItem from="1732121149781" duration="1882000" />
       <workItem from="1732214764483" duration="625000" />
+      <workItem from="1733605681393" duration="117000" />
+      <workItem from="1733605821456" duration="2663000" />
     </task>
     <servers />
   </component>

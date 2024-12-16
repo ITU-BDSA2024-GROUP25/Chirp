@@ -8,47 +8,63 @@
     var routeName = HttpContext.GetRouteValue("author");
 }
 
+@{
+    // Provides the HTML for User timeline also known as Private timeline.
+    // Contains two states:
+    //  - User is on own timeline: 
+    //      - User can do standard cheep operations e.g. post, like/dislike, follow/unfollow, etc. 
+    //      - Cheeps shown are own cheeps and following authors cheeps
+    //  - User is not on own timeline: 
+    //      - Only that authors cheeps are shown with a centralized follow button at the top
+    //      - User can not post cheeps
+    //      - User can still like/dislike cheeps
+}
+
 <div>
-    @if (User?.Identity?.IsAuthenticated == true)
+    @* If the author is logged in *@
+    @if (User.Identity?.IsAuthenticated == true)
     {
+        // If user is on another authors timeline page
         @if (Model.GetUserName != @routeName?.ToString())
         {
-        <h2> @routeName's Timeline </h2>
+            <h2>@routeName's Timeline</h2>
             <div>
                 @if (await Model.IsFollowing(@routeName?.ToString()))
                 {
                     <form method="post" asp-page-handler="Unfollow">
-                        <input type="hidden" name="authorName" value="@routeName?.ToString()"/>
-                        <button type="submit">Unfollow</button>
+                        <input type="hidden" name="authorName" value="@routeName?.ToString()" />
+                        <button type="submit"
+                            style="background: none; border: none; color: #cc6e6e; cursor: pointer;">Unfollow</button>
                     </form>
                 }
                 else
                 {
                     <form method="post" asp-page-handler="Follow">
-                        <input type="hidden" name="authorName" value="@routeName?.ToString()"/>
-                        <button type="submit">Follow</button>
+                        <input type="hidden" name="authorName" value="@routeName?.ToString()" />
+                        <button type="submit" style="background: none; border: none; color: green; cursor: pointer;">Follow</button>
                     </form>
                 }
             </div>
         }
+        
+        // If user is on own timeline page
         else
         {
-        <h2> My Timeline </h2>
+            <h2>My Timeline</h2>
             <form asp-page="/" method="post">
-                <input type="text" asp-for="Message">
-                <input type="submit" value="Share">
+                <input type="text" asp-for="Message" />
+                <input type="submit" value="Share" />
                 <span asp-validation-for="Message"></span>
             </form>
-
         }
     }
 
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
-                @foreach (var cheep in Model.Cheeps)
-                {
-                <li style="position: relative; padding-right: 60px;">
+            @foreach (var cheep in Model.Cheeps)
+            {
+                <li style="position: relative; padding-right: 120px;">
                     <p>
                         <strong>
                             <a href="/@cheep.authorName">@cheep.authorName</a>
@@ -57,42 +73,93 @@
                         <small>&mdash; @cheep.postedTime</small>
                     </p>
 
-                    @if (Model.GetUserName != cheep.authorName && Model.GetUserName == @routeName?.ToString())
+                    @if (Model.GetUserName == cheep.authorName)
                     {
-                    <form method="post" asp-page-handler="@((await Model.IsFollowing(cheep.authorName)) ? "Unfollow" : "Follow")"
-                          style="position: absolute; top: 7px; right: 10px;">
-                        <input type="hidden" name="authorName" value="@cheep.authorName" />
-                        <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
-                            @if (await Model.IsFollowing(cheep.authorName))
-                            {
-                            <span style="color: #cc6e6e; font-size: 12px;">Unfollow</span>
-                            }
-                            else
-                            {
-                            <span style="color: green; font-size: 12px;">Follow</span>
-                            }
-                        </button>
-                    </form>
+                        // Disabled Like/Dislike Buttons for Own Cheeps
+                        <div
+                            style="position: absolute; top: 40%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
+                            <button style="background: none; border: none; cursor: default;" disabled>
+                                <img src="/images/unlike.png" alt="Like Button" style="width: 16px; height: 16px;" />
+                                <span class="cheep-amount">@await Model.CheepLikesAmount(cheep)</span>
+                            </button>
+                            <button style="background: none; border: none; cursor: default;" disabled>
+                                <img src="/images/undislike.png" alt="Dislike Button" style="width: 16px; height: 16px;" />
+                                <span class="cheep-amount">@await Model.CheepDislikeAmount(cheep)</span>
+                            </button>
+                        </div>
+
+                        // Delete button for author's own cheeps
+                        <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
+                            <input type="hidden" name="cheepText" value="@cheep.text" />
+                            <input type="hidden" name="time" value="@cheep.postedTime" />
+                            <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
+                                <img src="/images/Xicon.png" alt="Delete Icon" style="width: 12px; height: 12px;" />
+                            </button>
+                        </form>
                     }
-                    else if (Model.GetUserName == cheep.authorName)
+                    else
                     {
-                    <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
-                        <input type="hidden" name="cheepText" value="@cheep.text" />
-                        <input type="hidden" name="time" value="@cheep.postedTime" />
-                        <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
-                            <img src="/images/Xicon.png" alt="Delete Icon" style="width: 12px; height: 12px;" />
-                        </button>
-                    </form>
+                        // Functional Like/Dislike Buttons
+                        <div
+                            style="position: absolute; top: 35%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
+
+                            @* Like / Remove like Button *@
+                            <form method="post"
+                                  asp-page-handler="@((await Model.IsCheepLikedByAuthor(cheep)) ? "RemoveLikeCheep" : "LikeCheep")">
+                                <input type="hidden" name="cheep.Text" value="@cheep.text"/>
+                                <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName"/>
+                                <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime"/>
+                                <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                    <img src="/images/@(await Model.IsCheepLikedByAuthor(cheep) ? "like.png" : "unlike.png")"
+                                         alt="Like Button" style="width: 16px; height: 16px;"/>
+                                    <span class="cheep-amount">@await Model.CheepLikesAmount(cheep)</span>
+                                </button>
+                            </form>
+
+                            @* Dislike / Remove dislike Button *@
+                            <form method="post"
+                                  asp-page-handler="@((await Model.IsCheepDislikedByAuthor(cheep)) ? "RemoveDislikeCheep" : "DislikeCheep")">
+                                <input type="hidden" name="cheep.Text" value="@cheep.text"/>
+                                <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName"/>
+                                <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime"/>
+                                <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                    <img src="/images/@(await Model.IsCheepDislikedByAuthor(cheep) ? "dislike.png" : "undislike.png")"
+                                         alt="Dislike Button" style="width: 16px; height: 16px;"/>
+                                    <span class="cheep-amount">@await Model.CheepDislikeAmount(cheep)</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        // Follow/Unfollow Button for Cheeps not owned by user
+                        @if (@routeName?.ToString() == Model.GetUserName)
+                        {
+                            <form method="post"
+                                asp-page-handler="@((await Model.IsFollowing(cheep.authorName)) ? "Unfollow" : "Follow")"
+                                style="position: absolute; top: 5px; right: 10px;">
+                                <input type="hidden" name="authorName" value="@cheep.authorName" />
+                                <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
+                                    @if (await Model.IsFollowing(cheep.authorName))
+                                    {
+                                        <span style="color: #cc6e6e; font-size: 12px;">Unfollow</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: green; font-size: 12px;">Follow</span>
+                                    }
+                                </button>
+                            </form>
+                        }
                     }
-                    </li>
-                }
-            </ul>
+                </li>
+            }
+        </ul>
     }
     else
     {
         <em>There are no cheeps so far.</em>
     }
     
+    @* Pagination logic *@
     <div class="pagination">
         @if (Model.CurrentPage > 1)
         {

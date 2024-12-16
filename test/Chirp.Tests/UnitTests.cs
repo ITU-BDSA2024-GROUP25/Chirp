@@ -1,13 +1,15 @@
+using System.Globalization;
 using Chirp.Infrastructure;
 using Chirp.Core;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Tests;
+
 public class UnitTests
 {
-    private ICheepRepository cheepRepository;
-    private IAuthorRepository authorRepository;
+    private ICheepRepository? _cheepRepository;
+    private IAuthorRepository? _authorRepository;
 
     [Fact]
     // AuthorId 13 because Id reaches 12 in original Database, same for CheepId 
@@ -21,7 +23,7 @@ public class UnitTests
         using var context = new ChirpDbContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-        cheepRepository = new CheepRepository(context);
+        _cheepRepository = new CheepRepository(context);
 
         context.Cheeps.ExecuteDelete();
         context.Authors.ExecuteDelete();
@@ -38,7 +40,7 @@ public class UnitTests
         await context.SaveChangesAsync();
 
         // Act
-        var cheepList = await cheepRepository.GetCheeps(null, 1);
+        var cheepList = await _cheepRepository.GetCheeps(null, 1);
         var cheepAmount = cheepList.ToList().Count;
 
         // Assert
@@ -56,7 +58,7 @@ public class UnitTests
         using var context = new ChirpDbContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-        cheepRepository = new CheepRepository(context);
+        _cheepRepository = new CheepRepository(context);
 
         context.Cheeps.ExecuteDelete();
         context.Authors.ExecuteDelete();
@@ -75,7 +77,7 @@ public class UnitTests
         await context.SaveChangesAsync();
 
         // Act 
-        var cheepcount = cheepRepository.GetTotalCheepsCount(null);
+        var cheepcount = _cheepRepository.GetTotalCheepsCount(null);
         // Assert 
         Assert.Equal(3, cheepcount);
     }
@@ -91,7 +93,7 @@ public class UnitTests
         using var context = new ChirpDbContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         
-        authorRepository = new AuthorRepository(context);
+        _authorRepository = new AuthorRepository(context);
 
         context.Cheeps.ExecuteDelete();
         context.Authors.ExecuteDelete();
@@ -117,7 +119,7 @@ public class UnitTests
         await context.SaveChangesAsync();
 
         // Act 
-        var findAuthorByName = authorRepository.FindAuthorByName("Jane Dig");
+        var findAuthorByName = _authorRepository.FindAuthorByName("Jane Dig");
         var cheepByauthorList = new List<Cheep>();
         foreach (var cheep in cheeps)
         {
@@ -145,14 +147,17 @@ public class UnitTests
         using var context = new ChirpDbContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-        cheepRepository = new CheepRepository(context);
+        _cheepRepository = new CheepRepository(context);
 
         context.Cheeps.ExecuteDelete();
         context.Authors.ExecuteDelete();
 
         Author author1 = new Author() { AuthorId = 13, Name = "John Doe", Email = "John+Doe@hotmail.com", Cheeps = new List<Cheep>() };
         Author author2 = new Author() { AuthorId = 14, Name = "Jane Dig", Email = "Jane+Dig@hotmail.com", Cheeps = new List<Cheep>() };
-        var authors = new List<Author>() { author1, author2 };
+        
+        Author author3 = new Author() { AuthorId = 15, Name = " Amalia testPerson", Email = "Amalia+tpe@hotmail.com", Cheeps = new List<Cheep>() };
+        
+        var authors = new List<Author>() { author1, author2, author3 };
 
         var c1 = new Cheep() { CheepId = 701, AuthorId = author1.AuthorId, Author = author1, Text = "They were married in Chicago, with old Smith, and was expected aboard every day; meantime, the two went past me.", TimeStamp = DateTime.Parse("2023-08-01 13:14:37") };
         var c2 = new Cheep() { CheepId = 702, AuthorId = author1.AuthorId, Author = author1, Text = "And then, as he listened to all that''s left o'' twenty-one people.", TimeStamp = DateTime.Parse("2023-08-01 13:15:21") };
@@ -165,14 +170,13 @@ public class UnitTests
 
         context.Authors.AddRange(authors);
         context.Cheeps.AddRange(cheepsList);
+        
         await context.SaveChangesAsync();
-
-        Author author3 = new Author() { AuthorId = 15, Name = " Amalia testPerson", Email = "Amalia+tpe@hotmail.com", Cheeps = new List<Cheep>() };
-
-        var addedCheep = new Cheep() { CheepId = 706, AuthorId = author3.AuthorId, Author = author3, Text = "Test string TP", TimeStamp = DateTime.Parse("2023-08-02 13:16:22") };
+        
+        var addedCheep = new CheepDto ("Test string TP", DateTime.Parse("2023-08-02 13:16:22").ToString(CultureInfo.CurrentCulture), author3.Name);
 
         // Act 
-        var newCheep = cheepRepository.CreateCheep(addedCheep);
+        await _cheepRepository.CreateCheep(addedCheep, author3.Name);
         await context.SaveChangesAsync();
 
         var cheepAmount = await context.Cheeps.CountAsync();
@@ -193,7 +197,7 @@ public class UnitTests
         using var context = new ChirpDbContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         
-        authorRepository = new AuthorRepository(context);
+        _authorRepository = new AuthorRepository(context);
 
         context.Cheeps.ExecuteDelete();
         context.Authors.ExecuteDelete();
@@ -201,7 +205,7 @@ public class UnitTests
         AuthorDto author = new AuthorDto( "John Doe", "John+Doe@hotmail.com");
         
         // Act
-        var newAuthor = authorRepository.CreateAuthor(author);
+        var newAuthor = _authorRepository.CreateAuthor(author);
         await context.SaveChangesAsync();
         
         var authorAmount = await context.Authors.CountAsync();
@@ -221,18 +225,18 @@ public class UnitTests
         using var context = new ChirpDbContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-        authorRepository = new AuthorRepository(context);
+        _authorRepository = new AuthorRepository(context);
 
         context.Cheeps.ExecuteDelete();
         context.Authors.ExecuteDelete();
 
         AuthorDto author = new AuthorDto( "John Doe", "John+Doe@hotmail.com");
 
-        var newAuthor = authorRepository.CreateAuthor(author);
+        var newAuthor = _authorRepository.CreateAuthor(author);
         await context.SaveChangesAsync();
 
         //Act
-        authorRepository.DeleteAuthor("John Doe");
+        await _authorRepository.DeleteAuthor("John Doe");
         var authorAmount = await context.Authors.CountAsync();
 
         // Assert 
@@ -249,7 +253,7 @@ public class UnitTests
         using var context = new ChirpDbContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         
-        authorRepository = new AuthorRepository(context);
+        _authorRepository = new AuthorRepository(context);
 
         context.Cheeps.ExecuteDelete();
         context.Authors.ExecuteDelete();
@@ -263,7 +267,7 @@ public class UnitTests
         await context.SaveChangesAsync();
         
         // Act 
-        await authorRepository.FollowAuthor(author1.Name, author2.Name);
+        await _authorRepository.FollowAuthor(author1.Name, author2.Name);
 
         var isFollowing = author1.Following.Contains(author2); 
         
@@ -284,7 +288,7 @@ public class UnitTests
         using var context = new ChirpDbContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
         
-        authorRepository = new AuthorRepository(context);
+        _authorRepository = new AuthorRepository(context);
 
         context.Cheeps.ExecuteDelete();
         context.Authors.ExecuteDelete();
@@ -296,11 +300,11 @@ public class UnitTests
         var authors = new List<Author>() { author1, author2, author3};
         context.Authors.AddRange(authors);
         await context.SaveChangesAsync();
-        await authorRepository.FollowAuthor(author1.Name, author2.Name);
+        await _authorRepository.FollowAuthor(author1.Name, author2.Name);
         
         //act
         
-        await authorRepository.UnfollowAuthor(author1.Name, author2.Name);
+        await _authorRepository.UnfollowAuthor(author1.Name, author2.Name);
         
         
         
@@ -327,33 +331,33 @@ public class UnitTests
         using var context = new ChirpDbContext(builder.Options);
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-        authorRepository = new AuthorRepository(context);
-        cheepRepository = new CheepRepository(context);
+        _authorRepository = new AuthorRepository(context);
+        _cheepRepository = new CheepRepository(context);
 
         context.Cheeps.ExecuteDelete();
         context.Authors.ExecuteDelete();
 
         AuthorDto author = new AuthorDto( "John Doe", "John+Doe@hotmail.com");
-        var newAuthor = authorRepository.CreateAuthor(author);
+        var newAuthor = _authorRepository.CreateAuthor(author);
 
         CheepDto cheepDto1 = new CheepDto("test cheep", "2023-08-01 13:15:22","John Doe");
         CheepDto cheepDto2 = new CheepDto("test cheep2", "2023-08-01 13:15:24","John Doe");
         CheepDto cheepDto3 = new CheepDto("test cheep3", "2023-08-01 13:15:27","John Doe");
         
-        await cheepRepository.CreateCheep(cheepDto1, "John Doe");
-        await cheepRepository.CreateCheep(cheepDto2, "John Doe");
+        await _cheepRepository.CreateCheep(cheepDto1, "John Doe");
+        await _cheepRepository.CreateCheep(cheepDto2, "John Doe");
 
 
         // Act 
-        await cheepRepository.FindCheepID(cheepDto2); 
-        var checkID2 = cheepRepository.FindCheepID(cheepDto2); 
-        await cheepRepository.DeleteCheep(cheepDto2);
-        await cheepRepository.CreateCheep(cheepDto3, "John Doe");
+        await _cheepRepository.FindCheepId(cheepDto2); 
+        var checkID2 = _cheepRepository.FindCheepId(cheepDto2); 
+        await _cheepRepository.DeleteCheep(cheepDto2);
+        await _cheepRepository.CreateCheep(cheepDto3, "John Doe");
 
         await context.SaveChangesAsync();
         
         // after deletion we check that the new cheep has a diffrent ID 
-        var cheepId3 = cheepRepository.FindCheepID(cheepDto3);
+        var cheepId3 = _cheepRepository.FindCheepId(cheepDto3);
         await context.SaveChangesAsync();
         
         // Assert 
