@@ -20,7 +20,7 @@ public interface ICheepRepository
     /// Starts a 1 to provide cheeps for the first page.
     /// </param>
     /// <returns>A list of cheep DTOs that belong to the specified author.</returns>
-    public Task<List<CheepDto>> GetCheeps(string authorName, int pageNumber);
+    public Task<List<CheepDto>> GetCheeps(string? authorName, int pageNumber);
     
     /// <summary>
     /// Gets the total cheeps from an author or the total amount in the database.
@@ -30,7 +30,7 @@ public interface ICheepRepository
     /// If null get total cheep count from the database.
     /// </param>
     /// <returns>An integer of the total amount of cheeps from an author or entirely.</returns>
-    public int GetTotalCheepsCount(string authorName);
+    public int GetTotalCheepsCount(string? authorName);
     
     /// <summary>
     /// Retrieve all cheeps from the specified author as well as all the following authors cheeps.
