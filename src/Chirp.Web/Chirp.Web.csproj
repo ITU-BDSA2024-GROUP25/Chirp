@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <Folder Include="data\**" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
