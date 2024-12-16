@@ -1,76 +1,78 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Text;
 using Chirp.Core;
 using Chirp.Infrastructure;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
+/// <summary>
+/// Represents the functionality for the My-Page page.
+/// Specifies which cheeps to be shown.
+/// Extended functionality: Deleting user and downloading user data.
+/// </summary>
 public class MyPageModel : SharedModel
 {
-    public string? AuthorName => HttpContext.GetRouteValue("author")?.ToString();
+    # region Fields
+    
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
+    private string AuthorName => HttpContext.GetRouteValue("author")?.ToString() 
+                                 ?? throw new NullReferenceException("Author name could not be found");
     
-    public MyPageModel(ICheepService cheepService, IAuthorService authorService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) : base(cheepService, authorService) 
+    # endregion
+    
+    # region Constructor
+    
+    public MyPageModel(ICheepService cheepService, IAuthorService authorService, UserManager<AppUser> userManager, 
+        SignInManager<AppUser> signInManager) : base(cheepService, authorService) 
     {
         _userManager = userManager;
         _signInManager = signInManager;
     }
     
-    public override async Task<IList<CheepDto>> GetCheeps()
-    {
-        if (AuthorName == null) throw new Exception("Author Name is null");
-        
-        return await _cheepService.GetAllCheeps(AuthorName);
-    }
+    # endregion
+
+    # region Queries
     
-    public async Task<IList<CheepDto>> GetLikedCheeps()
-    {
-        if (AuthorName == null) throw new Exception("Author Name is null");
-        
-        return await _cheepService.GetLikedCheeps(AuthorName);
-    }
+    public override async Task<IList<CheepDto>> GetCheeps() => await CheepService.GetAllCheeps(AuthorName);
+    public async Task<IList<CheepDto>> GetLikedCheeps() => await CheepService.GetLikedCheeps(AuthorName);
+    public async Task<IList<CheepDto>> GetDislikedCheeps() => await CheepService.GetDislikedCheeps(AuthorName);
+    
+    #endregion
+    
 
-    public async Task<IList<CheepDto>> GetDislikedCheeps()
-    {
-        if (AuthorName == null) throw new Exception("Author Name is null");
-        
-        return await _cheepService.GetDislikedCheeps(AuthorName);
-    }
-
+    # region Metods
+    
+    /// <summary>
+    /// Deletes the user from both the identity and as an author in the database.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when if the user manager fails to delete the user.</exception>
     public async Task<IActionResult> OnPostDeleteDataAsync()
     {
-        if (AuthorName == null) throw new Exception("Author Name is null");
-        await _authorService.DeleteAuthor(AuthorName);
-        
         var user = await _userManager.GetUserAsync(User);
         if (user != null)
         {
             var result = await _userManager.DeleteAsync(user);
-            var userId = await _userManager.GetUserIdAsync(user);
+            
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred deleting user.");
+                throw new InvalidOperationException("Unexpected error occurred deleting user.");
             }
+            
+            await AuthorService.DeleteAuthor(AuthorName);
         }
         
         await _signInManager.SignOutAsync();
-        
         return Redirect("/");
     }
 
+    /// <summary>
+    /// Creates and returns a text file with all data stored about the author. 
+    /// </summary>
     public async Task<IActionResult> OnPostDownloadInfoAsync()
     {
-        if (AuthorName == null) throw new Exception("Author Name is null");
-        
-        Author? author = await _authorService.FindAuthorByName(AuthorName);
-        if (author == null) throw new Exception("User: "+ AuthorName + " not found in database");
+        var author = await AuthorService.FindAuthorByName(AuthorName);
 
         // Create the text file
         var content = new StringBuilder();
@@ -84,72 +86,65 @@ public class MyPageModel : SharedModel
         content.AppendLine("");
             
         content.AppendLine("Following:");
-        if (author.Following != null)
+        if (author.Following.Any())
         {
-            if (author.Following.Any())
-            {
-                foreach (var follow in author.Following)
-                {
-                    content.AppendLine($"- {follow.Name}");
-                }
-            }
-            else content.AppendLine("- No Following");
+           foreach (var follow in author.Following)
+           {
+               content.AppendLine($"- {follow.Name}"); 
+                    
+           }
         }
-        else content.AppendLine($"- No Following");
+        else content.AppendLine("- No Following");
+        
         content.AppendLine("");    
         
         content.AppendLine("Cheeps:");
-        if (GetCheeps != null)
+        if (GetCheeps().Result.Any())
         {
-            if (GetCheeps().Result.Any())
+            foreach (var cheep in await GetCheeps())
             {
-                foreach (var cheep in await GetCheeps())
-                {
-                    content.AppendLine($"- \"{cheep.text}\" ({cheep.postedTime})");
-                    content.AppendLine($"  Likes: {await CheepLikesAmount(cheep)} Dislikes: {await CheepDislikeAmount(cheep)}");
-                }
+                content.AppendLine($"- \"{cheep.text}\" ({cheep.postedTime})");
+                content.AppendLine($"  Likes: {await CheepLikesAmount(cheep)} Dislikes: {await CheepDislikeAmount(cheep)}");
             }
-            else content.AppendLine("- No Cheeps");
         }
         else content.AppendLine("- No Cheeps");
+        
         content.AppendLine("");
         
         content.AppendLine("Liked Cheeps:");
         var likedCheeps = await GetLikedCheeps();
-        if (likedCheeps != null)
+        
+        if (likedCheeps.Any())
         {
-            if (likedCheeps.Any())
+            foreach (var cheep in likedCheeps)
             {
-                foreach (var cheep in likedCheeps)
-                {
-                    content.AppendLine($"- {cheep.authorName}: \"{cheep.text}\" ({cheep.postedTime})");
-                    content.AppendLine($"  Likes: {await CheepLikesAmount(cheep)} Dislikes: {await CheepDislikeAmount(cheep)}");
-                }
+                content.AppendLine($"- {cheep.authorName}: \"{cheep.text}\" ({cheep.postedTime})");
+                content.AppendLine($"  Likes: {await CheepLikesAmount(cheep)} Dislikes: {await CheepDislikeAmount(cheep)}");
             }
-            else content.AppendLine("- No Liked Cheeps");
         }
         else content.AppendLine("- No Liked Cheeps");
+        
         content.AppendLine("");
         
         content.AppendLine("Disliked Cheeps:");
         var dislikedCheeps = await GetDislikedCheeps();
-        if (dislikedCheeps != null)
+        
+        if (dislikedCheeps.Any())
         {
-            if (dislikedCheeps.Any())
+            foreach (var cheep in dislikedCheeps)
             {
-                foreach (var cheep in dislikedCheeps)
-                {
-                    content.AppendLine($"- {cheep.authorName}: \"{cheep.text}\" ({cheep.postedTime})");
-                    content.AppendLine($"  Likes: {await CheepLikesAmount(cheep)} Dislikes: {await CheepDislikeAmount(cheep)}");
-                }
+                content.AppendLine($"- {cheep.authorName}: \"{cheep.text}\" ({cheep.postedTime})");
+                content.AppendLine($"  Likes: {await CheepLikesAmount(cheep)} Dislikes: {await CheepDislikeAmount(cheep)}");
             }
-            else content.AppendLine("- No Disliked Cheeps");
         }
         else content.AppendLine("- No Disliked Cheeps");
+        
         
         // Convert content to bytes and return file
         byte[] fileBytes = Encoding.UTF8.GetBytes(content.ToString());
         string fileName = $"{author.Name}_Chirp_Data.txt";
         return File(fileBytes, "text/plain", fileName);
     }
+    
+    #endregion
 }
