@@ -29,7 +29,11 @@ Here comes a description of our domain model. ( this is just template stuff for 
 # Process
 
 ## Build, test, release, and deployment
-
+For Chirp! we utilize three main github workflows. The first is an automated build and test workflow that attempts to build any commit or pull request.
+It also runs our basic unit and integration tests, the more advanced test suite is not automated. For azure we have a standard azure deployment workflow with a minor change:
+we have added an optional dispatch, and limited what triggers the workflow. As redeploying azure on trivial changes result in extensive downtime.
+Our final Workflow "chirpflow" creates a release on versions with tags matching "v.*.*.*" this is mostly used for punctiating feature implementations. The releases 
+contains the program compiled for windows, linux, osx, and arm-64.
 ## Team work
 
 ## How to make _Chirp!_ work locally
