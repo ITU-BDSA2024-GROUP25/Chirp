@@ -1,9 +1,11 @@
+using System.Globalization;
 using Chirp.Infrastructure;
 using Chirp.Core;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Tests;
+
 public class UnitTests
 {
     private ICheepRepository cheepRepository;
@@ -169,10 +171,10 @@ public class UnitTests
 
         Author author3 = new Author() { AuthorId = 15, Name = " Amalia testPerson", Email = "Amalia+tpe@hotmail.com", Cheeps = new List<Cheep>() };
 
-        var addedCheep = new Cheep() { CheepId = 706, AuthorId = author3.AuthorId, Author = author3, Text = "Test string TP", TimeStamp = DateTime.Parse("2023-08-02 13:16:22") };
+        var addedCheep = new CheepDto (DateTime.Parse("2023-08-02 13:16:22").ToString(CultureInfo.CurrentCulture), "Test string TP", author3.Name);
 
         // Act 
-        var newCheep = cheepRepository.CreateCheep(addedCheep);
+        var newCheep = cheepRepository.CreateCheep(addedCheep, author3.Name);
         await context.SaveChangesAsync();
 
         var cheepAmount = await context.Cheeps.CountAsync();
@@ -345,15 +347,15 @@ public class UnitTests
 
 
         // Act 
-        await cheepRepository.FindCheepID(cheepDto2); 
-        var checkID2 = cheepRepository.FindCheepID(cheepDto2); 
+        await cheepRepository.FindCheepId(cheepDto2); 
+        var checkID2 = cheepRepository.FindCheepId(cheepDto2); 
         await cheepRepository.DeleteCheep(cheepDto2);
         await cheepRepository.CreateCheep(cheepDto3, "John Doe");
 
         await context.SaveChangesAsync();
         
         // after deletion we check that the new cheep has a diffrent ID 
-        var cheepId3 = cheepRepository.FindCheepID(cheepDto3);
+        var cheepId3 = cheepRepository.FindCheepId(cheepDto3);
         await context.SaveChangesAsync();
         
         // Assert 
