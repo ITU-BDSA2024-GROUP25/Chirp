@@ -10,6 +10,7 @@ on:
     # used info from this tread : https://stackoverflow.com/questions/62968897/is-it-possible-to-not-run-github-action-for-readme-updates
     paths-ignore:
     - '**.md'
+    - docs/**
     
   pull_request:
     branches: [ "main" ]
