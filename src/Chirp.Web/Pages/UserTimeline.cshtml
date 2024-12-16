@@ -104,20 +104,23 @@ var routeName = HttpContext.GetRouteValue("author");
             </div>
 
             <!-- Follow/Unfollow Button for Non-Owner Cheeps -->
-            <form method="post" asp-page-handler="@((await Model.IsFollowing(cheep.authorName)) ? "Unfollow" : "Follow")"
-                  style="position: absolute; top: 5px; right: 10px;">
-                <input type="hidden" name="authorName" value="@cheep.authorName" />
-                <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
-                    @if (await Model.IsFollowing(cheep.authorName))
-                    {
-                    <span style="color: #cc6e6e; font-size: 12px;">Unfollow</span>
-                    }
-                    else
-                    {
-                    <span style="color: green; font-size: 12px;">Follow</span>
-                    }
-                </button>
-            </form>
+            @if (@routeName?.ToString() == Model.GetUserName)
+            {
+                <form method="post" asp-page-handler="@((await Model.IsFollowing(cheep.authorName)) ? "Unfollow" : "Follow")"
+                      style="position: absolute; top: 5px; right: 10px;">
+                    <input type="hidden" name="authorName" value="@cheep.authorName" />
+                    <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
+                        @if (await Model.IsFollowing(cheep.authorName))
+                        {
+                            <span style="color: #cc6e6e; font-size: 12px;">Unfollow</span>
+                        }
+                        else
+                        {
+                            <span style="color: green; font-size: 12px;">Follow</span>
+                        }
+                    </button>
+                </form>
+            }
             }
         </li>
         }
