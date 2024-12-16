@@ -23,6 +23,9 @@ Here comes a description of our domain model. ( this is just template stuff for 
 ## Architecture of deployed application
 
 ## User activities
+![Illustration of the _Chirp!_ User journey](images/UserJourney.drawio.png)
+
+This illustration shows a potential user journey through the chirp application. Before login every possible user journey is represented. After login the illustration only display some of the options a user has. All functionalities are addressed at some point in the journey, but the illustration would become unreadable if it showed every possible way the user can go. For instance, it is both possible to logout and access the public timeline, no matter where the user is, so there would be a lot of crossing arrows.
 
 ## Sequence of functionality/calls trough _Chirp!_
 
