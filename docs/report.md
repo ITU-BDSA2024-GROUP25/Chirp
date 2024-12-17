@@ -65,4 +65,14 @@ Now the member(s) working on the issue creates a pull request to the branch, to 
 ## License
 This project is licensed under the MIT License (see full License her: https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/LICENSE).
 In the document NOTICE.MD we have provided additional information about other Licenses and copyrights for packages used, that do not fall under MIT (see https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/NOTICE.md).
+
 ## LLMs, ChatGPT, CoPilot, and others
+During the project, ChatGPT was used sparingly and was used when we encountered problems or situations where we felt stuck and documentation sites such as StackOverflow deemed unhelpful. Another use case of ChatGPT was to avoid redundant manual tasks, such as generating colors for the dark mode stylesheet. 
+The code segments developed with the help of an LLM have been clearly commented as such.  
+
+ChatGPT was used in the following areas:
+* CSS styling for dark mode and switch button.
+* Database structuring and help with schema relations.
+* Complex JavaScript features like "Maintain scroll" and "Switch button for color themes".
+  
+Generally, the use of LLMs sped up the project progress, however, in a few instances they provided wrong or buggy solutions which required extra time debugging.
