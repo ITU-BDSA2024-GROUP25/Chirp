@@ -65,11 +65,11 @@ public abstract class SharedModel : PageModel
     /// <summary>
     /// Handles the GET HTTP request to load pages and updates the cheeps and page number. 
     /// </summary>
-    /// <param name="pageNumber">The page number of what page to display. Defaults to 1 if none is given.</param>
+    /// <param name="page">The page number of what page to display. Defaults to 1 if none is given.</param>
     /// <returns>A task representing an asynchronous operation.</returns>
-    public async Task<ActionResult> OnGet([FromQuery] int? pageNumber)
+    public async Task<ActionResult> OnGet([FromQuery] int? page)
     {
-        CurrentPage = pageNumber ?? 1;
+        CurrentPage = page ?? 1;
 
         Cheeps = await GetCheeps();
         TotalPages = (int)Math.Ceiling(CheepAmount / 32.0);
