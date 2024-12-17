@@ -50,6 +50,8 @@ we have added an optional dispatch, and limited what triggers the workflow. As r
 Our final Workflow "chirpflow" creates a release on versions with tags matching "v.*.*.*" this is mostly used for punctiating feature implementations. The releases 
 contains the program compiled for windows, linux, osx, and arm-64.
 
+![Diagram of the three worklfows on the chirp github](images/workflows.png)
+
 Build and test: very usefull, used to see if a pull request actually passes the tests!
 Does not run our most advanced tests. ( could mention that due to the lateish introduction of tools like playwright
 we did not quite find the expertise and time to justify not running these tests locally. with out small team it's
@@ -83,6 +85,30 @@ Now the member(s) working on the issue creates a pull request to the branch, to 
 https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/docs/images/from%20issue%20creation%20to%20merge.drawio.png
 
 ## How to make _Chirp!_ work locally
+Before attempting to run Chirp, ensure that dotnet 8 is installed on you PC.
+For running the localhost version of the main program there are no other install requirements than this.
+
+The program does however need two secrets to be present on your computer to work.
+to add the secrets to your "chirp secrets storage" navigate your terminal to **"chirp/src/chirp.web/"** folder. 
+and use the following commands from terminal:
+
+``` dotnet user-secrets set "authentication:github:clientId" "SECRET-A" ```
+
+and
+
+``` dotnet user-secrets set "authentication:github:clientSecret" "SECRET-B ```
+
+**Initializing the secret store should not be necessary. just in case though the command is "dotnet user-secrets init"**
+
+These are our localhost secrets, and will enable github login in chirp. This is required, as an exception is triggered if the github secrets are missing.
+
+Now chirp! should be ready to run.
+
+The Program must be run from the **chirp/src/chirp.web/** folder.
+Either ``` dotnet run ```  or ``` dotnet Watch ```  will work.
+
+
+
 
 ## How to run test suite locally
 
