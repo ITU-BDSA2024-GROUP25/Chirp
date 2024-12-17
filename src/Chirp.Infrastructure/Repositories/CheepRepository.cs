@@ -1,99 +1,188 @@
-using System;
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Chirp.Core;
 
 namespace Chirp.Infrastructure;
 
+/// <summary>
+/// Provides CRUD operations for the Cheep entity and manages database relationships.
+/// </summary>
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDbContext _context;
 
+    /// <summary>
+    /// Initializes a new instance of the CheepRepository class with a specified database context.
+    /// </summary>
+    /// <param name="context">The database context used for accessing the database.</param>
     public CheepRepository(ChirpDbContext context)
     {
         _context = context;
     }
 
-    //adapted from slides session 6 page 8
-    public async Task<List<CheepDto>> GetCheeps(string? author = null, int pageNumber = 1)
+    #region Queries
+
+    /// <inheritdoc/>
+    public async Task<List<CheepDto>> GetCheeps(string? authorName = null, int pageNumber = 1)
     {
-        var query = (from cheep in _context.Cheeps
-                orderby cheep.TimeStamp descending
-                select cheep)
+        var query = _context.Cheeps
+            .OrderByDescending(c => c.TimeStamp)
             .Include(c => c.Author)
-            .Where(c => author == null || c.Author.Name == author)
+            .Where(c => authorName == null || c.Author.Name == authorName)
             .Skip((pageNumber - 1) * 32).Take(32)
-            .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
-        var result = await query.ToListAsync();
-        return result;
+            .Select(c => new CheepDto(c.Text, c.TimeStamp.ToString(CultureInfo.CurrentCulture), c.Author.Name));
+
+        return await query.ToListAsync();
     }
 
-    public async Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers,
-        int pageNumber = 1)
+    /// <inheritdoc/>
+    public int GetTotalCheepsCount(string? authorName = null)
     {
-        var authorNames = followers.Select(a => a.userName).ToList();
-        authorNames.Add(authorName); // also include owners cheeps
+        return string.IsNullOrEmpty(authorName)
+            ? _context.Cheeps.Count()
+            : _context.Cheeps
+                .Include(c => c.Author)
+                .Count(c => c.Author.Name == authorName);
+    }
 
-        var query = (from cheep in _context.Cheeps
-                where authorNames.Contains(cheep.Author.Name)
-                orderby cheep.TimeStamp descending
-                select cheep)
+    /// <inheritdoc/>
+    public async Task<List<CheepDto>> GetCheepsFromFollowers(string authorName, IList<AuthorDto> followers, int pageNumber = 1)
+    {
+        var authorNames = followers.Select(a => a.userName).Append(authorName).ToList();
+
+        var query = _context.Cheeps
+            .Where(c => authorNames.Contains(c.Author.Name))
+            .OrderByDescending(c => c.TimeStamp)
             .Include(c => c.Author)
             .Skip((pageNumber - 1) * 32).Take(32)
-            .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
+            .Select(c => new CheepDto(c.Text, c.TimeStamp.ToString(CultureInfo.CurrentCulture), c.Author.Name));
 
-        var result = await query.ToListAsync();
-        return result;
+        return await query.ToListAsync();
     }
 
-    public int GetTotalCheepsCount(string? author = null)
+    /// <inheritdoc/>
+    public async Task<List<CheepDto>> GetAllCheeps(string authorName)
     {
-        var query = _context.Cheeps.AsQueryable();
-
-        if (!string.IsNullOrEmpty(author))
-        {
-            query = query.Where(c => c.Author.Name == author);
-        }
-
-        return query.Count();
-    }
-
-    public async Task<List<CheepDto>> GetAllCheeps(string? author)
-    {
-        var query = (from cheep in _context.Cheeps
-                orderby cheep.TimeStamp descending
-                select cheep)
+        var query = _context.Cheeps
+            .Where(c => c.Author.Name == authorName)
+            .OrderByDescending(c => c.TimeStamp)
             .Include(c => c.Author)
-            .Where(c => author == null || c.Author.Name == author)
-            .Select(cheep => new CheepDto(cheep.Text, cheep.TimeStamp.ToString(), cheep.Author.Name));
-        var result = await query.ToListAsync();
-        return result;
+            .Select(c => new CheepDto(c.Text, c.TimeStamp.ToString(CultureInfo.CurrentCulture), c.Author.Name));
+
+        return await query.ToListAsync();
     }
 
-
-    public async Task CreateCheep(Cheep cheep)
+    /// <inheritdoc/>
+    public async Task<int> FindCheepId(CheepDto cheepDto)
     {
-        if (cheep.TimeStamp == default)
-            cheep.TimeStamp = DateTime.UtcNow;
+        var cheep = await _context.Cheeps
+            .FirstOrDefaultAsync(c =>
+                c.Author.Name == cheepDto.authorName &&
+                c.Text == cheepDto.text &&
+                c.TimeStamp == DateTime.Parse(cheepDto.postedTime, CultureInfo.CurrentCulture));
 
-        _context.Cheeps.Add(cheep);
-        await _context.SaveChangesAsync();
+        if (cheep == null) throw new NullReferenceException("Cheep not found");
+
+        return cheep.CheepId;
     }
 
-    public async Task CreateCheep(CheepDto cheep, string authorName)
+    /// <inheritdoc/>
+    public async Task<bool> IsCheepLikedByAuthor(string authorName, CheepDto cheep)
     {
         var author = await _context.Authors
+            .Include(a => a.LikedCheeps)
+            .Include(a => a.Following)
             .Where(a => a.Name == authorName)
             .FirstOrDefaultAsync();
 
-        if (author == null)
-        {
-            throw new Exception("Author not found"); // Replace with appropriate error handling.
-        }
+        if (author == null) return false;
 
-        Cheep newCheep = new Cheep
+        var cheepId = await FindCheepId(cheep);
+        return author.LikedCheeps.Any(c => c.CheepId == cheepId);
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> IsCheepDislikedByAuthor(string authorName, CheepDto cheep)
+    {
+        var author = await _context.Authors
+            .Include(a => a.DislikedCheeps)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) return false;
+
+        var cheepId = await FindCheepId(cheep);
+        return author.DislikedCheeps.Any(c => c.CheepId == cheepId);
+    }
+
+    /// <inheritdoc/>
+    public async Task<int> GetCheepLikesCount(CheepDto cheepDto)
+    {
+        var cheepId = await FindCheepId(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+
+        if (cheep == null) throw new NullReferenceException("Cheep not found");
+
+        return cheep.LikeAmount;
+    }
+
+    /// <inheritdoc/>
+    public async Task<int> GetCheepDislikesCount(CheepDto cheepDto)
+    {
+        var cheepId = await FindCheepId(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+
+        if (cheep == null) throw new NullReferenceException("Cheep not found");
+
+        return cheep.DislikeAmount;
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<CheepDto>> GetLikedCheeps(string authorName)
+    {
+        var author = await _context.Authors
+            .Include(a => a.LikedCheeps)
+            .ThenInclude(c => c.Author)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new NullReferenceException("Author not found");
+
+        return author.LikedCheeps
+            .OrderByDescending(c => c.TimeStamp)
+            .Select(c => new CheepDto(c.Text, c.TimeStamp.ToString(CultureInfo.CurrentCulture), c.Author.Name))
+            .ToList();
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<CheepDto>> GetDislikedCheeps(string authorName)
+    {
+        var author = await _context.Authors
+            .Include(a => a.DislikedCheeps)
+            .ThenInclude(c => c.Author)
+            .FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new NullReferenceException("Author not found");
+
+        return author.DislikedCheeps
+            .OrderByDescending(c => c.TimeStamp)
+            .Select(c => new CheepDto(c.Text, c.TimeStamp.ToString(CultureInfo.CurrentCulture), c.Author.Name))
+            .ToList();
+    }
+
+    #endregion
+
+    #region Commands
+
+    /// <inheritdoc/>
+    public async Task CreateCheep(CheepDto cheep, string authorName)
+    {
+        var author = await _context.Authors.FirstOrDefaultAsync(a => a.Name == authorName);
+
+        if (author == null) throw new NullReferenceException("Author not found");
+
+        var newCheep = new Cheep
         {
             Text = cheep.text,
-            TimeStamp = DateTime.Parse(cheep.postedTime),
+            TimeStamp = DateTime.Parse(cheep.postedTime, CultureInfo.CurrentCulture),
             AuthorId = author.AuthorId,
             Author = author
         };
@@ -102,38 +191,89 @@ public class CheepRepository : ICheepRepository
         await _context.SaveChangesAsync();
     }
 
+    /// <inheritdoc/>
     public async Task DeleteCheep(CheepDto cheepDto)
     {
+        var cheepId = await FindCheepId(cheepDto);
         var cheep = await _context.Cheeps
-            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text &&
-                        a.TimeStamp.ToString() == cheepDto.postedTime).FirstOrDefaultAsync();
+            .Include(c => c.Author)
+            .Include(c => c.LikedBy)
+            .Include(c => c.DislikedBy)
+            .FirstOrDefaultAsync(c => c.CheepId == cheepId);
 
-        if (cheep == null) throw new Exception("Cannot delete cheep, because it doesn't exist");
-
-        // Remove Cheep Relation
-        var author = await _context.Authors.Where(a => a.Name == cheepDto.authorName).FirstOrDefaultAsync();
-        if (author == null) throw new Exception("Cannot delete cheep, author not found");
-        author.Cheeps.Remove(cheep);
+        if (cheep == null) throw new NullReferenceException("Cheep not found");
 
         _context.Cheeps.Remove(cheep);
-
         await _context.SaveChangesAsync();
     }
 
-    public Task F()
+    /// <inheritdoc/>
+    public async Task LikeCheep(string authorName, CheepDto cheepDto)
     {
-        throw new NotImplementedException();
+        var author = await _context.Authors.Include(a => a.LikedCheeps).FirstOrDefaultAsync(a => a.Name == authorName);
+        var cheepId = await FindCheepId(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+
+        if (cheep == null || author == null) throw new NullReferenceException("Cheep or Author not found");
+
+        if (!author.LikedCheeps.Contains(cheep))
+        {
+            author.LikedCheeps.Add(cheep);
+            cheep.LikeAmount++;
+            await _context.SaveChangesAsync();
+        }
     }
 
-    public async Task<int> FindCheepID(CheepDto cheepDto)
+    /// <inheritdoc/>
+    public async Task DislikeCheep(string authorName, CheepDto cheepDto)
     {
-        var cheep = await _context.Cheeps
-            .Where(a => a.Author.Name == cheepDto.authorName && a.Text == cheepDto.text &&
-                        a.TimeStamp.ToString() == cheepDto.postedTime).FirstOrDefaultAsync();
+        var author = await _context.Authors.Include(a => a.DislikedCheeps).FirstOrDefaultAsync(a => a.Name == authorName);
+        var cheepId = await FindCheepId(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
 
-        if (cheep == null) throw new Exception("Cannot fecth cheep ID, because it doesn't exist");
+        if (cheep == null || author == null) throw new NullReferenceException("Cheep or Author not found");
 
-        return cheep.CheepId;
+        if (!author.DislikedCheeps.Contains(cheep))
+        {
+            author.DislikedCheeps.Add(cheep);
+            cheep.DislikeAmount++;
+            await _context.SaveChangesAsync();
+        }
     }
 
+    /// <inheritdoc/>
+    public async Task RemoveLikeCheep(string authorName, CheepDto cheepDto)
+    {
+        var author = await _context.Authors.Include(a => a.LikedCheeps).FirstOrDefaultAsync(a => a.Name == authorName);
+        var cheepId = await FindCheepId(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+
+        if (cheep == null || author == null) throw new NullReferenceException("Cheep or Author not found");
+
+        if (author.LikedCheeps.Contains(cheep))
+        {
+            author.LikedCheeps.Remove(cheep);
+            cheep.LikeAmount--;
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task RemoveDislikeCheep(string authorName, CheepDto cheepDto)
+    {
+        var author = await _context.Authors.Include(a => a.DislikedCheeps).FirstOrDefaultAsync(a => a.Name == authorName);
+        var cheepId = await FindCheepId(cheepDto);
+        var cheep = await _context.Cheeps.FirstOrDefaultAsync(c => c.CheepId == cheepId);
+
+        if (cheep == null || author == null) throw new NullReferenceException("Cheep or Author not found");
+
+        if (author.DislikedCheeps.Contains(cheep))
+        {
+            author.DislikedCheeps.Remove(cheep);
+            cheep.DislikeAmount--;
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    #endregion
 }

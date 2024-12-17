@@ -17,6 +17,21 @@ namespace Chirp.Web.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
+            modelBuilder.Entity("AuthorDislikedCheeps", b =>
+                {
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CheepId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AuthorId", "CheepId");
+
+                    b.HasIndex("CheepId");
+
+                    b.ToTable("AuthorDislikedCheeps", (string)null);
+                });
+
             modelBuilder.Entity("AuthorFollowings", b =>
                 {
                     b.Property<int>("AuthorId")
@@ -30,6 +45,21 @@ namespace Chirp.Web.Migrations
                     b.HasIndex("FollowingId");
 
                     b.ToTable("AuthorFollowings", (string)null);
+                });
+
+            modelBuilder.Entity("AuthorLikedCheeps", b =>
+                {
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CheepId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AuthorId", "CheepId");
+
+                    b.HasIndex("CheepId");
+
+                    b.ToTable("AuthorLikedCheeps", (string)null);
                 });
 
             modelBuilder.Entity("Chirp.Core.AppUser", b =>
@@ -112,9 +142,6 @@ namespace Chirp.Web.Migrations
 
                     b.HasKey("AuthorId");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.ToTable("Authors");
                 });
 
@@ -125,6 +152,12 @@ namespace Chirp.Web.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DislikeAmount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LikeAmount")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
@@ -270,6 +303,21 @@ namespace Chirp.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("AuthorDislikedCheeps", b =>
+                {
+                    b.HasOne("Chirp.Core.Author", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chirp.Core.Cheep", null)
+                        .WithMany()
+                        .HasForeignKey("CheepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AuthorFollowings", b =>
                 {
                     b.HasOne("Chirp.Core.Author", null)
@@ -281,6 +329,21 @@ namespace Chirp.Web.Migrations
                     b.HasOne("Chirp.Core.Author", null)
                         .WithMany()
                         .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AuthorLikedCheeps", b =>
+                {
+                    b.HasOne("Chirp.Core.Author", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Chirp.Core.Cheep", null)
+                        .WithMany()
+                        .HasForeignKey("CheepId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
