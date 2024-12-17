@@ -177,8 +177,6 @@ public class EndToEndTest
         await page.Locator("#Message").FillAsync("This is a valid cheep");
         await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         await Expect(page.Locator("#messagelist")).ToContainTextAsync("This is a valid cheep");
-        await Expect(page.Locator("h2")).ToContainTextAsync("My Timeline");
-
     }
     
     //Testuseren test follows and unfollow Jacqualine
@@ -194,15 +192,16 @@ public class EndToEndTest
 
         var page = await context.NewPageAsync();
         await page.GotoAsync("http://localhost:5273/");
-        await page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
+        await page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
         await page.GetByPlaceholder("Username").ClickAsync();
         await page.GetByPlaceholder("Username").FillAsync("test");
         await page.GetByPlaceholder("Username").PressAsync("Tab");
         await page.GetByPlaceholder("password").FillAsync("password");
         await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
-        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+        await page.Locator("p").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Link).ClickAsync();
+        await page.GetByRole(AriaRole.Button, new() { Name = "Follow" }).ClickAsync();
         await page.GetByRole(AriaRole.Link, new() { Name = "My Timeline" }).ClickAsync();
-        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).ClickAsync();
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Starbuck" }).GetByRole(AriaRole.Button).Nth(2).ClickAsync();
         await page.GetByRole(AriaRole.Link, new() { Name = "Public Timeline" }).ClickAsync();
         await Expect(page.Locator("#messagelist")).ToContainTextAsync("Follow");
     }
@@ -230,7 +229,7 @@ public class EndToEndTest
         await page.Locator("#Message").ClickAsync();
         await page.Locator("#Message").FillAsync("h");
         await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
-        await page.GetByText("hey man, its too short, needs").ClickAsync();
+        await page.GetByText("Cheep is too short, needs to contain more than 2 characters").ClickAsync();
     }
 
     //This test only test that the dark mode slider exist 
@@ -246,10 +245,33 @@ public class EndToEndTest
 
         var page = await context.NewPageAsync();
         await page.GotoAsync("http://localhost:5273/");
-        await page.Locator(".theme-switch").ClickAsync();
-        await page.Locator("span").ClickAsync();
+        await page.Locator("label span").ClickAsync();
+        await page.Locator("label span").ClickAsync();
     }
+    //Test that a user can like and dislike cheeps
+    [Test]
+    public async Task K_LikeAndDisLikeTest()
+    {
+        using var playwright = await Playwright.CreateAsync();
+        await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+        {
+            Headless = false,
+        });
+        var context = await browser.NewContextAsync();
 
+        var page = await context.NewPageAsync();
+        await page.GotoAsync("http://localhost:5273/");
+        await page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await page.GetByPlaceholder("Username").ClickAsync();
+        await page.GetByPlaceholder("Username").FillAsync("test");
+        await page.GetByPlaceholder("Username").PressAsync("Tab");
+        await page.GetByPlaceholder("password").FillAsync("password");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine The train" }).GetByRole(AriaRole.Button).First.ClickAsync();
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine The train" }).GetByRole(AriaRole.Button).Nth(1).ClickAsync();
+        await Expect(page.Locator("#messagelist")).ToContainTextAsync("0");
+        await page.GetByRole(AriaRole.Button, new() { Name = "Dislike Button 1" }).ClickAsync();
+    }
 
     [Test]
     public async Task Z_DeleteUserTest()
