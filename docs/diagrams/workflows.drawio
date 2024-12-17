@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram name="Page-1" id="f7LDHN_3DqTg1MV2c_hO">
-    <mxGraphModel dx="1151" dy="682" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1036" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -25,7 +25,7 @@
             <mxPoint x="120" y="290" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="b7QniJWKjZs4ARnllk3c-12" value="Setup up linux dotnet" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
+        <mxCell id="b7QniJWKjZs4ARnllk3c-12" value="Setup linux dotnet" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="60" y="290" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="b7QniJWKjZs4ARnllk3c-13" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" parent="1" source="b7QniJWKjZs4ARnllk3c-12" edge="1">
@@ -77,7 +77,7 @@
             <mxPoint x="379.95000000000005" y="305" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="b7QniJWKjZs4ARnllk3c-48" value="Setup up linux dotnet" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
+        <mxCell id="b7QniJWKjZs4ARnllk3c-48" value="Setup linux dotnet" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="319.95000000000005" y="305" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="b7QniJWKjZs4ARnllk3c-49" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" parent="1" source="b7QniJWKjZs4ARnllk3c-48" edge="1">
@@ -192,7 +192,7 @@
             <mxPoint x="685" y="320" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1jcnKHjSTtzGyk72apZk-9" value="Setup up linux dotnet" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
+        <mxCell id="1jcnKHjSTtzGyk72apZk-9" value="Setup linux dotnet" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="625" y="320" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="1jcnKHjSTtzGyk72apZk-10" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" parent="1" source="1jcnKHjSTtzGyk72apZk-9" edge="1">
@@ -248,7 +248,7 @@
             <mxPoint x="685" y="810" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="1jcnKHjSTtzGyk72apZk-28" value="Create Release with files." style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
+        <mxCell id="1jcnKHjSTtzGyk72apZk-28" value="Create Release with Zip files." style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fontColor=#000000;fillColor=#ffffc0;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="625" y="810" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="1jcnKHjSTtzGyk72apZk-29" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" parent="1" source="1jcnKHjSTtzGyk72apZk-28" edge="1">
@@ -259,10 +259,10 @@
         <mxCell id="1jcnKHjSTtzGyk72apZk-30" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" parent="1" vertex="1">
           <mxGeometry x="670" y="880" width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="SPa2eFnrnyaDHpjuBjY1-1" value="&lt;span style=&quot;font-size: 11px;&quot;&gt;Build-and-Test.yml&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+        <mxCell id="SPa2eFnrnyaDHpjuBjY1-1" value="&lt;span style=&quot;font-size: 11px;&quot;&gt;Build-and-Test.yml&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
           <mxGeometry x="10.000000000000028" y="25" width="215" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="SPa2eFnrnyaDHpjuBjY1-2" value="&lt;span style=&quot;font-size: 11px;&quot;&gt;Chirpflow.yml&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="SPa2eFnrnyaDHpjuBjY1-2" value="&lt;span style=&quot;font-size: 11px;&quot;&gt;Chirpflow.yml&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
           <mxGeometry x="577.5" y="25" width="215" height="30" as="geometry" />
         </mxCell>
       </root>
