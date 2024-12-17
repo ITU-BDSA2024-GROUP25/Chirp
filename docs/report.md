@@ -19,7 +19,7 @@ Here comes a description of our domain model.
 ![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModel4.drawio.png)
 
 ## Architecture — In the small
-Our chirp application uses onion architecture, as such our application Consists of three layers,
+Our chirp application uses onion architecture, as such our application Consists of three layers (projects),
 The core layer, where our basic data types and interfaces are made. The infrastructure layer
 Where most of our functions and interactions are defined. and the web layer, where everything is brough together with
 dependency injections in our razor pages and application builder. 
@@ -47,7 +47,7 @@ This illustration shows a potential user journey through the chirp application. 
 For Chirp! we utilize three main github workflows. The first is an automated build and test workflow that attempts to build any commit or pull request.
 It also runs our basic unit and integration tests, the more advanced test suite is not automated. For azure we have a standard azure deployment workflow with a minor change:
 we have added an optional dispatch, and limited what triggers the workflow. As redeploying azure on trivial changes result in extensive downtime.
-Our final Workflow "chirpflow" creates a release on versions with tags matching "v.*.*.*" this is mostly used for punctiating feature implementations. The releases 
+Our final Workflow "chirpflow" creates a release on versions with tags matching ```v.*.*.*``` this is mostly used for punctiating feature implementations. The releases 
 contains the program compiled for windows, linux, osx, and arm-64.
 
 ![Diagram of the three worklfows on the chirp github](images/workflows.png)
