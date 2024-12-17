@@ -40,7 +40,9 @@ public class CheepRepository : ICheepRepository
     {
         return string.IsNullOrEmpty(authorName)
             ? _context.Cheeps.Count()
-            : _context.Cheeps.Count(c => c.Author.Name == authorName);
+            : _context.Cheeps
+                .Include(c => c.Author)
+                .Count(c => c.Author.Name == authorName);
     }
 
     /// <inheritdoc/>
@@ -89,9 +91,11 @@ public class CheepRepository : ICheepRepository
     {
         var author = await _context.Authors
             .Include(a => a.LikedCheeps)
-            .FirstOrDefaultAsync(a => a.Name == authorName);
+            .Include(a => a.Following)
+            .Where(a => a.Name == authorName)
+            .FirstOrDefaultAsync();
 
-        if (author == null) throw new NullReferenceException("Author not found");
+        if (author == null) return false;
 
         var cheepId = await FindCheepId(cheep);
         return author.LikedCheeps.Any(c => c.CheepId == cheepId);
@@ -104,7 +108,7 @@ public class CheepRepository : ICheepRepository
             .Include(a => a.DislikedCheeps)
             .FirstOrDefaultAsync(a => a.Name == authorName);
 
-        if (author == null) throw new NullReferenceException("Author not found");
+        if (author == null) return false;
 
         var cheepId = await FindCheepId(cheep);
         return author.DislikedCheeps.Any(c => c.CheepId == cheepId);

@@ -1,8 +1,5 @@
-using System.Security.Authentication;
-using System.Security.Claims;
 using Chirp.Infrastructure;
 using Chirp.Core;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +14,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<ICheepService, CheepService>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
-builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
@@ -54,9 +51,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    Console.WriteLine("Ensuring database is created...");
     var context = services.GetRequiredService<ChirpDbContext>();
+    Console.WriteLine("Database created successfully.");
+    Console.WriteLine("Seeding database...");
+
     context.Database.EnsureCreated();
     DbInitializer.SeedDatabase(context);
+    Console.WriteLine("Database seeded successfully.");
+
 }
 
 
