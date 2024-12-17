@@ -114,6 +114,17 @@ Either ``` dotnet run ```  or ``` dotnet Watch ```  will work.
 
 
 ## How to run test suite locally
+There are two different test suits. 
+First there is the tests that is primarily unit tests and don’t use the UI can be run from the Chirp folder by writing the command  ```dotnet test```
+
+The tests that are separate to the unit tests is playwright tests and two integration tests, because they need to run on local host and therefore need to know the GitHub authorization secrets. This means that these tests can only be run locally.
+Playwright must be installed to run the tests, and your computer need to know the secrets.
+
+Step by step guide for playwright tests  
+  1. Open a terminal. Navigate to the Chirp/src/Chirp.Web folder
+  2. Run the command ```dotnet run```
+  3. Open a new terminal. Navigate to the Chirp/test
+  4. Run the command ```dotnet test```
 
 # Ethics
 
