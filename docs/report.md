@@ -9,51 +9,7 @@ author:
 - Teis <teif@itu.dk>
 numbersections: true
 ---
----
----
----
-
----
----
----
----
----
----
----
----
----
----
----
----
----
----
----
----
----
----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\pagebreak
 
 # Design and Architecture of _Chirp!_
 
