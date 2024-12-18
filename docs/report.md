@@ -86,9 +86,8 @@ When the acceptance criteria had been fulfilled, the member(s) working the branc
 
 Now the member(s) working on the issue creates a pull request to the branch, to merge it with main branch, and add a reviewer(s). Before another team member can merge preliminary workflow checks will be run, then if the new input passes workflow checks (see -- add ref to WF --) and test the reviewer can look at the code, reject if necessary, or complete the merge. The old branch can then be deleted.
 
-![Issue from creation to merge](images/from issue creation to merge.drawio.png)
+![Issue from creation to merge](images/IssueToMerge)
 
-https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/docs/images/from%20issue%20creation%20to%20merge.drawio.png
 
 ## How to make _Chirp!_ work locally
 Before attempting to run Chirp, ensure that dotnet 8 is installed on you PC.
