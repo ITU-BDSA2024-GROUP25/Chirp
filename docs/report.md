@@ -9,7 +9,7 @@ author:
 - Teis <teif@itu.dk>
 numbersections: true
 ---
-\pagebreak
+\newpage
 
 # Design and Architecture of _Chirp!_
 
