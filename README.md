@@ -1,4 +1,6 @@
-# Chirp
+# Chirp!
+Chirp! is an ASP.NET Razor web application which is a Twitter clone. This app was developed as a part of the course "Analysis, Design and Software Architecture (Autumn 2024)" at the IT-University of Copenhagen. 
+
 ## How to run the Chirp! application locally
 Before attempting to run Chirp!, ensure that dotnet 8 is installed on your computer.
 For the localhost version of the Chirp!, there are no other install requirements.
