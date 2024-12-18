@@ -8,17 +8,22 @@ author:
 - Nicklas <nlje@itu.dk>
 - Teis <teif@itu.dk>
 numbersections: true
+geometry: margin=2cm
 ---
+![Cheep photo taken from course](images/CheepCheep.png){width=60%}
+
 \newpage
 
 # Design and Architecture of _Chirp!_
 
 ## Domain model
 
-![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModelFINAL.drawio.png)
+![](images/DomainModelFINAL.drawio.png)
+
+\newpage
 
 ## Architecture — In the small
-![Illustration of the _Chirp!_ ONION](images/OnionDiagram.png)
+![](images/OnionDiagram.png)
 
 Our Chirp! application uses onion architecture, as such our application consists of three layers. The core layer is where our basic data types and interfaces are defined. 
 The infrastructure layer is where most of our functions and interactions are implemented and the web layer is where everything is brought together with
@@ -28,13 +33,17 @@ dependency injections in our razor pages and application builder.
 repository and services layer in our 4-layer onion diagram. For instance, we have Data Transfer Objects(DTOs) that are from Chirp.Core which we use 
 for transportation between layers, since they fit better in the repository layer than the domain layer in the diagram.*
 
+\newpage
+
 ## Architecture of deployed application
-![Illustration of the _Chirp!_ ONION](images/DeploymentDiagram.drawio.png)
+![](images/DeploymentDiagram.drawio.png)
 
 This is a visualization of our deployed program on our Azure application.
 
+\newpage
+
 ## User activities
-![Illustration of the _Chirp!_ User journey](images/UserJourney.drawio.png)
+![](images/UserJourney.drawio.png)
 
 This illustration shows a potential user's journey through the Chirp! application. Before login, every possible user journey is represented. 
 After login, the illustration only displays the options linearly. All functionalities are addressed at some point in the journey,
@@ -42,7 +51,7 @@ but the illustration would become indecipherable if it showed every possible opt
 and access the public timeline, no matter where the user is.
 
 ## Sequence of functionality/calls through _Chirp!_
-![Illustration of the _Chirp!_ Sequence Diagram](diagrams/SequenceDiagram.png)
+![](diagrams/SequenceDiagram.png)
 
 The illustration shows the sequence of events happening when the user opens the application. This sequence diagram is made at a 
 relatively high level of abstraction, and as such focuses on important sequences where every single operation is not shown. 
@@ -52,7 +61,7 @@ For example, attributes such as ```Like-/DislikeAmount```, ```IsFollowing```, et
 
 ## Build, test, release, and deployment
 
-![Diagram of the three worklfows on the chirp github](images/workflows.png)
+![](images/workflows.png)
 
 **Build-and-test** is an automated build and test workflow that attempts to build and test any commit or pull request. The workflow is used to see if a pull request passes the tests. 
 This workflow exclusively runs backend tests.
@@ -66,12 +75,14 @@ as redeploying Azure on trivial changes results in extensive downtime. There is 
 to be run and should be run for weekly evaluations and major updates. The releases contain the program compiled for Windows, Linux, OSX, and OSX arm-64.
 
 ## Teamwork
-![Project board](images/projectBoard.png)
+
+![](images/projectBoard.png)
 
 This image shows an in-progress project board.  
 
 ### Introducing a new feature  
-![Issue from creation to merge](images/IssueToMerge-2.drawio.png)
+
+![](images/IssueToMerge-2.drawio.png)
 
 From the beginning the team agreed to work together primarily physically whenever possible, therefore a lot of tasks were undertaken using a combination of mob- and pair-programming.
 
@@ -88,7 +99,7 @@ The reviewer(s) can now approve or reject the pull request and the old branch ca
 *Note: The above description is true to our process if the team had worked always using best practices. However, due to uncertainty about refactoring and new technologies throughout the course, a lot of the time new features would be committed to the main branch, without proper testing, which would then be added later.*     
 
 ### Unfinished features
-![Final project board](images/finalProjectBoard.png)
+![](images/finalProjectBoard.png)
 
 We would have preferred to have implemented the following features but chose to prioritize differently: 
 
@@ -97,6 +108,8 @@ We would have preferred to have implemented the following features but chose to 
 **Confirmation warning on critical actions:** An example of a critical action could be; If a User wants to delete a cheep or delete their author page entirely. This would trigger a pop-up window requesting confirmation from the user. Otherwise, the action would be abandoned.
 
 **The page not flashing in dark mode:**  Currently the website flashes on page load when in dark mode. This is due to it loading light mode first and then switching to dark mode.
+
+\newpage
 
 ## How to make _Chirp!_ work locally
 Before attempting to run Chirp!, ensure that dotnet 8 is installed on your computer.
@@ -130,15 +143,20 @@ There are also tests that are separate from the unit tests such as Playwright te
 
 Step-by-step guide for front-end tests:  
   1. Open a terminal. Navigate to the Chirp/src/Chirp.Web folder
+
   2. Run the command ```dotnet run```
+
   3. Open a new terminal. Navigate to the Chirp/test
+
   4. Run the command ```dotnet test```
+
+\newpage
 
 # Ethics
 
 ## License
-This project is licensed under the MIT License (see full license here: https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/LICENSE).
-In the document NOTICE.md we have provided additional information about other licenses and copyrights for packages used, that do not fall under MIT (see https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/NOTICE.md).
+This project is licensed under the MIT License (see full license here: \url{https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/LICENSE}).
+In the document NOTICE.md we have provided additional information about other licenses and copyrights for packages used, that do not fall under MIT (see \url{https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/NOTICE.md}).
 
 ## LLMs, ChatGPT, CoPilot, and others
 During the project, ChatGPT was used sparingly when we encountered problems or situations where we felt stuck and documentation sites such as StackOverflow were deemed unhelpful. Another use case of ChatGPT was to avoid redundant manual tasks, such as generating colors for the dark mode stylesheet. 
