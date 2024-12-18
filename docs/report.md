@@ -64,39 +64,38 @@ as redeploying Azure on trivial changes results in extensive downtime. There is 
 **Chirpflow** is not used frequently as it is used for creating a GitHub release. Chirpflow is semi-manual as it requires version tags, matching ```v.*.*.*```, 
 to be run and should be run for weekly evaluations and major updates. The releases contain the program compiled for Windows, Linux, OSX, and OSX arm-64.
 
-## Team work
+## Teamwork
 ![Project board](images/projectBoard.png)
 
+This image shows an in-progress project board.  
+
 ### Introducing a new feature  
-From the beginning the team agreed to, work together physically instead of remotely when ever possible, therefore a lot of task were undertaken using a combination of mob programming and co-authoring, this goes for tackling a new feature as well.
+![Issue from creation to merge](images/IssueToMerge-2.drawio.png)
 
-When presented with a new feature to implement, a team member(s) creates a new issue on the project bord and adds appropriate acceptance criteria. If there is some confusion as to what that would be, the team member(s) brings it to the team, discuss it, and create a plan for how to best approach the implementation. When a new feature is under development a team member moves it from the To-do list to the in progress list, and assigns one or more members to the task.
+From the beginning the team agreed to work together primarily physically whenever possible, therefore a lot of tasks were undertaken using a combination of mob- and pair-programming.
 
-When assigned to an issue, member(s) then create - and publish a new branch to work on the issue, Doing their best to keep to a GitHub Flow -style branching strategy.
-When the acceptance criteria  been fulfilled, the member(s) working the branch - or someone else from the team, will then create a new sub-branch, to write the necessary test for the new methods and- or UI features. 
+When presented with a new feature to implement, a team member creates a new issue on the project board and adds appropriate acceptance criteria. If there is any confusion as to what that would be, the team member brings it to the team, discusses it, and creates a plan for how to approach the implementation best. When a new feature is under development, a team member moves it from the To-do list to the in-progress list and assigns one or more members to the task.
 
-Now the member(s) working on the issue, creates a pull request to the branch to merge it with main branch and add a reviewer(s), This will then trigger workflow checks, making sure that new features will not conflict with the current version of the program. (ref?) 
+When assigned to an issue, member(s) then create - and publish a new branch to work on the issue. Following GitHub Flow-style branching strategy.
+When the acceptance criteria have been fulfilled, the member(s) working on the branch - or someone else from the team, will then create a new sub-branch, to write the necessary tests for the new methods and- or UI features. 
+
+Afterward, the member(s) working on the issue, create a pull request to the main branch and add reviewer(s), This will then trigger workflow checks, making sure that new features will not break old features.
 
 If the new feature passes the checks, the reviewer(s) can now manually look at the code, to check for possible conflicts that the workflows did not catch. 
-The reviewer(s) can now approve( or reject) pull request and the old branch can be deleted.
+The reviewer(s) can now approve or reject the pull request and the old branch can be deleted.
 
-*Above description is true to our process if the team had worked always using best practise. However it should be noted that do to a lot of uncertainty about how test should be written, a lot of the time new features would be committed to main, without test, which would then be added later.*     
-
-![Issue from creation to merge](images/IssueToMerge-2.drawio.png)
+*Note: The above description is true to our process if the team had worked always using best practices. However, due to uncertainty about refactoring and new technologies throughout the course, a lot of the time new features would be committed to the main branch, without proper testing, which would then be added later.*     
 
 ### Unfinished features
 ![Final project board](images/finalProjectBoard.png)
 
-We would have preferred to have implemented following features but simply did not have the time: 
+We would have preferred to have implemented the following features but chose to prioritize differently: 
 
-**Get workflow to run UI test** Do to playwright being introduced later in the project, the team did not have the time or expertise to figure out how to make playwright and integration test run using GitHub Actions, Primarily do to being unable to make automatic SetUp / TearDown functions to work. 
+**Get workflow to run UI test:** We would have liked our entire test suite run using GitHub Actions. Both Playwright tests and front-end integration tests currently are required to be run locally.
 
-**confirmation warning on critical actions** an example of a critical action could be; If a User wants to delete a cheep or delete their author page entity. This would trigger a pop-up window should then check with the user, if they confirm, the action will be done. otherwise the action is abandoned.
+**Confirmation warning on critical actions:** An example of a critical action could be; If a User wants to delete a cheep or delete their author page entirely. This would trigger a pop-up window requesting confirmation from the user. Otherwise, the action would be abandoned.
 
-**The page not flashing in dark mode**  We currently have an issue when page is in dark mode where a page change will flash between dark and lightmode, This would give people with light sensitivity issues problems.
-
-**Automation on project bord **  All updates to project bord are done manually this would have been an  ideal feature to run automatically though a workflow.   
-
+**The page not flashing in dark mode:**  Currently the website flashes on page load when in dark mode. This is due to it loading light mode first and then switching to dark mode.
 
 ## How to make _Chirp!_ work locally
 Before attempting to run Chirp!, ensure that dotnet 8 is installed on your computer.
