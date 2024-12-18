@@ -17,16 +17,16 @@ numbersections: true
 ![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModelFINAL.drawio.png)
 
 ## Architecture — In the small
+![Illustration of the _Chirp!_ ONION](images/OnionDiagram.png)
+
 Our Chirp! application uses onion architecture, as such our application consists of three layers. The core layer is where our basic data types and interfaces are defined. 
 The infrastructure layer is where most of our functions and interactions are implemented and the web layer is where everything is brought together with
 dependency injections in our razor pages and application builder. 
 
-Note: This 4 layered onion diagram is not 1:1 to the actual onion structure of the code. Chirp.Infrastructure covers both the
+*Note: This 4-layered onion diagram is not 1:1 to the actual onion structure of the code. Chirp.Infrastructure covers both the
 repository and services layer in our 4-layer onion diagram. For instance, we have Data Transfer Objects(DTOs) that are from Chirp.Core which we use 
-for transportation between layers, since they fit better in the repository layer than the domain layer in the diagram. 
+for transportation between layers, since they fit better in the repository layer than the domain layer in the diagram.*
 
-
-![Illustration of the _Chirp!_ ONION](images/OnionDiagram.png)
 ## Architecture of deployed application
 ![Illustration of the _Chirp!_ ONION](images/DeploymentDiagram.drawio.png)
 
