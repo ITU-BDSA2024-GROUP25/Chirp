@@ -1,4 +1,5 @@
-﻿body {
+﻿/* Dark mode colors generated with the use of an LLM */
+body {
     background: #2a1b1b;
     color: #f0e6e6;
     font-family: 'Trebuchet MS', sans-serif;
@@ -270,7 +271,12 @@ ul.nav li a:hover {
     background-color: #995e5e;
 }
 
-/* Toggle switch button styling recieved by LLM*/
+.cheep-amount {
+    color: #ccc;
+    font-size: 14px;
+}
+
+/* Toggle switch button styling developed with the use of an LLM */
 .switch {
     position: relative;
     display: inline-block;

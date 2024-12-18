@@ -7,11 +7,18 @@
     <link id="themeStylesheet" href="/css/style.css" rel="stylesheet" type="text/css"/>
     <link rel="icon" type="image/png" href="/favicon/favicon.ico">
 </head>
+
+@{
+    // Shared layout and styling between all the pages. 
+    // Also includes JavaScript code for miscellaneous behavior.    
+}
+
 <body>
 <div class=page>
     <h1><img src="/images/icon1.png" alt="Icon1"/>Chirp!</h1>
 
     <div class=navigation>
+        @* If the user is logged in *@
         @if (User?.Identity?.IsAuthenticated == true)
         {
             <div>
@@ -24,8 +31,8 @@
             <div asp-validation-summary="ModelOnly">
             </div>
 
-
         }
+        @* if the user is not logged in *@
         else
         {
             <div>
@@ -34,7 +41,8 @@
                 <a class="nav-link text-dark" href="/Identity/Account/Login">Login</a> |
             </div>
         }
-        
+
+        @* Switch button *@
         <div class="theme-switch" align="right">
             <label class="switch">
                 <span class="slider"></span>
@@ -52,8 +60,11 @@
 
 
 <script>
-    /// This code was inspired by code given from LLM suggesting to use Javascript to layout page (We could not
-    /// get Model to work) and also to use local storage to remember values when switching between pages
+    /// The JavaScript code is largely inspired by code given from an LLM, including:
+    /// 1. Switch button logic.
+    /// 2. Achieving a way to not reset page on updates occur.
+
+    /// Switch button functionality. Switches between using style and style2 (Light and Dark mode).
     const slider = document.querySelector('.slider');
     const stylesheet = document.getElementById('themeStylesheet');
 
@@ -64,7 +75,6 @@
             slider.classList.toggle('checked', savedTheme === '/css/style2.css');
         }
     }
-
     slider.addEventListener('click', () => {
         const isChecked = slider.classList.toggle('checked');
         if (isChecked) {
@@ -76,7 +86,22 @@
         }
     });
 
+    /// Maintain scroll position when updates occur.
     document.addEventListener('DOMContentLoaded', loadStyle);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Restore scroll position
+        const scrollPos = sessionStorage.getItem('scrollPosition');
+        if (scrollPos) {
+            window.scrollTo(0, parseInt(scrollPos, 10));
+            sessionStorage.removeItem('scrollPosition');
+        }
+
+        // Save scroll position before leaving the page
+        window.addEventListener('beforeunload', function () {
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+        });
+    });
 </script>
 
 </body>

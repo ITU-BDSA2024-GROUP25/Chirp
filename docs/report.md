@@ -14,62 +14,63 @@ numbersections: true
 
 ## Domain model
 
-Here comes a description of our domain model. 
-
-![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModel4.drawio.png)
+![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModelFINAL.drawio.png)
 
 ## Architecture — In the small
-Our chirp application uses onion architecture, as such our application Consists of three layers (projects),
-The core layer, where our basic data types and interfaces are made. The infrastructure layer
-Where most of our functions and interactions are defined. and the web layer, where everything is brough together with
+Our Chirp! application uses onion architecture, as such our application consists of three layers. The core layer is where our basic data types and interfaces are defined. 
+The infrastructure layer is where most of our functions and interactions are implemented and the web layer is where everything is brought together with
 dependency injections in our razor pages and application builder. 
 
-Note: this 4 layered onion diagram is not 1:1 to the actual structure. Chirp.infrastructure covers both the
-repository and services layer in our 3 layer onion. And we have some interfaces and DTOs that are from chirp.core
-But as we use them for transport, and to set up our repository we find they fit better in the repository layer, than the domain layer. 
-
-(short version: Note: the 4 layer onion diagram uses different abstractions of layers and are not 1:1 with the internal programs 3 layers)
+Note: This 4 layered onion diagram is not 1:1 to the actual onion structure of the code. Chirp.Infrastructure covers both the
+repository and services layer in our 4-layer onion diagram. For instance, we have Data Transfer Objects(DTOs) that are from Chirp.Core which we use 
+for transportation between layers, since they fit better in the repository layer than the domain layer in the diagram. 
 
 
 ![Illustration of the _Chirp!_ ONION](images/OnionDiagram.png)
 ## Architecture of deployed application
+![Illustration of the _Chirp!_ ONION](images/DeploymentDiagram.drawio.png)
+
+This is a visualization of our deployed program on our Azure application.
 
 ## User activities
 ![Illustration of the _Chirp!_ User journey](images/UserJourney.drawio.png)
 
-This illustration shows a potential user journey through the chirp application. Before login every possible user journey is represented. After login the illustration only display some of the options a user has. All functionalities are addressed at some point in the journey, but the illustration would become unreadable if it showed every possible way the user can go. For instance, it is both possible to logout and access the public timeline, no matter where the user is, so there would be a lot of crossing arrows.
+This illustration shows a potential user's journey through the Chirp! application. Before login, every possible user journey is represented. 
+After login, the illustration only displays the options linearly. All functionalities are addressed at some point in the journey,
+but the illustration would become indecipherable if it showed every possible option at any time. For instance, it is possible to logout 
+and access the public timeline, no matter where the user is.
 
-## Sequence of functionality/calls trough _Chirp!_
+## Sequence of functionality/calls through _Chirp!_
 ![Illustration of the _Chirp!_ Sequence Diagram](diagrams/SequenceDiagram.png)
 
-The illustration shows the sequence of events happening when the user opens the application.This seqeunce diagram is made relatively high-level focusing on important sequences, meaning every single operation is not shown. For example, attributes such as Like-/DislikeAmount, IsFollowing, etc. are all retrieved as a part of the fetched objects from the request and shown accordingly. 
+The illustration shows the sequence of events happening when the user opens the application. This sequence diagram is made at a 
+relatively high level of abstraction, and as such focuses on important sequences where every single operation is not shown. 
+For example, attributes such as ```Like-/DislikeAmount```, ```IsFollowing```, etc. are all retrieved as a part of the fetched objects from the request and shown accordingly. 
 
 # Process
 
 ## Build, test, release, and deployment
-For Chirp! we utilize three main github workflows. The first is an automated build and test workflow that attempts to build any commit or pull request.
-It also runs our basic unit and integration tests, the more advanced test suite is not automated. For azure we have a standard azure deployment workflow with a minor change:
-we have added an optional dispatch, and limited what triggers the workflow. As redeploying azure on trivial changes result in extensive downtime.
-Our final Workflow "chirpflow" creates a release on versions with tags matching ```v.*.*.*``` this is mostly used for punctiating feature implementations. The releases 
-contains the program compiled for windows, linux, osx, and arm-64.
 
 ![Diagram of the three worklfows on the chirp github](images/workflows.png)
 
-Build and test: very usefull, used to see if a pull request actually passes the tests!
-Does not run our most advanced tests. ( could mention that due to the lateish introduction of tools like playwright
-we did not quite find the expertise and time to justify not running these tests locally. with out small team it's
-quite easy to get someone else to hop on the branch and run the test suite before a merge) But could defenetly be improved
-by letting it know our secrets and setting playwright up. (though the playwright tests break on UI changes, and that's not really an incompatiblilty)
+**Build-and-test** is an automated build and test workflow that attempts to build and test any commit or pull request. The workflow is used to see if a pull request passes the tests. 
+This workflow exclusively runs backend tests.
 
+**main_bdsagroup25chirprazor1** is generated by Azure and is modified to build the app starting with Chirp.Core followed 
+by Chirp.Infrastructure and lastly Chirp.Web. This is because Azure has difficulties supporting the application's onion architecture. 
+The onion architecture disallows manual terminal deployment. There are limits on what triggers the workflow 
+as redeploying Azure on trivial changes results in extensive downtime. There is an optional dispatch to trigger the workflow manually.
 
-AzureDeploy: this one is generated by azure, it is modified to build the app from core outward, as azure has had some disagreements with the applications onion architecture. We also limited when it runs as a modification.
-Extremly usefull. especially as the onion architecture disallows manual terminal deployment the way we did prior to the refactoring.
-
-chirpflow: This workflow is not used frequently as it's for creating a release, this should be run for weekly evaluations, and major updates.
+**Chirpflow** is not used frequently as it is used for creating a GitHub release. Chirpflow is semi-manual as it requires version tags, matching ```v.*.*.*```, 
+to be run and should be run for weekly evaluations and major updates. The releases contain the program compiled for Windows, Linux, OSX, and OSX arm-64.
 
 ## Team work
 ### *** INSERT final picture of bord with unfinished tasks *** 
 comment on the missing changes 
+( could mention that due to the lateish introduction of tools like playwright
+we did not quite find the expertise and time to justify not running these tests locally. with out small team it's
+quite easy to get someone else to hop on the branch and run the test suite before a merge) But could defenetly be improved
+by letting it know our secrets and setting playwright up. (though the playwright tests break on UI changes, and that's not really an incompatiblilty)
 
 -- add comment on why playwrite does not run though workflows. 
 
@@ -83,29 +84,26 @@ When the acceptance criteria had been fulfilled, the member(s) working the branc
 
 Now the member(s) working on the issue creates a pull request to the branch, to merge it with main branch, and add a reviewer(s). Before another team member can merge preliminary workflow checks will be run, then if the new input passes workflow checks (see -- add ref to WF --) and test the reviewer can look at the code, reject if necessary, or complete the merge. The old branch can then be deleted.
 
-![Issue from creation to merge](images/from issue creation to merge.drawio.png)
+![Issue from creation to merge](images/IssueToMerge.drawio.png)
 
-https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/docs/images/from%20issue%20creation%20to%20merge.drawio.png
 
 ## How to make _Chirp!_ work locally
-Before attempting to run Chirp, ensure that dotnet 8 is installed on you PC.
-For running the localhost version of the main program there are no other install requirements than this.
+Before attempting to run Chirp!, ensure that dotnet 8 is installed on your computer.
+For the localhost version of the Chirp!, there are no other install requirements.
 
-The program does however need two secrets to be present on your computer to work.
-to add the secrets to your "chirp secrets storage" navigate your terminal to **"chirp/src/chirp.web/"** folder. 
-and use the following commands from terminal:
+The program does however need two secrets present on your computer for it to run.
+To add the secrets to your "secrets-storage" navigate your terminal to **"chirp/src/chirp.web/"** folder and 
+use the following commands from the terminal:
 
 ``` dotnet user-secrets set "authentication:github:clientId" "SECRET-A" ```
 
-and
-
 ``` dotnet user-secrets set "authentication:github:clientSecret" "SECRET-B ```
 
-**Initializing the secret store should not be necessary. just in case though the command is "dotnet user-secrets init"**
+**Initializing the secret store should not be necessary. However, just in case the command is "dotnet user-secrets init"**
 
-These are our localhost secrets, and will enable github login in chirp. This is required, as an exception is triggered if the github secrets are missing.
+These are our localhost secrets and will enable GitHub login on Chirp!. This is required, as an exception is triggered if the GitHub secrets are missing.
 
-Now chirp! should be ready to run.
+Now Chirp! should be ready to run.
 
 The Program must be run from the **chirp/src/chirp.web/** folder.
 Either ``` dotnet run ```  or ``` dotnet Watch ```  will work.
@@ -113,21 +111,31 @@ Either ``` dotnet run ```  or ``` dotnet Watch ```  will work.
 
 
 
-## How to run test suite locally
+## How to run the test suite locally
+There are two different test suits. 
+There are the backend tests that are primarily unit tests and do not use the UI. These tests can be run from the Chirp folder by running the command:  ```dotnet test```
+
+There are also tests that are separate from the unit tests such as Playwright tests and front-end integration tests. These tests need to run on localhost with Playwright installed and secrets present on the computer.  
+
+Step-by-step guide for front-end tests:  
+  1. Open a terminal. Navigate to the Chirp/src/Chirp.Web folder
+  2. Run the command ```dotnet run```
+  3. Open a new terminal. Navigate to the Chirp/test
+  4. Run the command ```dotnet test```
 
 # Ethics
 
 ## License
-This project is licensed under the MIT License (see full License her: https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/LICENSE).
-In the document NOTICE.MD we have provided additional information about other Licenses and copyrights for packages used, that do not fall under MIT (see https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/NOTICE.md).
+This project is licensed under the MIT License (see full license here: https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/LICENSE).
+In the document NOTICE.md we have provided additional information about other licenses and copyrights for packages used, that do not fall under MIT (see https://github.com/ITU-BDSA2024-GROUP25/Chirp/blob/main/NOTICE.md).
 
 ## LLMs, ChatGPT, CoPilot, and others
-During the project, ChatGPT was used sparingly and was used when we encountered problems or situations where we felt stuck and documentation sites such as StackOverflow deemed unhelpful. Another use case of ChatGPT was to avoid redundant manual tasks, such as generating colors for the dark mode stylesheet. 
-The code segments developed with the help of an LLM have been clearly commented as such.  
+During the project, ChatGPT was used sparingly when we encountered problems or situations where we felt stuck and documentation sites such as StackOverflow were deemed unhelpful. Another use case of ChatGPT was to avoid redundant manual tasks, such as generating colors for the dark mode stylesheet. 
+The few code segments developed with the help of an LLM have been clearly commented as such.  
 
 ChatGPT was used in the following areas:
 * CSS styling for dark mode and switch button.
 * Database structuring and help with schema relations.
 * Complex JavaScript features like "Maintain scroll" and "Switch button for color themes".
   
-Generally, the use of LLMs sped up the project progress, however, in a few instances they provided wrong or buggy solutions which required extra time debugging.
+Generally, the use of LLMs sped up the project's progress. However, in a few instances, they provided wrong or buggy solutions which required extra time debugging.

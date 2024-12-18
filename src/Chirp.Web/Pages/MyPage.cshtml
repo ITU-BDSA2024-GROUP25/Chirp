@@ -8,8 +8,17 @@
     var routeName = HttpContext.GetRouteValue("author");
 }
 
+@{
+    // Provides the HTML for the My-Page page, which only logged-in users can access.
+    // This page shows all the stored data about the user including:
+    //  - Name, Mail, Following, Cheeps, Liked Cheeps and Disliked Cheeps
+    // Includes the functionality to download data and delete user.
+    // Also includes standard cheep operations e.g. like/dislike, follow/unfollow, etc.
+}
+
+@* General user information *@
 <div>
-    <strong> My Information: </strong>
+    <h2> My Information: </h2>
     <div class="cheepbox">
         <p>Name: @User.Identity?.Name</p>
         @if (!string.IsNullOrEmpty(Model.GetUserEmail))
@@ -29,6 +38,7 @@
     </div>
 </div>
 
+@* Cheeps related to the user *@
 <div>
     <strong> My Cheeps: </strong>
     @if (Model.Cheeps.Any())
@@ -36,31 +46,159 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-            <li style="position: relative; padding-right: 60px;">
-                <p>
-                    <strong>
-                        <a href="/@cheep.authorName">@cheep.authorName</a>
-                    </strong>
-                    @cheep.text
-                    <small>&mdash; @cheep.postedTime</small>
-                </p>
-                <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
-                    <input type="hidden" name="cheepText" value="@cheep.text" />
-                    <input type="hidden" name="time" value="@cheep.postedTime" />
-                    <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
-                        <img src="/images/Xicon.png" alt="Delete Icon" style="width: 12px; height: 12px;" />
-                    </button>
-                </form>
+                <li style="position: relative; padding-right: 60px;">
+                    <p>
+                        <strong>
+                            <a href="/@cheep.authorName">@cheep.authorName</a>
+                        </strong>
+                        @cheep.text
+                        <small>&mdash; @cheep.postedTime</small>
+                    </p>
+
+                    @* Delete button for authors own cheeps *@
+                    <form method="post" asp-page-handler="Delete" style="position: absolute; top: 7px; right: 1px;">
+                        <input type="hidden" name="cheepText" value="@cheep.text" />
+                        <input type="hidden" name="time" value="@cheep.postedTime" />
+                        <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;">
+                            <img src="/images/Xicon.png" alt="Delete Icon" style="width: 12px; height: 12px;" />
+                        </button>
+                    </form>
+
+                    @* Disabled Like/Dislike Buttons for authors own cheeps *@
+                    <div
+                        style="position: absolute; top: 40%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
+                        <button style="background: none; border: none; cursor: default;" disabled>
+                            <img src="/images/unlike.png" alt="Like Button" style="width: 16px; height: 16px;" />
+                            <span class="cheep-amount">@await Model.CheepLikesAmount(cheep)</span>
+                        </button>
+                        <button style="background: none; border: none; cursor: default;" disabled>
+                            <img src="/images/undislike.png" alt="Dislike Button" style="width: 16px; height: 16px;" />
+                            <span class="cheep-amount">@await Model.CheepDislikeAmount(cheep)</span>
+                        </button>
+                    </div>
                 </li>
             }
         </ul>
     }
     else
     {
-        <em>You have no cheeps.</em>
+        <p>- You have no cheeps.</p>
     }
 </div>
 
+<div>
+    <strong> Liked Cheeps: </strong>
+    @if ((await Model.GetLikedCheeps()).Any())
+    {
+        <ul id="messagelist" class="cheeps">
+            @foreach (var cheep in await Model.GetLikedCheeps())
+            {
+                <li style="position: relative; padding-right: 60px;">
+                    <p>
+                        <strong>
+                            <a href="/@cheep.authorName">@cheep.authorName</a>
+                        </strong>
+                        @cheep.text
+                        <small>&mdash; @cheep.postedTime</small>
+                    </p>
+                    
+                    @* Functional Like/Dislike Buttons *@
+                    <div
+                        style="position: absolute; top: 35%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
+
+                        @* Like / Remove like Button *@
+                        <form method="post"
+                            asp-page-handler="@((await Model.IsCheepLikedByAuthor(cheep)) ? "RemoveLikeCheep" : "LikeCheep")">
+                            <input type="hidden" name="cheep.Text" value="@cheep.text" />
+                            <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
+                            <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
+                            <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                <img src="/images/@(await Model.IsCheepLikedByAuthor(cheep) ? "like.png" : "unlike.png")"
+                                    alt="Like Button" style="width: 16px; height: 16px;" />
+                                <span class="cheep-amount">@await Model.CheepLikesAmount(cheep)</span>
+                            </button>
+                        </form>
+
+                        @* Dislike / Remove dislike Button *@
+                        <form method="post"
+                            asp-page-handler="@((await Model.IsCheepDislikedByAuthor(cheep)) ? "RemoveDislikeCheep" : "DislikeCheep")">
+                            <input type="hidden" name="cheep.Text" value="@cheep.text" />
+                            <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
+                            <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
+                            <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                <img src="/images/@(await Model.IsCheepDislikedByAuthor(cheep) ? "dislike.png" : "undislike.png")"
+                                    alt="Dislike Button" style="width: 16px; height: 16px;" />
+                                <span class="cheep-amount">@await Model.CheepDislikeAmount(cheep)</span>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>- You have not liked any cheeps.</p>
+    }
+</div>
+
+<div>
+    <strong> Disliked Cheeps: </strong>
+    @if ((await Model.GetDislikedCheeps()).Any())
+    {
+        <ul id="messagelist" class="cheeps">
+            @foreach (var cheep in await Model.GetDislikedCheeps())
+            {
+                <li style="position: relative; padding-right: 60px;">
+                    <p>
+                        <strong>
+                            <a href="/@cheep.authorName">@cheep.authorName</a>
+                        </strong>
+                        @cheep.text
+                        <small>&mdash; @cheep.postedTime</small>
+                    </p>
+                    
+                    @* Functional Like/Dislike Buttons *@
+                    <div
+                        style="position: absolute; top: 35%; right: 0px; transform: translateY(10%); display: flex; gap: 10px; align-items: center;">
+
+                        @* Like / Remove like Button *@
+                        <form method="post"
+                              asp-page-handler="@((await Model.IsCheepLikedByAuthor(cheep)) ? "RemoveLikeCheep" : "LikeCheep")">
+                            <input type="hidden" name="cheep.Text" value="@cheep.text" />
+                            <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
+                            <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
+                            <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                <img src="/images/@(await Model.IsCheepLikedByAuthor(cheep) ? "like.png" : "unlike.png")"
+                                     alt="Like Button" style="width: 16px; height: 16px;" />
+                                <span class="cheep-amount">@await Model.CheepLikesAmount(cheep)</span>
+                            </button>
+                        </form>
+
+                        @* Dislike / Remove dislike Button *@
+                        <form method="post"
+                            asp-page-handler="@((await Model.IsCheepDislikedByAuthor(cheep)) ? "RemoveDislikeCheep" : "DislikeCheep")">
+                            <input type="hidden" name="cheep.Text" value="@cheep.text" />
+                            <input type="hidden" name="cheep.AuthorName" value="@cheep.authorName" />
+                            <input type="hidden" name="cheep.PostedTime" value="@cheep.postedTime" />
+                            <button type="submit" style="background: none; border: none; cursor: pointer;">
+                                <img src="/images/@(await Model.IsCheepDislikedByAuthor(cheep) ? "dislike.png" : "undislike.png")"
+                                    alt="Dislike Button" style="width: 16px; height: 16px;" />
+                                <span class="cheep-amount">@await Model.CheepDislikeAmount(cheep)</span>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>- You have not disliked any cheeps.</p>
+    }
+</div>
+
+@* Download and Delete Buttons *@
 <div style="text-align: right; display: flex; justify-content: flex-end; gap: 10px;">
     <form method="post" asp-page-handler="DownloadInfo">
         <button class="w-100 btn btn-lg btn-danger" type="submit">Download Data</button>
