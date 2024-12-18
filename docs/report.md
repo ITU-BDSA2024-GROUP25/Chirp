@@ -33,6 +33,8 @@ But as we use them for transport, and to set up our repository we find they fit 
 
 ![Illustration of the _Chirp!_ ONION](images/OnionDiagram.png)
 ## Architecture of deployed application
+This is a visualization of our deployed program.
+![Illustration of the _Chirp!_ ONION](images/DeploymentDiagram.drawio.png)
 
 ## User activities
 ![Illustration of the _Chirp!_ User journey](images/UserJourney.drawio.png)
