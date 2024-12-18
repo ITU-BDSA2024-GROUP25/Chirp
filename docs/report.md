@@ -14,65 +14,63 @@ numbersections: true
 
 ## Domain model
 
-Here comes a description of our domain model. 
-
-![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModel4.drawio.png)
+![Illustration of the _Chirp!_ data model as UML class diagram.](images/DomainModelFINAL.drawio.png)
 
 ## Architecture — In the small
-Our chirp application uses onion architecture, as such our application Consists of three layers (projects),
-The core layer, where our basic data types and interfaces are made. The infrastructure layer
-Where most of our functions and interactions are defined. and the web layer, where everything is brough together with
+Our Chirp! application uses onion architecture, as such our application consists of three layers. The core layer is where our basic data types and interfaces are defined. 
+The infrastructure layer is where most of our functions and interactions are implemented and the web layer where everything is brought together with
 dependency injections in our razor pages and application builder. 
 
-Note: this 4 layered onion diagram is not 1:1 to the actual structure. Chirp.infrastructure covers both the
-repository and services layer in our 3 layer onion. And we have some interfaces and DTOs that are from chirp.core
-But as we use them for transport, and to set up our repository we find they fit better in the repository layer, than the domain layer. 
-
-(short version: Note: the 4 layer onion diagram uses different abstractions of layers and are not 1:1 with the internal programs 3 layers)
+Note: This 4 layered onion diagram is not 1:1 to the actual onion structure of the code. Chirp.Infrastructure covers both the
+repository and services layer in our 4 layer onion diagram. For instance we have Data Transfer Objects(DTOs) that are from Chirp.Core which we use 
+for transportation between layers. We find they fit better in the repository layer than the domain layer in the diagram. 
 
 
 ![Illustration of the _Chirp!_ ONION](images/OnionDiagram.png)
 ## Architecture of deployed application
 ![Illustration of the _Chirp!_ ONION](images/DeploymentDiagram.drawio.png)
 
-This is a visualization of our deployed program.
+This is a visualization of our deployed program on our Azure application.
 
 ## User activities
 ![Illustration of the _Chirp!_ User journey](images/UserJourney.drawio.png)
 
-This illustration shows a potential user journey through the chirp application. Before login every possible user journey is represented. After login the illustration only display some of the options a user has. All functionalities are addressed at some point in the journey, but the illustration would become unreadable if it showed every possible way the user can go. For instance, it is both possible to logout and access the public timeline, no matter where the user is, so there would be a lot of crossing arrows.
+This illustration shows a potential user journey through the Chirp! application. Before login every possible user journey is represented. 
+After login the illustration only display the options linearly. All functionalities are addressed at some point in the journey,
+but the illustration would become indecipherable if it showed every possible option at any time. For instance, it is both possible to logout 
+and access the public timeline, no matter where the user is.
 
-## Sequence of functionality/calls trough _Chirp!_
+## Sequence of functionality/calls through _Chirp!_
 ![Illustration of the _Chirp!_ Sequence Diagram](diagrams/SequenceDiagram.png)
 
-The illustration shows the sequence of events happening when the user opens the application.This seqeunce diagram is made relatively high-level focusing on important sequences, meaning every single operation is not shown. For example, attributes such as Like-/DislikeAmount, IsFollowing, etc. are all retrieved as a part of the fetched objects from the request and shown accordingly. 
+The illustration shows the sequence of events happening when the user opens the application. This seqeunce diagram is made at a 
+relatively high-level of abstraction, and as such focuses on important sequences where every single operation is not shown. 
+For example, attributes such as ```Like-/DislikeAmount```, ```IsFollowing```, etc. are all retrieved as a part of the fetched objects from the request and shown accordingly. 
 
 # Process
 
 ## Build, test, release, and deployment
-For Chirp! we utilize three main github workflows. The first is an automated build and test workflow that attempts to build any commit or pull request.
-It also runs our basic unit and integration tests, the more advanced test suite is not automated. For azure we have a standard azure deployment workflow with a minor change:
-we have added an optional dispatch, and limited what triggers the workflow. As redeploying azure on trivial changes result in extensive downtime.
-Our final Workflow "chirpflow" creates a release on versions with tags matching ```v.*.*.*``` this is mostly used for punctiating feature implementations. The releases 
-contains the program compiled for windows, linux, osx, and arm-64.
 
 ![Diagram of the three worklfows on the chirp github](images/workflows.png)
 
-Build and test: very usefull, used to see if a pull request actually passes the tests!
-Does not run our most advanced tests. ( could mention that due to the lateish introduction of tools like playwright
-we did not quite find the expertise and time to justify not running these tests locally. with out small team it's
-quite easy to get someone else to hop on the branch and run the test suite before a merge) But could defenetly be improved
-by letting it know our secrets and setting playwright up. (though the playwright tests break on UI changes, and that's not really an incompatiblilty)
+**Build-and-test** is an automated build and test workflow that attempts to build and test any commit or pull request. The workflow is used to see if a pull request actually passes the tests. 
+This workflow exclusively runs backend tests.
 
+**main_bdsagroup25chirprazor1** is generated by Azure and is modified to build the app starting with Chirp.Core followed 
+by Chirp.Infrastructure and lastly Chirp.Web. This is because Azure has difficulties supporting the applications onion architecture. 
+The onion architecture disallows manual terminal deployment. There are limits on what triggers the workflow 
+as redeploying Azure on trivial changes result in extensive downtime. There is an optional dispatch to trigger the workflow manually.
 
-AzureDeploy: this one is generated by azure, it is modified to build the app from core outward, as azure has had some disagreements with the applications onion architecture. We also limited when it runs as a modification.
-Extremly usefull. especially as the onion architecture disallows manual terminal deployment the way we did prior to the refactoring.
-
-chirpflow: This workflow is not used frequently as it's for creating a release, this should be run for weekly evaluations, and major updates.
+**Chirpflow** is not used frequently as it is used for creating a GitHub release. Chirpflow is semi-manual as it requires version tags, matching ```v.*.*.*```, 
+to be run and should be run for weekly evaluations and major updates. The releases contains the program compiled for windows, linux, osx, and osx arm-64.
 
 ## Team work
 ### *** INSERT final picture of bord with unfinished tasks *** 
 comment on the missing changes 
+( could mention that due to the lateish introduction of tools like playwright
+we did not quite find the expertise and time to justify not running these tests locally. with out small team it's
+quite easy to get someone else to hop on the branch and run the test suite before a merge) But could defenetly be improved
+by letting it know our secrets and setting playwright up. (though the playwright tests break on UI changes, and that's not really an incompatiblilty)
 
 -- add comment on why playwrite does not run though workflows. 
 
