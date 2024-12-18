@@ -4,6 +4,8 @@ using Xunit;
 using Chirp.Core;
 using Chirp.Infrastructure;
 using Chirp.Web;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Tests
 {
@@ -11,6 +13,7 @@ namespace Chirp.Tests
     {
         private readonly WebApplicationFactory<Program> _fixture;
         private readonly HttpClient _client;
+        
 
         public TestAPI(WebApplicationFactory<Program> fixture)
         {

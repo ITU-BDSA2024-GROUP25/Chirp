@@ -3,14 +3,14 @@ using NUnit;
 using static Microsoft.Playwright.Assertions;
 
 namespace PlaywrightTests;
-/**
+/*
 Playwright runs tests in alphabetical order so to ensure the intended order the tests are labeled 
 with a letter in front of the name.
 */
 public class EndToEndTest
 {
-    //Registers the user with username: test, email: test@test.dk, password: password
-    //If username is already taken try to run the test Z_DeleteUserTest() manually
+    // Registers the user with username: test, email: test@test.dk, password: password
+    // If username is already taken try to run the test Z_DeleteUserTest() manually
     [Test]
     public async Task A_RegisterUserTest()
     {
@@ -62,7 +62,6 @@ public class EndToEndTest
         await page.Locator("#Message").FillAsync("Delete this");
         await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         await page.GetByRole(AriaRole.Button, new() { Name = "Delete Icon" }).ClickAsync();
-
     } 
  
     [Test]
@@ -82,7 +81,7 @@ public class EndToEndTest
 
     }
 
-    //tries to login and out with the test-user. If failed try to run RegisterUserTest() first
+    // Tries to login and out with the test-user. If failed try to run RegisterUserTest() first
     [Test]
     public async Task D_ValidLoginAndOutTest()
     {
@@ -107,7 +106,7 @@ public class EndToEndTest
 
     }
 
-    //test that check that it is not possible to login with an account that doesnt exist
+    // Test that check that it is not possible to login with an account that doesnt exist
     [Test]
     public async Task E_InvalidLoginAttemptTest()
     {
@@ -128,7 +127,8 @@ public class EndToEndTest
         await page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         await page.GetByText("Invalid login attempt.").ClickAsync();
     }
-    //Test that a user cant make a username with a "/" in front that redirects to another page
+    
+    // Test that a user cant make a username with a "/" in front that redirects to another page
     [Test]
     public async Task F_TestingForRedirectionAttempt()
     {
@@ -154,7 +154,8 @@ public class EndToEndTest
         await page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         await page.GetByText("Username '/redirect' is").ClickAsync();
     }
-    //tries to cheep with the test-user. If failed try to run RegisterUserTest() first
+    
+    // Tries to cheep with the test-user. If failed try to run RegisterUserTest() first
     [Test]
     public async Task G_ValidCheepTest()
     {
@@ -179,7 +180,7 @@ public class EndToEndTest
         await Expect(page.Locator("#messagelist")).ToContainTextAsync("This is a valid cheep");
     }
     
-    //Testuseren test follows and unfollow Jacqualine
+    // Test user test follows and unfollow Jacqualine
     [Test]
     public async Task H_FolloweringJacqualineTest()
     {
@@ -207,7 +208,7 @@ public class EndToEndTest
     }
     
 
-    //tries to cheep too short with the test-user. If failed try to run RegisterUserTest() first
+    // Tries to cheep too short with the test-user. If failed try to run RegisterUserTest() first
     [Test]
     public async Task I_TooShortCheepTest()
     {
@@ -232,7 +233,7 @@ public class EndToEndTest
         await page.GetByText("Cheep is too short, needs to contain more than 2 characters").ClickAsync();
     }
 
-    //This test only test that the dark mode slider exist 
+    // This test only test that the dark mode slider exist 
     [Test]
     public async Task J_DarkModeTest()
     {
@@ -248,7 +249,8 @@ public class EndToEndTest
         await page.Locator("label span").ClickAsync();
         await page.Locator("label span").ClickAsync();
     }
-    //Test that a user can like and dislike cheeps
+    
+    // Test that a user can like and dislike cheeps
     [Test]
     public async Task K_LikeAndDisLikeTest()
     {
