@@ -23,7 +23,7 @@ dependency injections in our razor pages and application builder.
 
 Note: This 4 layered onion diagram is not 1:1 to the actual onion structure of the code. Chirp.Infrastructure covers both the
 repository and services layer in our 4-layer onion diagram. For instance, we have Data Transfer Objects(DTOs) that are from Chirp.Core which we use 
-for transportation between layers. We find they fit better in the repository layer than the domain layer in the diagram. 
+for transportation between layers, since they fit better in the repository layer than the domain layer in the diagram. 
 
 
 ![Illustration of the _Chirp!_ ONION](images/OnionDiagram.png)
@@ -97,8 +97,6 @@ use the following commands from the terminal:
 
 ``` dotnet user-secrets set "authentication:github:clientId" "SECRET-A" ```
 
-and
-
 ``` dotnet user-secrets set "authentication:github:clientSecret" "SECRET-B ```
 
 **Initializing the secret store should not be necessary. However, just in case the command is "dotnet user-secrets init"**
@@ -119,7 +117,7 @@ There are the backend tests that are primarily unit tests and do not use the UI.
 
 There are also tests that are separate from the unit tests such as Playwright tests and front-end integration tests. These tests need to run on localhost with Playwright installed and secrets present on the computer.  
 
-Step-by-step guide for front-end tests  
+Step-by-step guide for front-end tests:  
   1. Open a terminal. Navigate to the Chirp/src/Chirp.Web folder
   2. Run the command ```dotnet run```
   3. Open a new terminal. Navigate to the Chirp/test
