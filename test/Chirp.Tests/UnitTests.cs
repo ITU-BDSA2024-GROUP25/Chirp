@@ -350,5 +350,52 @@ public class UnitTests
         // Assert 
         Assert.Equal(1, cheepAmount); 
     }
+    
+    /// <summary>
+    /// This should test that when a author deletes a cheep in a list the cheepID is no longer in use.
+    /// This is an integration test, since it is backend, it is located here. 
+    /// </summary>
+    [Fact]
+    public async void deletedCheepRemovesID() 
+    {
+        // Arrange 
+        using var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDbContext>().UseSqlite(connection);
 
+        using var context = new ChirpDbContext(builder.Options);
+        await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
+
+        authorRepository = new AuthorRepository(context);
+        cheepRepository = new CheepRepository(context);
+
+        context.Cheeps.ExecuteDelete();
+        context.Authors.ExecuteDelete();
+
+        AuthorDto author = new AuthorDto( "John Doe", "John+Doe@hotmail.com");
+        var newAuthor = authorRepository.CreateAuthor(author);
+
+        CheepDto cheepDto1 = new CheepDto("test cheep", "2023-08-01 13:15:22","John Doe");
+        CheepDto cheepDto2 = new CheepDto("test cheep2", "2023-08-01 13:15:24","John Doe");
+        CheepDto cheepDto3 = new CheepDto("test cheep3", "2023-08-01 13:15:27","John Doe");
+
+        await cheepRepository.CreateCheep(cheepDto1, "John Doe");
+        await cheepRepository.CreateCheep(cheepDto2, "John Doe");
+
+
+        // Act 
+        await cheepRepository.FindCheepID(cheepDto2); 
+        var checkID2 = cheepRepository.FindCheepID(cheepDto2); 
+        await cheepRepository.DeleteCheep(cheepDto2);
+        await cheepRepository.CreateCheep(cheepDto3, "John Doe");
+
+        await context.SaveChangesAsync();
+
+        // after deletion, the new cheep should have a diffrent ID 
+        var cheepId3 = cheepRepository.FindCheepID(cheepDto3);
+        await context.SaveChangesAsync();
+
+        // Assert 
+        Assert.False(checkID2 == cheepId3);
+    }
 }
