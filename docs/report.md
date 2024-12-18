@@ -65,26 +65,37 @@ as redeploying Azure on trivial changes results in extensive downtime. There is 
 to be run and should be run for weekly evaluations and major updates. The releases contain the program compiled for Windows, Linux, OSX, and OSX arm-64.
 
 ## Team work
-### *** INSERT final picture of bord with unfinished tasks *** 
-comment on the missing changes 
-( could mention that due to the lateish introduction of tools like playwright
-we did not quite find the expertise and time to justify not running these tests locally. with out small team it's
-quite easy to get someone else to hop on the branch and run the test suite before a merge) But could defenetly be improved
-by letting it know our secrets and setting playwright up. (though the playwright tests break on UI changes, and that's not really an incompatiblilty)
-
--- add comment on why playwrite does not run though workflows. 
+![Project board](images/projectBoard.png)
 
 ### Introducing a new feature  
-From the beginning the team agreed to, work together physically instead of remotely when ever possible, therfore a lot of task were undertaken using a combination of mob programming and co-authoring, this goes for tackling a new feature as well.
+From the beginning the team agreed to, work together physically instead of remotely when ever possible, therefore a lot of task were undertaken using a combination of mob programming and co-authoring, this goes for tackling a new feature as well.
 
-When presented with a new feature to implement, a team member creates a new issue on the project bord and adds appropriate acceptance criteria. If there is some confusion as to what that would be, the team member brings it to the team, discuss it, and create a plan for how to best approach the implementation. When a new feature is under development a team member moves it from the To-do list to the in progress list and assigns one or more members to the task.
+When presented with a new feature to implement, a team member(s) creates a new issue on the project bord and adds appropriate acceptance criteria. If there is some confusion as to what that would be, the team member(s) brings it to the team, discuss it, and create a plan for how to best approach the implementation. When a new feature is under development a team member moves it from the To-do list to the in progress list, and assigns one or more members to the task.
 
-When assigned to an issue, member(s) then create- and publish a new branch to work on the issue, occasionally creating sub-branches to try different approaches. Doing their best to keep to a GitHub Flow -style branching strategy.
-When the acceptance criteria had been fulfilled, the member(s) working the branch - or someone else from the team, will then create a new sub-branch, to write the necessary test for the new methods and- or UI features.
+When assigned to an issue, member(s) then create - and publish a new branch to work on the issue, Doing their best to keep to a GitHub Flow -style branching strategy.
+When the acceptance criteria  been fulfilled, the member(s) working the branch - or someone else from the team, will then create a new sub-branch, to write the necessary test for the new methods and- or UI features. 
 
-Now the member(s) working on the issue creates a pull request to the branch, to merge it with main branch, and add a reviewer(s). Before another team member can merge preliminary workflow checks will be run, then if the new input passes workflow checks (see -- add ref to WF --) and test the reviewer can look at the code, reject if necessary, or complete the merge. The old branch can then be deleted.
+Now the member(s) working on the issue, creates a pull request to the branch to merge it with main branch and add a reviewer(s), This will then trigger workflow checks, making sure that new features will not conflict with the current version of the program. (ref?) 
 
-![Issue from creation to merge](images/IssueToMerge.drawio.png)
+If the new feature passes the checks, the reviewer(s) can now manually look at the code, to check for possible conflicts that the workflows did not catch. 
+The reviewer(s) can now approve( or reject) pull request and the old branch can be deleted.
+
+*Above description is true to our process if the team had worked always using best practise. However it should be noted that do to a lot of uncertainty about how test should be written, a lot of the time new features would be committed to main, without test, which would then be added later.*     
+
+![Issue from creation to merge](images/IssueToMerge-2.drawio.png)
+
+### Unfinished features
+![Final project board](images/finalProjectBoard.png)
+
+We would have preferred to have implemented following features but simply did not have the time: 
+
+**Get workflow to run UI test** Do to playwright being introduced later in the project, the team did not have the time or expertise to figure out how to make playwright and integration test run using GitHub Actions, Primarily do to being unable to make automatic SetUp / TearDown functions to work. 
+
+**confirmation warning on critical actions** an example of a critical action could be; If a User wants to delete a cheep or delete their author page entity. This would trigger a pop-up window should then check with the user, if they confirm, the action will be done. otherwise the action is abandoned.
+
+**The page not flashing in dark mode**  We currently have an issue when page is in dark mode where a page change will flash between dark and lightmode, This would give people with light sensitivity issues problems.
+
+**Automation on project bord **  All updates to project bord are done manually this would have been an  ideal feature to run automatically though a workflow.   
 
 
 ## How to make _Chirp!_ work locally
