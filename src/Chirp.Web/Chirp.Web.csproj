@@ -8,6 +8,8 @@
     <PublishSingleFile>false</PublishSingleFile>
     <UserSecretsId>af3e1c62-ea73-4000-8827-42dfde0b35bf</UserSecretsId>
     <ExcludeFilesFromDeployment>"data/chirp.db"</ExcludeFilesFromDeployment>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>NU1903</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
